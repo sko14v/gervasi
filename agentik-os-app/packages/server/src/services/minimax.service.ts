@@ -181,7 +181,7 @@ export async function chat(
         (err as { statusCode?: number })?.statusCode ??
         0;
       const is5xx = status >= 500 && status < 600;
-      const isNetwork = err instanceof Error && /fetch|network|timeout/i.test(err.message);
+      const isNetwork = err instanceof Error && /connection|fetch|network|timeout|econnrefused|dns/i.test(err.message);
       const shouldRetry = (is5xx || isNetwork) && attempt < maxRetries;
       if (shouldRetry) {
         logger.warn(

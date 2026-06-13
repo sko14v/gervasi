@@ -150,3 +150,28 @@ Nothing to update or rebuild failed — check output above.
 [2026-06-14 01:17:41] [INFO] [server] Agentik OS backend listo en http://localhost:3002
 [2026-06-14 01:17:41] [INFO] [server] Agentik OS backend listo en http://localhost:3001
 [2026-06-14 01:17:41] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:20:17] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:20:17] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:21:50] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:21:50] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:23:08] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 01:23:24] [INFO] [http] [GET] [/health] [200] [90ms]
+[2026-06-14 01:23:40] [INFO] [http] [GET] [/health] [200] [65ms]
+[2026-06-14 01:24:02] [INFO] [icp] run() start
+[2026-06-14 01:24:03] [ERROR] [minimax] chat failed: Connection error.
+[2026-06-14 01:24:03] [ERROR] [icp] model error: [ERROR] Connection error.
+[2026-06-14 01:24:03] [icp] [nota-error] lead=IM-2026-001 error=[ERROR] Connection error.
+[2026-06-14 01:24:03] [ERROR] [http] [POST] [/agents/icp] [500] [500ms]
+[2026-06-14 01:24:12] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:24:12] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 01:24:12] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:24:17] [INFO] [icp] run() start
+[2026-06-14 01:24:18] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 01:24:19] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 01:24:19] [INFO] [vault] lead IM-2026-001 actualizado → score 10 estado cualificado (+6 bullets)
+[2026-06-14 01:24:19] [INFO] [icp] run() ok in 1567ms
+[2026-06-14 01:24:19] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 01:24:19] [INFO] [icp] lead IM-2026-001 → score 10/10 estado cualificado (6 bullets)
+[2026-06-14 01:24:19] [INFO] [http] [POST] [/agents/icp] [200] [1580ms]
+[2026-06-14 01:24:19] [icp] [nota-procesada] lead=IM-2026-001 score=10 estado=cualificado follow_ups=2
+[2026-06-14 01:24:20] [INFO] [agents] graphify reindex OK en 1261ms

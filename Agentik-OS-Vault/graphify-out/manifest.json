@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/leads/IM-2026-001.md": {
-    "mtime": 1781391551.0579133,
-    "ast_hash": "379ac1c77fb18112133202806031ab92",
+    "mtime": 1781393059.4668188,
+    "ast_hash": "aa1439bc76c596f6f0df190534cb0590",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/leads/IM-2026-002.md": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "03-Memoria/_logs/log.md": {
-    "mtime": 1781391551.0716116,
-    "ast_hash": "18b3e136cec014a7eaf5dc063e55915f",
+    "mtime": 1781393059.4777055,
+    "ast_hash": "bec7e8e198cf3c41c8a0754cd87fc457",
     "semantic_hash": ""
   },
   "04-Conocimiento/guias-agentes/addendum-cerebro-transcripciones-persistencia.md": {
@@ -265,8 +265,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1781365249.081511,
-    "ast_hash": "9d44a1d59a588803c986938b9ad3691d",
+    "mtime": 1781391556.2371585,
+    "ast_hash": "3cd5ad9e0e6a87bdd01930020487b16d",
     "semantic_hash": ""
   },
   "MEMORY.md": {

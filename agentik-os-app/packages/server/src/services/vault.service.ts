@@ -154,8 +154,8 @@ export async function getNextLeadId(): Promise<string> {
   for (const file of files) {
     const match = file.match(/^IM-(\d{4})-(\d{3})\.md$/);
     if (match) {
-      const year = parseInt(match[1], 10);
-      const num = parseInt(match[2], 10);
+      const year = parseInt(match[1]!, 10);
+      const num = parseInt(match[2]!, 10);
       if (year === currentYear && num > maxNum) {
         maxNum = num;
       }
