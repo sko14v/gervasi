@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.turbo/
+.vite/
+.DS_Store
+*.log
+.env
+.env.local
+.cache/
+graphify-out/

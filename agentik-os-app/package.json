@@ -1,0 +1,24 @@
+{
+  "name": "agentik-os",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Agentik O.S. — local monorepo for the Agentik CRM + dashboard + call-coach app (Iron Monkey Charter + Growing Inmobiliario)",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "dev:app": "npm run dev -w @agentik-os/app",
+    "dev:server": "npm run dev -w @agentik-os/server",
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "check-health": "node scripts/check-health.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^5.4.0",
+    "react-hook-form": "^7.79.0"
+  }
+}
