@@ -1,7 +1,6 @@
 /**
  * FunnelChart.tsx — Funnel del pipeline Iron Monkey con Recharts.
- *
- * BarChart horizontal mostrando leads por estado.
+ * Design system tokens for container, chart colors preserved.
  */
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
@@ -44,35 +43,32 @@ const ESTADO_LABELS: Record<string, string> = {
 
 function SkeletonBar() {
   return (
-    <div className="animate-pulse rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <div className="mb-4 h-4 w-48 rounded bg-slate-700" />
+    <div className="animate-pulse rounded-radius-xl border border-separator bg-surface p-5">
+      <div className="mb-4 h-4 w-48 rounded-radius-sm bg-tint" />
       {[...Array(4)].map((_, i) => (
         <div key={i} className="mb-2 flex items-center gap-2">
-          <div className="h-3 w-20 rounded bg-slate-700" />
-          <div
-            className="h-5 rounded bg-slate-700"
-            style={{ width: `${60 - i * 12}%` }}
-          />
+          <div className="h-3 w-20 rounded-radius-sm bg-tint" />
+          <div className="h-5 rounded-radius-sm bg-tint" style={{ width: `${60 - i * 12}%` }} />
         </div>
       ))}
     </div>
   );
 }
 
-interface TooltipProps {
+interface CustomTooltipData {
   active?: boolean;
   payload?: Array<{ value: number; payload: { estado: string } }>;
 }
 
-function CustomTooltip({ active, payload }: TooltipProps) {
+function CustomTooltip({ active, payload }: CustomTooltipData) {
   if (!active || !payload?.length) return null;
   const item = payload[0]!;
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm shadow-xl">
-      <span className="font-semibold text-slate-100">
+    <div className="rounded-radius-md border border-separator bg-surface px-3 py-2 text-sm shadow-popover">
+      <span className="font-semibold text-label-primary">
         {ESTADO_LABELS[item.payload.estado] ?? item.payload.estado}
       </span>
-      <span className="ml-2 text-slate-400">{item.value} leads</span>
+      <span className="ml-2 text-label-secondary">{item.value} leads</span>
     </div>
   );
 }
@@ -82,14 +78,13 @@ export function FunnelChart({ pipeline, loading = false }: FunnelChartProps) {
 
   if (pipeline.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 p-8 text-center">
-        <p className="text-sm text-slate-400">Sin leads en el pipeline.</p>
-        <p className="mt-1 text-xs text-slate-500">Añade tu primer lead en Iron Monkey.</p>
+      <div className="flex flex-col items-center justify-center rounded-radius-xl border border-separator bg-surface p-8 text-center">
+        <p className="text-callout text-label-secondary">Sin leads en el pipeline.</p>
+        <p className="mt-1 text-caption-1 text-label-tertiary">Añade tu primer lead en Iron Monkey.</p>
       </div>
     );
   }
 
-  // Ordenar por cantidad (mayor a menor, excluyendo descartados)
   const data = [...pipeline]
     .filter((p) => p.estado !== 'descartado')
     .sort((a, b) => b.count - a.count)
@@ -100,33 +95,20 @@ export function FunnelChart({ pipeline, loading = false }: FunnelChartProps) {
     }));
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+    <div className="rounded-radius-xl border border-separator bg-surface p-5">
       <div className="mb-4">
-        <h3 className="text-sm font-semibold text-slate-200">Pipeline Iron Monkey</h3>
-        <p className="text-xs text-slate-500">Distribución de leads por estado</p>
+        <h3 className="text-subhead font-semibold text-label-primary">Pipeline Iron Monkey</h3>
+        <p className="text-caption-1 text-label-secondary">Distribución de leads por estado</p>
       </div>
 
       <ResponsiveContainer width="100%" height={Math.max(140, data.length * 36)}>
-        <BarChart
-          layout="vertical"
-          data={data}
-          margin={{ top: 0, right: 16, bottom: 0, left: 8 }}
-        >
-          <XAxis type="number" tick={{ fill: '#64748b', fontSize: 11 }} allowDecimals={false} />
-          <YAxis
-            type="category"
-            dataKey="label"
-            tick={{ fill: '#94a3b8', fontSize: 11 }}
-            width={90}
-          />
-          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.04)' }} />
+        <BarChart layout="vertical" data={data} margin={{ top: 0, right: 16, bottom: 0, left: 8 }}>
+          <XAxis type="number" tick={{ fill: 'var(--label-tertiary)', fontSize: 11 }} allowDecimals={false} />
+          <YAxis type="category" dataKey="label" tick={{ fill: 'var(--label-secondary)', fontSize: 11 }} width={90} />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(128,128,128,0.06)' }} />
           <Bar dataKey="count" radius={[0, 6, 6, 0]} maxBarSize={24}>
             {data.map((entry) => (
-              <Cell
-                key={entry.estado}
-                fill={ESTADO_COLORS[entry.estado] ?? '#64748b'}
-                fillOpacity={0.85}
-              />
+              <Cell key={entry.estado} fill={ESTADO_COLORS[entry.estado] ?? '#64748b'} fillOpacity={0.85} />
             ))}
           </Bar>
         </BarChart>

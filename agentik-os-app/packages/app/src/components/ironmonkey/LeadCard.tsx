@@ -52,9 +52,9 @@ function formatFecha(iso?: string): string | null {
 
 /** Color del badge de score: 1-3 rojo, 4-6 amarillo, 7-10 verde. */
 function scoreBadgeColor(score: number): string {
-  if (score >= 7) return 'border-emerald-500/40 bg-emerald-500/20 text-emerald-200';
-  if (score >= 4) return 'border-amber-500/40 bg-amber-500/20 text-amber-200';
-  return 'border-rose-500/40 bg-rose-500/20 text-rose-200';
+  if (score >= 7) return 'border-success/40 bg-success/20 text-success';
+  if (score >= 4) return 'border-warning/40 bg-warning/20 text-warning';
+  return 'border-danger/40 bg-danger/20 text-danger';
 }
 
 export function LeadCard({ lead }: LeadCardProps) {
@@ -93,23 +93,23 @@ export function LeadCard({ lead }: LeadCardProps) {
         setCurrentLead(lead);
       }}
       className={cn(
-        'group cursor-grab select-none rounded-lg border bg-slate-900/60 p-3 shadow-sm transition-all duration-150',
-        'border-slate-700/60 hover:border-primary-500/60 hover:bg-slate-900 hover:shadow-md',
-        isDragging && 'cursor-grabbing border-primary-500 opacity-70 shadow-xl',
+        'group cursor-grab select-none rounded-radius-md border bg-tint/50 p-3 shadow-sm transition-all duration-150',
+        'border-separator hover:border-charter/60 hover:bg-tint/30 hover:shadow-md',
+        isDragging && 'cursor-grabbing border-charter opacity-70 shadow-xl',
       )}
       role="button"
       tabIndex={0}
     >
       {/* Header: nombre + sensación (esquina sup. derecha) + score */}
       <div className="flex items-start justify-between gap-2">
-        <h3 className="line-clamp-1 text-sm font-semibold text-slate-100">
+        <h3 className="line-clamp-1 text-callout font-semibold text-label-primary">
           {lead.nombre || lead.id}
         </h3>
         <div className="flex shrink-0 items-center gap-1.5">
           {/* Score como badge prominente */}
           <span
             className={cn(
-              'rounded-md border px-2 py-0.5 text-xs font-bold leading-none tabular-nums',
+              'rounded-radius-sm border px-2 py-0.5 text-caption-2 font-bold leading-none tabular-nums',
               scoreBadgeColor(lead.score),
             )}
             title={`Score ${lead.score}/10`}
@@ -128,7 +128,7 @@ export function LeadCard({ lead }: LeadCardProps) {
       </div>
 
       {/* Meta */}
-      <div className="mt-2 space-y-1 text-xs text-slate-400">
+      <div className="mt-2 space-y-1 text-caption-2 text-label-tertiary">
         {fecha && (
           <div className="flex items-center gap-1.5">
             <Calendar className="h-3 w-3 shrink-0" />

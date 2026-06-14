@@ -21,7 +21,7 @@ export default function SeguimientoPage() {
   const vencidos = alerts.filter(
     (a) => a.priority === 'alta' || (a.diasSinActividad && a.diasSinActividad > 3)
   );
-  
+
   const hoy = alerts.filter(
     (a) => a.priority === 'media' || (a.diasSinActividad && a.diasSinActividad <= 3 && a.diasSinActividad > 1)
   );
@@ -47,16 +47,16 @@ export default function SeguimientoPage() {
   return (
     <div className="flex h-full flex-col p-6 space-y-6 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4 shrink-0">
+      <div className="flex items-center justify-between border-b border-separator pb-4 shrink-0">
         <div className="flex items-center gap-3">
-          <div className="rounded-lg bg-amber-500/15 p-2 text-amber-400">
+          <div className="rounded-radius-md bg-charter/15 p-2 text-charter">
             <Clock className="h-5 w-5" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-100">
+            <h1 className="text-headline font-bold tracking-tight text-label-primary">
               Iron Monkey — Seguimiento
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-caption-1 text-label-tertiary">
               Gestión de seguimientos y alertas de leads estancados sin actividad.
             </p>
           </div>
@@ -64,14 +64,14 @@ export default function SeguimientoPage() {
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-slate-800 shrink-0">
+      <div className="flex border-b border-separator shrink-0">
         <button
           onClick={() => setActiveTab('hoy')}
           className={cn(
-            'px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition',
+            'px-4 py-2.5 text-callout font-bold uppercase tracking-wider border-b-2 transition',
             activeTab === 'hoy'
-              ? 'border-amber-500 text-amber-300'
-              : 'border-transparent text-slate-500 hover:text-slate-300'
+              ? 'border-charter text-charter'
+              : 'border-transparent text-label-tertiary hover:text-label-secondary'
           )}
         >
           Hoy ({hoy.length})
@@ -79,10 +79,10 @@ export default function SeguimientoPage() {
         <button
           onClick={() => setActiveTab('semana')}
           className={cn(
-            'ml-4 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition',
+            'ml-4 px-4 py-2.5 text-callout font-bold uppercase tracking-wider border-b-2 transition',
             activeTab === 'semana'
-              ? 'border-amber-500 text-amber-300'
-              : 'border-transparent text-slate-500 hover:text-slate-300'
+              ? 'border-charter text-charter'
+              : 'border-transparent text-label-tertiary hover:text-label-secondary'
           )}
         >
           Esta semana ({semana.length})
@@ -90,15 +90,15 @@ export default function SeguimientoPage() {
         <button
           onClick={() => setActiveTab('vencidos')}
           className={cn(
-            'ml-4 px-4 py-2.5 text-xs font-bold uppercase tracking-wider border-b-2 transition flex items-center gap-1.5',
+            'ml-4 px-4 py-2.5 text-callout font-bold uppercase tracking-wider border-b-2 transition flex items-center gap-1.5',
             activeTab === 'vencidos'
-              ? 'border-red-500 text-red-400'
-              : 'border-transparent text-slate-500 hover:text-red-400/70'
+              ? 'border-danger text-danger'
+              : 'border-transparent text-label-tertiary hover:text-danger/70'
           )}
         >
           Vencidos
           {vencidos.length > 0 && (
-            <span className="rounded-full bg-red-500/20 text-red-400 text-[10px] font-bold px-1.5 py-0.5 border border-red-500/30">
+            <span className="rounded-radius-md bg-danger/20 text-danger text-caption-2 font-bold px-1.5 py-0.5 border border-danger/30">
               {vencidos.length}
             </span>
           )}
@@ -108,7 +108,7 @@ export default function SeguimientoPage() {
       {/* List */}
       <div className="flex-1 overflow-auto space-y-3 pr-1 min-h-0">
         {currentList.length === 0 ? (
-          <div className="text-center py-20 text-slate-500 text-xs">
+          <div className="text-center py-20 text-label-tertiary text-callout">
             No hay seguimientos en esta lista.
           </div>
         ) : (
@@ -116,20 +116,20 @@ export default function SeguimientoPage() {
             <div
               key={item.leadId}
               className={cn(
-                'rounded-xl border p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition',
+                'rounded-radius-xl border border-separator p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition',
                 activeTab === 'vencidos'
-                  ? 'border-red-500/20 bg-red-500/5'
-                  : 'border-slate-800 bg-slate-900/40 hover:border-slate-700'
+                  ? 'border-danger/20 bg-danger/5'
+                  : 'bg-tint/50 hover:border-charter/40'
               )}
             >
               <div className="space-y-1">
                 <div className="flex items-center gap-2">
-                  <span className="font-semibold text-slate-200 text-sm">{item.leadNombre}</span>
-                  <span className="text-[10px] text-slate-500 font-mono">({item.leadId})</span>
+                  <span className="font-semibold text-label-primary text-body">{item.leadNombre}</span>
+                  <span className="text-caption-2 text-label-tertiary font-mono">({item.leadId})</span>
                 </div>
-                <p className="text-xs text-slate-400">{item.reason}</p>
+                <p className="text-callout text-label-secondary">{item.reason}</p>
                 {item.diasSinActividad !== undefined && (
-                  <span className="text-[10px] text-slate-500 block">
+                  <span className="text-caption-2 text-label-tertiary block">
                     Sin actividad hace {item.diasSinActividad} días
                   </span>
                 )}
@@ -138,14 +138,14 @@ export default function SeguimientoPage() {
               <div className="flex items-center gap-2 shrink-0">
                 <button
                   onClick={() => handleResolveFollowUp(item.leadId)}
-                  className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 px-3 py-2 text-xs font-semibold text-white transition shadow shadow-amber-600/10"
+                  className="flex-1 sm:flex-initial flex items-center justify-center gap-1.5 rounded-radius-md bg-charter hover:bg-charter/90 px-3 py-2 text-callout font-semibold text-white transition shadow shadow-charter/10"
                 >
                   <Check className="h-3.5 w-3.5" />
                   Registrar llamada
                 </button>
                 <button
                   onClick={() => navigate(`/iron-monkey/leads/${item.leadId}`)}
-                  className="p-2 rounded-lg border border-slate-800 bg-slate-950/20 hover:bg-slate-800 text-slate-400 hover:text-slate-200 transition"
+                  className="p-2 rounded-radius-md border border-separator bg-tint/30 hover:bg-tint/50 text-label-tertiary hover:text-label-primary transition"
                   title="Ver ficha"
                 >
                   <Eye className="h-4 w-4" />

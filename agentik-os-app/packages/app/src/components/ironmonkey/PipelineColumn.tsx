@@ -35,22 +35,22 @@ export function PipelineColumn({ estado, leads }: PipelineColumnProps) {
     <div
       ref={setNodeRef}
       className={cn(
-        'flex w-72 shrink-0 flex-col rounded-lg bg-slate-800/60 p-3 transition-colors duration-150',
-        isOver && 'bg-slate-800 ring-2 ring-primary-500/40',
+        'flex w-72 shrink-0 flex-col rounded-radius-md bg-tint/50 p-3 transition-colors duration-150',
+        isOver && 'bg-tint/30 ring-2 ring-charter/40',
       )}
       data-estado={estado}
     >
       {/* Header */}
       <div className="mb-3 flex items-center justify-between px-1">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-slate-300">
+        <h2 className="text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
           {ESTADO_LEAD_LABELS[estado]}
         </h2>
         <span
           className={cn(
             'rounded-full px-2 py-0.5 text-[10px] font-semibold',
             leads.length > 0
-              ? 'bg-primary-500/20 text-primary-300'
-              : 'bg-slate-700/50 text-slate-500',
+              ? 'bg-charter/20 text-charter'
+              : 'bg-tint-2/50 text-label-tertiary',
           )}
         >
           {leads.length}
@@ -64,7 +64,7 @@ export function PipelineColumn({ estado, leads }: PipelineColumnProps) {
             <LeadCard key={lead.id} lead={lead} />
           ))}
           {leads.length === 0 && (
-            <div className="flex h-24 items-center justify-center rounded border border-dashed border-slate-700 text-xs text-slate-600">
+            <div className="flex h-24 items-center justify-center rounded-radius-sm border border-dashed border-separator text-caption-2 text-label-quaternary">
               Vacío
             </div>
           )}

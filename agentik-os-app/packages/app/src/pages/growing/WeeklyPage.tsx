@@ -49,25 +49,26 @@ export default function WeeklyPage() {
         setLoading(false);
       }
     }
+
     void fetchWeeklyReview();
   }, []);
 
   return (
-    <div className="p-6 h-full flex flex-col overflow-hidden bg-slate-950/20">
+    <div className="p-6 h-full flex flex-col overflow-hidden bg-canvas">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4 mb-6 shrink-0">
+      <div className="flex items-center justify-between border-b border-separator pb-4 mb-6 shrink-0">
         <div className="flex items-center gap-3">
           <button
             onClick={() => navigate('/growing/sesiones')}
-            className="rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 p-2 text-slate-400 hover:text-slate-100 transition"
+            className="rounded-radius-md border border-separator bg-tint/30 text-label-tertiary hover:text-label-primary hover:bg-tint/50 transition p-2"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-slate-100">
+            <h1 className="text-title-1 text-label-primary">
               Growing — Weekly Review
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-caption-1 text-label-tertiary">
               Análisis consolidado semanal de cold calling (sólo domingos).
             </p>
           </div>
@@ -77,49 +78,49 @@ export default function WeeklyPage() {
       {/* Content */}
       <div className="flex-1 overflow-y-auto max-w-4xl mx-auto w-full pt-2 pr-1 min-h-0 space-y-6">
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 text-slate-500 text-xs">
+          <div className="flex flex-col items-center justify-center py-20 text-label-tertiary text-caption-1">
             <Loader2 className="h-6 w-6 animate-spin text-emerald-400 mb-2" />
             <span>Generando revisión semanal...</span>
           </div>
         ) : data ? (
           <div className="space-y-6">
-            
+
             {/* Stats Summary row */}
             <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Sesiones</span>
-                <div className="text-2xl font-bold text-slate-200">{data.sesiones_count} analizadas</div>
+              <div className="surface-card p-4 space-y-1">
+                <span className="text-caption-2 font-semibold text-label-tertiary uppercase tracking-wider">Sesiones</span>
+                <div className="text-display-md text-label-primary">{data.sesiones_count} analizadas</div>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Llamadas totales</span>
-                <div className="text-2xl font-bold text-slate-200">{data.llamadas_total}</div>
+              <div className="surface-card p-4 space-y-1">
+                <span className="text-caption-2 font-semibold text-label-tertiary uppercase tracking-wider">Llamadas totales</span>
+                <div className="text-display-md text-label-primary">{data.llamadas_total}</div>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Citas logradas</span>
-                <div className="text-2xl font-bold text-emerald-400 flex items-center gap-1.5">
+              <div className="surface-card p-4 space-y-1">
+                <span className="text-caption-2 font-semibold text-label-tertiary uppercase tracking-wider">Citas logradas</span>
+                <div className="text-display-md text-emerald-400 flex items-center gap-1.5">
                   <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                   {data.citas_total}
                 </div>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/40 p-4 space-y-1">
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">ICL Promedio</span>
-                <div className="text-2xl font-bold text-slate-200">{data.icl_promedio}/100</div>
+              <div className="surface-card p-4 space-y-1">
+                <span className="text-caption-2 font-semibold text-label-tertiary uppercase tracking-wider">ICL Promedio</span>
+                <div className="text-display-md text-label-primary">{data.icl_promedio}/100</div>
               </div>
             </section>
 
             {/* Wins & Improvements */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              
+
               {/* Wins */}
-              <section className="rounded-xl border border-slate-800 bg-slate-900/20 p-5 space-y-3">
-                <h3 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-800 pb-2">
+              <section className="surface-card p-5 space-y-3">
+                <h3 className="text-caption-1 font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-separator pb-2">
                   <Award className="h-4 w-4" />
                   Top Wins de la semana
                 </h3>
-                <ul className="space-y-2.5 text-xs text-slate-300">
+                <ul className="space-y-2.5 text-caption-1 text-label-secondary">
                   {data.wins.map((w, i) => (
                     <li key={i} className="flex gap-2">
-                      <span className="text-emerald-400 font-bold font-mono">#{i+1}</span>
+                      <span className="text-emerald-400 font-bold font-mono">#{i + 1}</span>
                       <span>{w}</span>
                     </li>
                   ))}
@@ -127,15 +128,15 @@ export default function WeeklyPage() {
               </section>
 
               {/* Improvements */}
-              <section className="rounded-xl border border-slate-800 bg-slate-900/20 p-5 space-y-3">
-                <h3 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-slate-800 pb-2">
+              <section className="surface-card p-5 space-y-3">
+                <h3 className="text-caption-1 font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5 border-b border-separator pb-2">
                   <TrendingUp className="h-4 w-4" />
                   Mejoras Prioritarias
                 </h3>
-                <ul className="space-y-2.5 text-xs text-slate-300">
+                <ul className="space-y-2.5 text-caption-1 text-label-secondary">
                   {data.improvements.map((im, i) => (
                     <li key={i} className="flex gap-2">
-                      <span className="text-amber-400 font-bold font-mono">#{i+1}</span>
+                      <span className="text-amber-400 font-bold font-mono">#{i + 1}</span>
                       <span>{im}</span>
                     </li>
                   ))}
@@ -145,11 +146,11 @@ export default function WeeklyPage() {
             </div>
 
             {/* Plan de Acción */}
-            <section className="rounded-xl border border-slate-800 bg-slate-900/40 p-5 space-y-3">
-              <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider border-b border-slate-800 pb-2">
+            <section className="surface-card p-5 space-y-3">
+              <h3 className="text-caption-1 font-bold text-label-primary uppercase tracking-wider border-b border-separator pb-2">
                 Plan de acción para la próxima semana
               </h3>
-              <p className="text-xs text-slate-400 leading-relaxed">
+              <p className="text-caption-1 text-label-tertiary leading-relaxed">
                 Basado en tu desempeño de esta semana, debes centrar tu esfuerzo en mejorar el talk ratio en el descubrimiento y afianzar la presentación inicial en los primeros 20 segundos de la llamada.
               </p>
             </section>

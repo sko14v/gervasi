@@ -42,7 +42,7 @@ const CERRADOS: EstadoLead[] = ['ganado', 'perdido', 'descartado'];
 
 function SkeletonCard() {
   return (
-    <div className="h-20 animate-pulse rounded-lg border border-slate-700/60 bg-slate-900/40" />
+    <div className="h-20 animate-pulse rounded-radius-md border border-separator bg-tint/30" />
   );
 }
 
@@ -129,20 +129,20 @@ export function Pipeline() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-slate-800 px-6 py-4">
+      <div className="flex items-center justify-between border-b border-separator px-6 py-4">
         <div>
-          <h1 className="text-lg font-semibold tracking-tight text-slate-100">
+          <h1 className="text-headline tracking-tight text-label-primary">
             Iron Monkey — Pipeline
           </h1>
-          <p className="text-xs text-slate-500">
+          <p className="text-caption-2 text-label-tertiary">
             {total} lead{total === 1 ? '' : 's'} · arrastra entre columnas
           </p>
         </div>
         <button
           type="button"
           className={cn(
-            'inline-flex items-center gap-2 rounded-md bg-primary-600 px-3 py-1.5 text-sm font-medium text-white transition-colors',
-            'hover:bg-primary-500 active:bg-primary-700',
+            'inline-flex items-center gap-2 rounded-radius-sm bg-charter px-3 py-1.5 text-subhead font-medium text-label-inverse transition-colors',
+            'hover:bg-charter/80 active:bg-charter',
           )}
           onClick={() => setFormOpen(true)}
         >
@@ -155,13 +155,13 @@ export function Pipeline() {
       {error && (
         <div
           role="alert"
-          className="mx-6 mt-4 flex items-center justify-between gap-3 rounded-md border border-rose-500/40 bg-rose-500/10 px-4 py-2.5 text-sm text-rose-200"
+          className="mx-6 mt-4 flex items-center justify-between gap-3 rounded-radius-md border border-danger/40 bg-danger/10 px-4 py-2.5 text-subhead text-danger"
         >
           <span>No se pudieron cargar los leads: {error}</span>
           <button
             type="button"
             onClick={clearError}
-            className="text-rose-300 hover:text-rose-100"
+            className="text-danger hover:text-danger/80"
             aria-label="Cerrar"
           >
             ×
@@ -175,9 +175,9 @@ export function Pipeline() {
           {ESTADOS_PIPELINE.map((e) => (
             <div
               key={e}
-              className="flex w-72 shrink-0 flex-col gap-2 rounded-lg bg-slate-800/40 p-3"
+              className="flex w-72 shrink-0 flex-col gap-2 rounded-radius-md bg-tint/30 p-3"
             >
-              <div className="mb-2 h-4 w-24 animate-pulse rounded bg-slate-700/60" />
+              <div className="mb-2 h-4 w-24 animate-pulse rounded-radius-xs bg-tint-2/50" />
               <SkeletonCard />
               <SkeletonCard />
               <SkeletonCard />
@@ -189,9 +189,9 @@ export function Pipeline() {
       {/* Empty */}
       {!loading && total === 0 && !error && (
         <div className="flex flex-1 flex-col items-center justify-center gap-3 px-6 py-12 text-center">
-          <Inbox className="h-12 w-12 text-slate-700" />
-          <p className="text-sm text-slate-400">
-            No hay leads. Crea uno con el botón <strong className="text-slate-300">+</strong>
+          <Inbox className="h-12 w-12 text-label-quaternary" />
+          <p className="text-subhead text-label-secondary">
+            No hay leads. Crea uno con el botón <strong className="text-label-primary">+</strong>
           </p>
         </div>
       )}
@@ -216,11 +216,11 @@ export function Pipeline() {
 
           {/* Cerrados colapsable */}
           {totalCerrados > 0 && (
-            <div className="border-t border-slate-800 px-6 py-3">
+            <div className="border-t border-separator px-6 py-3">
               <button
                 type="button"
                 onClick={() => setCerradosOpen((v) => !v)}
-                className="flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-slate-200"
+                className="flex items-center gap-2 text-caption-2 font-medium text-label-secondary hover:text-label-primary"
               >
                 {cerradosOpen ? (
                   <ChevronUp className="h-3.5 w-3.5" />
@@ -267,8 +267,8 @@ export function Pipeline() {
         aria-label="Crear nuevo lead"
         className={cn(
           'fixed bottom-6 right-6 z-30 inline-flex items-center gap-2 rounded-full',
-          'bg-primary-600 px-4 py-3 text-sm font-medium text-white shadow-lg',
-          'transition-all hover:bg-primary-500 hover:shadow-xl active:bg-primary-700',
+          'bg-charter px-4 py-3 text-subhead font-medium text-label-inverse shadow-lg',
+          'transition-all hover:bg-charter/80 hover:shadow-xl active:bg-charter',
         )}
       >
         <Plus className="h-4 w-4" />
@@ -307,12 +307,12 @@ function DetailDrawer({
         type="button"
         aria-label="Cerrar panel"
         onClick={onClose}
-        className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/70 backdrop-blur-sm"
       />
       {/* Panel: full-screen en mobile, lateral en desktop */}
       <div
         className={cn(
-          'relative ml-auto flex h-full w-full flex-col bg-slate-900 shadow-2xl',
+          'relative ml-auto flex h-full w-full flex-col bg-surface shadow-2xl',
           'sm:max-w-md md:max-w-lg lg:max-w-xl',
         )}
       >

@@ -1,12 +1,6 @@
 /**
- * HealthIndicator — ping /api/health cada 30 s y refleja el estado
- * con un dot verde / rojo / gris. Usado por Topbar.
- *
- * Implementación:
- *   - al montar, ping inmediato
- *   - setInterval de 30 s
- *   - estados: 'idle' (gris) | 'ok' (verde) | 'error' (rojo)
- *   - al hacer hover muestra tooltip con timestamp
+ * HealthIndicator — ping /api/health cada 30 s y refleja el estado.
+ * Usado por Topbar.
  */
 
 import { useEffect, useState } from 'react';
@@ -55,40 +49,38 @@ export function HealthIndicator() {
   }, []);
 
   const tooltip = lastChecked
-    ? `Último check: ${lastChecked.toLocaleTimeString()}${
-        detail ? `\n${detail}` : ''
-      }`
+    ? `Último check: ${lastChecked.toLocaleTimeString()}${detail ? `\n${detail}` : ''}`
     : 'Sin comprobar';
 
   return (
     <div
-      className="flex items-center gap-2 text-xs"
+      className="flex items-center gap-2 text-caption-1"
       title={tooltip}
       aria-label={`Estado del backend: ${status}`}
     >
       {status === 'idle' && (
         <>
-          <Loader2 className="h-3.5 w-3.5 animate-spin text-slate-500" />
-          <span className="text-slate-500">Conectando…</span>
+          <Loader2 className="h-3.5 w-3.5 animate-spin text-label-tertiary" />
+          <span className="text-label-tertiary">Conectando…</span>
         </>
       )}
       {status === 'ok' && (
         <>
           <span
             className={cn(
-              'inline-block h-2 w-2 rounded-full bg-emerald-500',
-              'shadow-[0_0_8px_rgba(16,185,129,0.6)]',
+              'inline-block h-2 w-2 rounded-full bg-success',
+              'shadow-[0_0_8px_rgba(48,209,88,0.6)]',
             )}
           />
-          <span className="hidden text-slate-400 sm:inline">Backend OK</span>
-          <CheckCircle2 className="hidden h-3.5 w-3.5 text-emerald-500 sm:inline" />
+          <span className="hidden text-label-secondary sm:inline">Backend OK</span>
+          <CheckCircle2 className="hidden h-3.5 w-3.5 text-success sm:inline" />
         </>
       )}
       {status === 'error' && (
         <>
-          <span className="inline-block h-2 w-2 rounded-full bg-rose-500" />
-          <span className="hidden text-rose-400 sm:inline">Sin conexión</span>
-          <AlertCircle className="hidden h-3.5 w-3.5 text-rose-500 sm:inline" />
+          <span className="inline-block h-2 w-2 rounded-full bg-danger" />
+          <span className="hidden text-danger sm:inline">Sin conexión</span>
+          <AlertCircle className="hidden h-3.5 w-3.5 text-danger sm:inline" />
         </>
       )}
     </div>

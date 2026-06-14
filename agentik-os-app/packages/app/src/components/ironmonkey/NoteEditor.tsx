@@ -104,18 +104,18 @@ const BULLET_FIELDS: Array<{
   /** Si el campo es un array, lo unimos con ` | ` */
   isArray?: boolean;
 }> = [
-  { key: 'que_quiere', label: 'Qué quiere' },
-  { key: 'detalles_grupo', label: 'Detalles del grupo' },
-  { key: 'restricciones_preferencias', label: 'Restricciones / preferencias' },
-  {
-    key: 'objeciones_mencionadas',
-    label: 'Objeciones mencionadas',
-    isArray: true,
-  },
-  { key: 'por_que_eligio_iron_monkey', label: 'Por qué Iron Monkey' },
-  { key: 'nivel_urgencia', label: 'Nivel de urgencia' },
-  { key: 'proximo_paso', label: 'Próximo paso' },
-];
+    { key: 'que_quiere', label: 'Qué quiere' },
+    { key: 'detalles_grupo', label: 'Detalles del grupo' },
+    { key: 'restricciones_preferencias', label: 'Restricciones / preferencias' },
+    {
+      key: 'objeciones_mencionadas',
+      label: 'Objeciones mencionadas',
+      isArray: true,
+    },
+    { key: 'por_que_eligio_iron_monkey', label: 'Por qué Iron Monkey' },
+    { key: 'nivel_urgencia', label: 'Nivel de urgencia' },
+    { key: 'proximo_paso', label: 'Próximo paso' },
+  ];
 
 function renderBulletValue(value: unknown, isArray?: boolean): string {
   if (value == null) return '—';
@@ -173,10 +173,10 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
   const score = icpResult?.score ?? lead.score;
   const scoreColor =
     score >= 7
-      ? 'border-emerald-500/40 bg-emerald-500/15 text-emerald-200'
+      ? 'border-success/40 bg-success/15 text-success'
       : score >= 4
-        ? 'border-amber-500/40 bg-amber-500/15 text-amber-200'
-        : 'border-rose-500/40 bg-rose-500/15 text-rose-200';
+        ? 'border-warning/40 bg-warning/15 text-warning'
+        : 'border-danger/40 bg-danger/15 text-danger';
 
   const showProposalBtn = icpResult !== null && icpResult.score >= 7;
 
@@ -202,19 +202,19 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="flex shrink-0 items-center justify-between border-b border-slate-800 px-5 py-3">
+      <div className="flex shrink-0 items-center justify-between border-b border-separator px-5 py-3">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+          <p className="text-caption-2 font-semibold uppercase tracking-widest text-label-tertiary">
             Nota de llamada
           </p>
-          <h3 className="text-base font-semibold text-slate-100">
+          <h3 className="text-headline font-semibold text-label-primary">
             {lead.nombre || lead.id}
           </h3>
         </div>
         <button
           type="button"
           onClick={onClose}
-          className="rounded p-1.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-100"
+          className="rounded-radius-xs p-1.5 text-label-secondary transition-colors hover:bg-tint/30 hover:text-label-primary"
           aria-label="Cerrar panel"
         >
           <X className="h-4 w-4" />
@@ -225,7 +225,7 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
         {/* Textarea */}
         <label
           htmlFor="nota"
-          className="mb-1 block text-xs font-medium text-slate-300"
+          className="mb-1 block text-caption-2 font-medium text-label-secondary"
         >
           Nota libre
         </label>
@@ -239,17 +239,17 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
           rows={8}
           disabled={icpRunning}
           className={cn(
-            'w-full resize-y rounded-md border border-slate-700 bg-slate-950/40 px-3 py-2 text-sm leading-relaxed text-slate-100 placeholder:text-slate-600 transition-colors',
-            'focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/40',
+            'w-full resize-y rounded-radius-sm border border-separator bg-surface px-3 py-2 text-subhead leading-relaxed text-label-primary placeholder:text-label-quaternary transition-colors',
+            'focus:border-charter focus:outline-none focus:ring-1 focus:ring-charter/40',
             'disabled:cursor-not-allowed disabled:opacity-60',
           )}
         />
-        <p className="mt-1 text-[11px] text-slate-500">
-          Atajo: <kbd className="rounded border border-slate-700 bg-slate-800 px-1 text-[10px]">Cmd</kbd>
+        <p className="mt-1 text-caption-2 text-label-tertiary">
+          Atajo: <kbd className="rounded-radius-xs border border-separator bg-tint px-1 text-[10px]">Cmd</kbd>
           /
-          <kbd className="rounded border border-slate-700 bg-slate-800 px-1 text-[10px]">Ctrl</kbd>
+          <kbd className="rounded-radius-xs border border-separator bg-tint px-1 text-[10px]">Ctrl</kbd>
           +
-          <kbd className="rounded border border-slate-700 bg-slate-800 px-1 text-[10px]">Enter</kbd>
+          <kbd className="rounded-radius-xs border border-separator bg-tint px-1 text-[10px]">Enter</kbd>
           {' '}para guardar y analizar.
         </p>
 
@@ -260,8 +260,8 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
             onClick={submit}
             disabled={icpRunning || nota.trim().length === 0}
             className={cn(
-              'inline-flex items-center gap-2 rounded-md bg-primary-600 px-3 py-1.5 text-sm font-medium text-white transition-colors',
-              'hover:bg-primary-500 active:bg-primary-700',
+              'inline-flex items-center gap-2 rounded-radius-sm bg-charter px-3 py-1.5 text-subhead font-medium text-label-inverse transition-colors',
+              'hover:bg-charter/80 active:bg-charter',
               'disabled:cursor-not-allowed disabled:opacity-60',
             )}
           >
@@ -283,7 +283,7 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
         {icpError && (
           <div
             role="alert"
-            className="mt-3 flex items-start gap-2 rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200"
+            className="mt-3 flex items-start gap-2 rounded-radius-md border border-danger/40 bg-danger/10 px-3 py-2 text-subhead text-danger"
           >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>No se pudo analizar la nota: {icpError}</span>
@@ -292,7 +292,7 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
 
         {/* Resultado del ICP */}
         {icpResult && (
-          <div className="mt-5 space-y-4 border-t border-slate-800 pt-5">
+          <div className="mt-5 space-y-4 border-t border-separator pt-5">
             <div className="flex flex-wrap items-center gap-2">
               <span
                 className={cn(
@@ -303,12 +303,12 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
               >
                 Score {icpResult.score}/10
               </span>
-              <span className="rounded-md border border-slate-700 bg-slate-800/60 px-2 py-1 text-xs font-medium text-slate-300">
+              <span className="rounded-radius-sm border border-separator bg-tint/50 px-2 py-1 text-caption-2 font-medium text-label-secondary">
                 Estado: {ESTADO_LEAD_LABELS[icpResult.estado]}
               </span>
               {icpResult.dev_mock && (
                 <span
-                  className="rounded-md border border-amber-500/40 bg-amber-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-amber-200"
+                  className="rounded-radius-sm border border-warning/40 bg-warning/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-warning"
                   title="API key no configurada — respuesta de fallback"
                 >
                   DEV-MOCK
@@ -319,10 +319,10 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
             {/* Bullets estructurados (objeto con 7 campos) */}
             {bullets && (
               <section>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <h4 className="mb-2 text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
                   Resumen estructurado
                 </h4>
-                <dl className="space-y-2 text-sm">
+                <dl className="space-y-2 text-subhead">
                   {BULLET_FIELDS.map(({ key, label, isArray }) => {
                     const value = (bullets as unknown as Record<string, unknown>)[
                       key as string
@@ -330,12 +330,12 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
                     return (
                       <div
                         key={key as string}
-                        className="rounded-md border border-slate-800 bg-slate-900/40 px-3 py-2"
+                        className="rounded-radius-sm border border-separator bg-tint/30 px-3 py-2"
                       >
-                        <dt className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                        <dt className="text-caption-2 font-semibold uppercase tracking-wider text-label-tertiary">
                           {label}
                         </dt>
-                        <dd className="mt-0.5 text-slate-200">
+                        <dd className="mt-0.5 text-label-primary">
                           {renderBulletValue(value, isArray)}
                         </dd>
                       </div>
@@ -348,16 +348,16 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
             {/* Follow-ups (categóricos, no fechas ISO) */}
             {followUps.length > 0 && (
               <section>
-                <h4 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
+                <h4 className="mb-2 text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
                   Follow-ups programados
                 </h4>
-                <ul className="space-y-1.5 text-sm text-slate-200">
+                <ul className="space-y-1.5 text-subhead text-label-primary">
                   {followUps.map((f, i) => (
                     <li
                       key={i}
-                      className="flex items-start gap-2 rounded-md border border-slate-800 bg-slate-900/40 px-2 py-1.5"
+                      className="flex items-start gap-2 rounded-radius-sm border border-separator bg-tint/30 px-2 py-1.5"
                     >
-                      <span className="shrink-0 rounded border border-primary-500/30 bg-primary-500/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-200">
+                      <span className="shrink-0 rounded-radius-xs border border-charter/30 bg-charter/10 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-charter">
                         {safeWhenLabel(f.when)}
                       </span>
                       <span>{safeMotivo(f.motivo)}</span>
@@ -369,14 +369,14 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
 
             {/* Botón Generar oferta condicional */}
             {showProposalBtn && (
-              <div className="rounded-md border border-emerald-500/30 bg-emerald-500/5 p-3">
-                <p className="mb-2 text-xs text-emerald-200">
+              <div className="rounded-radius-sm border border-success/30 bg-success/5 p-3">
+                <p className="mb-2 text-caption-2 text-success">
                   Score alto. Este lead está listo para una oferta.
                 </p>
                 <button
                   type="button"
                   onClick={() => setProposalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition-colors hover:bg-emerald-500"
+                  className="inline-flex items-center gap-2 rounded-radius-sm bg-success px-3 py-1.5 text-subhead font-medium text-label-inverse transition-colors hover:bg-success/80"
                 >
                   <FileText className="h-4 w-4" />
                   Generar oferta

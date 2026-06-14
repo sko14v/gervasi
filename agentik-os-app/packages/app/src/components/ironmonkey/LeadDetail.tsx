@@ -22,16 +22,16 @@ const SENSACION_META: Record<
   SensacionLead,
   { emoji: string; label: string; color: string }
 > = {
-  caliente: { emoji: '🔥', label: 'Caliente', color: 'text-rose-300' },
-  tibio: { emoji: '🟡', label: 'Tibio', color: 'text-amber-300' },
-  frio: { emoji: '🟠', label: 'Frío', color: 'text-sky-300' },
-  descartado: { emoji: '⛔', label: 'Descartado', color: 'text-slate-400' },
+  caliente: { emoji: '🔥', label: 'Caliente', color: 'text-danger' },
+  tibio: { emoji: '🟡', label: 'Tibio', color: 'text-warning' },
+  frio: { emoji: '🟠', label: 'Frío', color: 'text-info' },
+  descartado: { emoji: '⛔', label: 'Descartado', color: 'text-label-secondary' },
 };
 
 function scoreBadge(score: number): string {
-  if (score >= 7) return 'border-emerald-500/40 bg-emerald-500/15 text-emerald-200';
-  if (score >= 4) return 'border-amber-500/40 bg-amber-500/15 text-amber-200';
-  return 'border-rose-500/40 bg-rose-500/15 text-rose-200';
+  if (score >= 7) return 'border-success/40 bg-success/15 text-success';
+  if (score >= 4) return 'border-warning/40 bg-warning/15 text-warning';
+  return 'border-danger/40 bg-danger/15 text-danger';
 }
 
 function fmtDate(iso?: string): string | null {
@@ -71,30 +71,30 @@ export function LeadDetail({ lead, onClose }: LeadDetailProps) {
   const presupuesto = fmtPresupuesto(lead.presupuesto_min, lead.presupuesto_max);
 
   return (
-    <aside className="flex h-full min-h-0 flex-col border-l border-slate-800 bg-slate-950/40">
+    <aside className="flex h-full min-h-0 flex-col border-l border-separator bg-tint/30">
       {/* Header */}
-      <header className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-800 px-5 py-4">
+      <header className="flex shrink-0 items-start justify-between gap-3 border-b border-separator px-5 py-4">
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center gap-2">
-            <span className="text-xl leading-none" aria-hidden>
+            <span className="text-title-3 leading-none" aria-hidden>
               {sens.emoji}
             </span>
-            <span className={cn('text-xs font-semibold uppercase tracking-wider', sens.color)}>
+            <span className={cn('text-caption-2 font-semibold uppercase tracking-wider', sens.color)}>
               {sens.label}
             </span>
             <span
               className={cn(
-                'rounded-md border px-1.5 py-0.5 text-[11px] font-semibold',
+                'rounded-radius-sm border px-1.5 py-0.5 text-[11px] font-semibold',
                 scoreBadge(lead.score),
               )}
             >
               {lead.score}/10
             </span>
           </div>
-          <h2 className="truncate text-lg font-semibold text-slate-100">
+          <h2 className="truncate text-headline font-semibold text-label-primary">
             {lead.nombre || lead.id}
           </h2>
-          <p className="truncate text-xs text-slate-500">
+          <p className="truncate text-caption-2 text-label-tertiary">
             {lead.id} · {ESTADO_LEAD_LABELS[lead.estado]}
           </p>
         </div>
@@ -102,15 +102,15 @@ export function LeadDetail({ lead, onClose }: LeadDetailProps) {
           type="button"
           onClick={onClose}
           aria-label="Cerrar"
-          className="shrink-0 rounded p-1.5 text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-100"
+          className="shrink-0 rounded-radius-xs p-1.5 text-label-secondary transition-colors hover:bg-tint/30 hover:text-label-primary"
         >
           <X className="h-4 w-4" />
         </button>
       </header>
 
       {/* Resumen (datos de contacto + evento) */}
-      <section className="shrink-0 space-y-3 border-b border-slate-800 px-5 py-4 text-sm">
-        <h3 className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+      <section className="shrink-0 space-y-3 border-b border-separator px-5 py-4 text-subhead">
+        <h3 className="text-caption-2 font-semibold uppercase tracking-widest text-label-tertiary">
           Resumen
         </h3>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -154,15 +154,15 @@ export function LeadDetail({ lead, onClose }: LeadDetailProps) {
       </section>
 
       {/* Tabs */}
-      <div className="flex shrink-0 border-b border-slate-800 px-5">
+      <div className="flex shrink-0 border-b border-separator px-5">
         <button
           type="button"
           onClick={() => setTab('notas')}
           className={cn(
-            'border-b-2 px-1 py-2.5 text-xs font-semibold uppercase tracking-wider transition-colors',
+            'border-b-2 px-1 py-2.5 text-caption-2 font-semibold uppercase tracking-wider transition-colors',
             tab === 'notas'
-              ? 'border-primary-400 text-primary-200'
-              : 'border-transparent text-slate-500 hover:text-slate-200',
+              ? 'border-charter text-charter'
+              : 'border-transparent text-label-tertiary hover:text-label-primary',
           )}
         >
           Notas
@@ -171,7 +171,7 @@ export function LeadDetail({ lead, onClose }: LeadDetailProps) {
         <button
           type="button"
           disabled
-          className="ml-4 cursor-not-allowed border-b-2 border-transparent px-1 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-700"
+          className="ml-4 cursor-not-allowed border-b-2 border-transparent px-1 py-2.5 text-caption-2 font-semibold uppercase tracking-wider text-label-quaternary"
           title="Próximamente"
         >
           Historial
@@ -199,11 +199,11 @@ function SummaryItem({
 }) {
   return (
     <div className={cn('min-w-0', full && 'sm:col-span-2')}>
-      <div className="flex items-center gap-1 text-[10px] uppercase tracking-wider text-slate-500">
+      <div className="flex items-center gap-1 text-caption-2 uppercase tracking-wider text-label-tertiary">
         {icon}
         {label}
       </div>
-      <div className="truncate text-slate-200">{value}</div>
+      <div className="truncate text-label-primary">{value}</div>
     </div>
   );
 }

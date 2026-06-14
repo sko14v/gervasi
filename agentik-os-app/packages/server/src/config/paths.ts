@@ -61,6 +61,8 @@ export const VAULT_PATHS = {
   growingProspectos: path.join(VAULT_PATH, '02-GrowingInmobiliario', 'prospectos'),
   growingSesiones: path.join(VAULT_PATH, '02-GrowingInmobiliario', 'sesiones'),
   growingConversaciones: path.join(VAULT_PATH, '02-GrowingInmobiliario', 'conversaciones'),
+  growingBetting: path.join(VAULT_PATH, '02-GrowingInmobiliario', 'betting'),
+  growingBettingState: path.join(VAULT_PATH, '02-GrowingInmobiliario', '_state'),
   memoria: path.join(VAULT_PATH, '03-Memoria'),
   logs: path.join(VAULT_PATH, '03-Memoria', '_logs'),
   logFile: path.join(VAULT_PATH, '03-Memoria', '_logs', 'log.md'),

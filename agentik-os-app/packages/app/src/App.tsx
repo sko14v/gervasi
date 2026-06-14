@@ -22,6 +22,7 @@ import GrowingSesionNueva from '@/pages/growing/SesionNuevaPage';
 import GrowingProspectos from '@/pages/growing/ProspectosPage';
 import GrowingFipas from '@/pages/growing/FipasPage';
 import GrowingWeekly from '@/pages/growing/WeeklyPage';
+import GrowingBetting from '@/pages/growing/BettingPage';
 
 function RootRedirect() {
   const ultimoNegocio = localStorage.getItem('ultimoNegocio');
@@ -60,6 +61,7 @@ export default function App() {
         <Route path="/growing/prospectos" element={<GrowingProspectos />} />
         <Route path="/growing/fipas" element={<GrowingFipas />} />
         <Route path="/growing/weekly" element={<GrowingWeekly />} />
+        <Route path="/growing/betting" element={<GrowingBetting />} />
 
         {/* KPIs, Vault, Memory & Settings */}
         <Route path="/kpis" element={<Kpis />} />

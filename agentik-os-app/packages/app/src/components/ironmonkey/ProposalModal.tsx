@@ -22,9 +22,9 @@ interface ProposalData {
 }
 
 function scoreBadge(score: number): string {
-  if (score >= 7) return 'border-emerald-500/40 bg-emerald-500/15 text-emerald-200';
-  if (score >= 4) return 'border-amber-500/40 bg-amber-500/15 text-amber-200';
-  return 'border-rose-500/40 bg-rose-500/15 text-rose-200';
+  if (score >= 7) return 'border-success/40 bg-success/15 text-success';
+  if (score >= 4) return 'border-warning/40 bg-warning/15 text-warning';
+  return 'border-danger/40 bg-danger/15 text-danger';
 }
 
 export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps) {
@@ -70,14 +70,14 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
       <div className="space-y-4">
         {/* Info panel */}
         {!proposal && (
-          <section className="rounded-lg border border-slate-800 bg-slate-950/40 p-4">
+          <section className="rounded-radius-md border border-separator bg-tint/30 p-4">
             <header className="mb-3 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-slate-100">
+              <h3 className="text-subhead font-semibold text-label-primary">
                 Resumen del lead
               </h3>
               <span
                 className={cn(
-                  'rounded-md border px-2 py-0.5 text-xs font-semibold',
+                  'rounded-radius-sm border px-2 py-0.5 text-caption-2 font-semibold',
                   scoreBadge(score),
                 )}
               >
@@ -85,47 +85,47 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
               </span>
             </header>
 
-            <dl className="grid grid-cols-1 gap-2 text-sm sm:grid-cols-2">
+            <dl className="grid grid-cols-1 gap-2 text-subhead sm:grid-cols-2">
               <div>
-                <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                   Nombre
                 </dt>
-                <dd className="text-slate-200">{lead.nombre || '—'}</dd>
+                <dd className="text-label-primary">{lead.nombre || '—'}</dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                   Contacto
                 </dt>
-                <dd className="text-slate-200">
+                <dd className="text-label-primary">
                   {lead.telefono || '—'} · {lead.email || '—'}
                 </dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                   Idioma
                 </dt>
-                <dd className="text-slate-200">{lead.idioma}</dd>
+                <dd className="text-label-primary">{lead.idioma}</dd>
               </div>
               <div>
-                <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                   Origen
                 </dt>
-                <dd className="text-slate-200">{lead.origen}</dd>
+                <dd className="text-label-primary">{lead.origen}</dd>
               </div>
               {lead.personas !== undefined && (
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                  <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                     Personas
                   </dt>
-                  <dd className="text-slate-200">{lead.personas}</dd>
+                  <dd className="text-label-primary">{lead.personas}</dd>
                 </div>
               )}
               {lead.tipo_evento && (
                 <div>
-                  <dt className="text-[11px] uppercase tracking-wider text-slate-500">
+                  <dt className="text-caption-2 uppercase tracking-wider text-label-tertiary">
                     Tipo evento
                   </dt>
-                  <dd className="text-slate-200">{lead.tipo_evento}</dd>
+                  <dd className="text-label-primary">{lead.tipo_evento}</dd>
                 </div>
               )}
             </dl>
@@ -134,31 +134,31 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
 
         {/* Generate / Preview Box */}
         {generating ? (
-          <div className="rounded-lg border border-dashed border-primary-500/20 bg-primary-500/5 p-12 text-center space-y-3">
-            <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary-400" />
-            <p className="text-sm font-semibold text-slate-200">Generando Propuesta Comercial</p>
-            <p className="text-xs text-slate-400">
+          <div className="rounded-radius-md border border-dashed border-charter/20 bg-charter/5 p-12 text-center space-y-3">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-charter" />
+            <p className="text-subhead font-semibold text-label-primary">Generando Propuesta Comercial</p>
+            <p className="text-caption-2 text-label-secondary">
               Redactando con MiniMax M3 y renderizando PDF con Playwright...
             </p>
           </div>
         ) : proposal ? (
           <div className="space-y-4">
             {/* Proposal generated metadata */}
-            <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/50 p-3 rounded-lg border border-slate-800 text-xs text-slate-300">
+            <div className="flex flex-wrap items-center justify-between gap-3 bg-tint/50 p-3 rounded-radius-md border border-separator text-caption-2 text-label-secondary">
               <div className="flex gap-4">
                 <span><strong>Versión:</strong> v{proposal.version}</span>
                 <span><strong>Tamaño:</strong> {(proposal.size_bytes / 1024).toFixed(1)} KB</span>
                 <span><strong>Tiempo:</strong> {(proposal.duration_ms / 1000).toFixed(2)}s</span>
               </div>
               {proposal.dev_mock && (
-                <span className="rounded border border-amber-500/30 bg-amber-500/10 px-1.5 py-0.5 text-[9px] font-bold text-amber-200 uppercase tracking-wider">
+                <span className="rounded-radius-xs border border-warning/30 bg-warning/10 px-1.5 py-0.5 text-[9px] font-bold text-warning uppercase tracking-wider">
                   DEV-MOCK
                 </span>
               )}
             </div>
 
             {/* PDF iframe view */}
-            <div className="rounded-lg border border-slate-800 overflow-hidden bg-slate-950 h-[480px]">
+            <div className="rounded-radius-md border border-separator overflow-hidden bg-tint/30 h-[480px]">
               <iframe
                 src={pdfUrl}
                 title="Propuesta Comercial PDF"
@@ -172,7 +172,7 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
               <a
                 href={pdfUrl}
                 download={proposal.pdf_filename}
-                className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white transition"
+                className="inline-flex items-center gap-2 rounded-radius-md bg-success hover:bg-success/80 px-3 py-1.5 text-caption-2 font-semibold text-label-inverse transition"
               >
                 <Download className="h-3.5 w-3.5" />
                 Descargar PDF
@@ -181,7 +181,7 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
                 href={pdfUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-slate-800 hover:bg-slate-700 px-3 py-1.5 text-xs font-semibold text-slate-300 transition"
+                className="inline-flex items-center gap-2 rounded-radius-md border border-separator bg-tint/30 text-label-secondary hover:bg-tint/50 px-3 py-1.5 text-caption-2 font-semibold transition"
               >
                 <ExternalLink className="h-3.5 w-3.5" />
                 Abrir en pestaña nueva
@@ -189,21 +189,21 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
             </div>
           </div>
         ) : (
-          <div className="rounded-lg border border-dashed border-slate-700 bg-slate-900/30 p-10 text-center space-y-4">
-            <FileText className="mx-auto h-12 w-12 text-slate-600" />
+          <div className="rounded-radius-md border border-dashed border-separator bg-tint/30 p-10 text-center space-y-4">
+            <FileText className="mx-auto h-12 w-12 text-label-quaternary" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-slate-300">
+              <p className="text-subhead font-medium text-label-secondary">
                 La propuesta comercial en PDF se redactará utilizando la información del catálogo.
               </p>
-              <p className="text-xs text-slate-500">
+              <p className="text-caption-2 text-label-tertiary">
                 Playwright renderizará el PDF de forma local para garantizar la privacidad y el diseño premium.
               </p>
             </div>
-            
+
             <button
               type="button"
               onClick={handleGenerate}
-              className="inline-flex items-center gap-2 rounded-lg bg-primary-600 hover:bg-primary-500 px-4 py-2 text-sm font-semibold text-white transition"
+              className="inline-flex items-center gap-2 rounded-radius-md bg-charter hover:bg-charter/80 px-4 py-2 text-subhead font-semibold text-label-inverse transition"
             >
               <Sparkles className="h-4 w-4" />
               Generar Propuesta
@@ -213,19 +213,19 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
 
         {/* Error message */}
         {error && (
-          <div className="flex items-start gap-2 rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200">
-            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-400" />
+          <div className="flex items-start gap-2 rounded-radius-md border border-danger/40 bg-danger/10 px-3 py-2 text-subhead text-danger">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-danger" />
             <span>{error}</span>
           </div>
         )}
       </div>
 
-      <div className="mt-5 flex items-center justify-end border-t border-slate-800 pt-4 shrink-0">
+      <div className="mt-5 flex items-center justify-end border-t border-separator pt-4 shrink-0">
         <button
           type="button"
           onClick={handleClose}
           disabled={generating}
-          className="inline-flex items-center gap-2 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 transition hover:bg-slate-800 disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-radius-md border border-separator px-4 py-2 text-subhead text-label-secondary transition hover:bg-tint/50 disabled:opacity-50"
         >
           <X className="h-4 w-4" />
           Cerrar

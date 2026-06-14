@@ -12,3 +12,7 @@ export * from './types/digest.js';
 export * from './constants/estados-lead.js';
 
 export * from './validators/lead.schema.js';
+
+// Casa de Apuestas — Growing Inmobiliario
+export * from './types/betting.js';
+export * from './lib/betting.js';

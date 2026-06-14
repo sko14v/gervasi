@@ -1,7 +1,7 @@
 /**
  * Settings — Configuración del sistema Agentik O.S.
  *
- * Fase 4: 3 secciones funcionales:
+ * 3 secciones funcionales:
  *   1. Vault — ruta actual + botón Reindexar Graphify
  *   2. Modelos IA — qué modelo usa cada agente (informativo)
  *   3. Objetivos semanales — editable, persiste en el backend
@@ -17,11 +17,11 @@ import {
   CheckCircle,
   Save,
   AlertCircle,
+  Dices,
 } from 'lucide-react';
 import { api } from '@/lib/api/client';
 import { cn } from '@/lib/utils/cn';
-
-/* ---------- Types ---------- */
+import { useBettingStore } from '@/stores/bettingStore';
 
 interface HealthData {
   vault: { exists: boolean; path: string };
@@ -63,22 +63,22 @@ function SectionVault() {
   };
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+    <div className="surface-card p-6">
       <div className="mb-4 flex items-center gap-3">
-        <div className="rounded-lg bg-sky-500/10 p-2 text-sky-400">
+        <div className="rounded-radius-md bg-info/10 p-2 text-info">
           <Database className="h-4 w-4" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-slate-200">Vault</h2>
-          <p className="text-xs text-slate-500">Base de datos local en formato Markdown</p>
+          <h2 className="text-title-3 text-label-primary">Vault</h2>
+          <p className="text-caption-1 text-label-secondary">Base de datos local en formato Markdown</p>
         </div>
       </div>
 
       <div className="space-y-3">
         {/* Path */}
-        <div className="rounded-lg bg-slate-800/50 px-3 py-2.5">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500">Ruta del vault</p>
-          <p className="mt-1 font-mono text-xs text-slate-300 break-all">
+        <div className="rounded-radius-md bg-tint/40 px-3 py-2.5">
+          <p className="text-caption-2 font-medium uppercase tracking-wider text-label-tertiary">Ruta del vault</p>
+          <p className="mt-1 font-mono text-caption-1 text-label-secondary break-all">
             {health?.vault?.path ?? 'Detectando...'}
           </p>
         </div>
@@ -90,15 +90,15 @@ function SectionVault() {
             { label: 'FFmpeg', ok: health?.ffmpeg },
             { label: 'Graphify indexado', ok: health?.graphify_index },
           ].map(({ label, ok }) => (
-            <div key={label} className="flex items-center gap-2 rounded-lg bg-slate-800/40 px-3 py-2">
+            <div key={label} className="flex items-center gap-2 rounded-radius-md bg-tint/30 px-3 py-2">
               {ok === undefined ? (
-                <div className="h-2 w-2 animate-pulse rounded-full bg-slate-600" />
+                <div className="h-2 w-2 animate-pulse rounded-full bg-label-tertiary" />
               ) : ok ? (
-                <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
+                <CheckCircle className="h-3.5 w-3.5 text-success" />
               ) : (
-                <AlertCircle className="h-3.5 w-3.5 text-red-400" />
+                <AlertCircle className="h-3.5 w-3.5 text-danger" />
               )}
-              <span className="text-xs text-slate-300">{label}</span>
+              <span className="text-caption-1 text-label-primary">{label}</span>
             </div>
           ))}
         </div>
@@ -108,12 +108,12 @@ function SectionVault() {
           <button
             onClick={() => void reindex()}
             disabled={reindexing}
-            className="flex items-center gap-2 rounded-lg bg-sky-600/20 px-3 py-2 text-xs font-medium text-sky-300 transition hover:bg-sky-600/30 disabled:opacity-50"
+            className="flex items-center gap-2 rounded-radius-md bg-info/10 px-3 py-2 text-caption-1 font-medium text-info transition hover:bg-info/15 disabled:opacity-50"
           >
             <RefreshCw className={cn('h-3.5 w-3.5', reindexing && 'animate-spin')} />
             Reindexar Graphify
           </button>
-          {reindexMsg && <p className="text-xs text-slate-400">{reindexMsg}</p>}
+          {reindexMsg && <p className="text-caption-1 text-label-secondary">{reindexMsg}</p>}
         </div>
       </div>
     </div>
@@ -133,14 +133,14 @@ const AGENTES_MODELOS = [
 
 function SectionModels() {
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+    <div className="surface-card p-6">
       <div className="mb-4 flex items-center gap-3">
-        <div className="rounded-lg bg-violet-500/10 p-2 text-violet-400">
+        <div className="rounded-radius-md bg-premium/10 p-2 text-premium">
           <Cpu className="h-4 w-4" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-slate-200">Modelos IA</h2>
-          <p className="text-xs text-slate-500">Configuración de modelos por agente (solo lectura)</p>
+          <h2 className="text-title-3 text-label-primary">Modelos IA</h2>
+          <p className="text-caption-1 text-label-secondary">Configuración de modelos por agente (solo lectura)</p>
         </div>
       </div>
 
@@ -148,13 +148,13 @@ function SectionModels() {
         {AGENTES_MODELOS.map((ag) => (
           <div
             key={ag.agente}
-            className="flex items-center justify-between rounded-lg bg-slate-800/40 px-3 py-2.5"
+            className="flex items-center justify-between rounded-radius-md bg-tint/30 px-3 py-2.5"
           >
             <div>
-              <p className="text-xs font-medium text-slate-200">{ag.agente}</p>
-              <p className="text-[11px] text-slate-500">{ag.desc}</p>
+              <p className="text-caption-1 font-medium text-label-primary">{ag.agente}</p>
+              <p className="text-caption-2 text-label-tertiary">{ag.desc}</p>
             </div>
-            <div className="rounded-full bg-violet-500/15 px-2.5 py-1 text-[11px] font-medium text-violet-300">
+            <div className="rounded-full bg-premium/10 px-2.5 py-1 text-caption-2 font-medium text-premium">
               {ag.modelo}
             </div>
           </div>
@@ -186,10 +186,8 @@ function SectionObjetivos() {
   const save = async () => {
     setSaving(true);
     try {
-      // Los objetivos se pasan como query params al goal-tracker para usarse en runtime
-      // En una versión futura se persistirían en el vault. Por ahora guardamos en localStorage.
       localStorage.setItem('agentik-objetivos', JSON.stringify(objetivos));
-      await new Promise((r) => setTimeout(r, 400)); // Simular latencia
+      await new Promise((r) => setTimeout(r, 400));
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
     } finally {
@@ -197,7 +195,6 @@ function SectionObjetivos() {
     }
   };
 
-  // Cargar desde localStorage al montar
   useEffect(() => {
     const raw = localStorage.getItem('agentik-objetivos');
     if (raw) {
@@ -215,21 +212,21 @@ function SectionObjetivos() {
   ];
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-6">
+    <div className="surface-card p-6">
       <div className="mb-4 flex items-center gap-3">
-        <div className="rounded-lg bg-emerald-500/10 p-2 text-emerald-400">
+        <div className="rounded-radius-md bg-success/10 p-2 text-success">
           <Target className="h-4 w-4" />
         </div>
         <div>
-          <h2 className="text-sm font-semibold text-slate-200">Objetivos semanales</h2>
-          <p className="text-xs text-slate-500">Usados por el Goal Tracker y el Dashboard</p>
+          <h2 className="text-title-3 text-label-primary">Objetivos semanales</h2>
+          <p className="text-caption-1 text-label-secondary">Usados por el Goal Tracker y el Dashboard</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {fields.map(({ key, label, unit, step }) => (
           <div key={key}>
-            <label className="block text-[11px] font-medium text-slate-400">{label}</label>
+            <label className="block text-caption-2 font-medium text-label-secondary">{label}</label>
             <div className="mt-1 flex items-center gap-2">
               <input
                 type="number"
@@ -242,9 +239,9 @@ function SectionObjetivos() {
                       : e.target.value;
                   handleChange(key, raw);
                 }}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2 text-sm text-slate-100 focus:border-primary-500 focus:outline-none"
+                className="w-full rounded-radius-sm border border-separator bg-tint/40 px-3 py-2 text-callout text-label-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/25 transition"
               />
-              <span className="shrink-0 text-xs text-slate-500">{unit}</span>
+              <span className="shrink-0 text-caption-1 text-label-tertiary">{unit}</span>
             </div>
           </div>
         ))}
@@ -254,7 +251,7 @@ function SectionObjetivos() {
         <button
           onClick={() => void save()}
           disabled={saving}
-          className="flex items-center gap-2 rounded-lg bg-emerald-600/20 px-4 py-2 text-xs font-medium text-emerald-300 transition hover:bg-emerald-600/30 disabled:opacity-50"
+          className="flex items-center gap-2 rounded-radius-md bg-success/10 px-4 py-2 text-caption-1 font-medium text-success transition hover:bg-success/15 disabled:opacity-50"
         >
           {saving ? (
             <RefreshCw className="h-3.5 w-3.5 animate-spin" />
@@ -263,6 +260,124 @@ function SectionObjetivos() {
           )}
           Guardar objetivos
         </button>
+        {saved && (
+          <span className="flex items-center gap-1 text-caption-1 text-success">
+            <CheckCircle className="h-3.5 w-3.5" />
+            Guardado
+          </span>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Sección: Casa de Apuestas ---------- */
+
+function SectionBetting() {
+  const { settings, updateSettings } = useBettingStore();
+  const [saved, setSaved] = useState(false);
+
+  const handleRatio = (key: keyof typeof settings.ratios, raw: string) => {
+    const val = parseFloat(raw);
+    if (isNaN(val)) return;
+    updateSettings({ ratios: { ...settings.ratios, [key]: val } });
+    setSaved(false);
+  };
+
+  const toggleBool = (key: keyof typeof settings) => {
+    updateSettings({ [key]: !settings[key] } as Partial<typeof settings>);
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  return (
+    <div className="surface-card p-6">
+      <div className="mb-4 flex items-center gap-3">
+        <div className="rounded-radius-md bg-success/10 p-2 text-success">
+          <Dices className="h-4 w-4" />
+        </div>
+        <div>
+          <h2 className="text-title-3 text-label-primary">Gamificación — Casa de Apuestas</h2>
+          <p className="text-caption-1 text-label-secondary">Ratios del sector y comportamiento del módulo</p>
+        </div>
+      </div>
+
+      <div className="space-y-5">
+        {/* Ratios del sector */}
+        <div>
+          <p className="text-caption-2 font-medium uppercase tracking-wider text-label-tertiary mb-3">
+            Ratios del sector (para payout potencial)
+          </p>
+          <div className="grid grid-cols-2 gap-3">
+            {[
+              { key: 'ratio_contesta' as const, label: 'Ratio contesta', unit: '%', factor: 100, desc: '35% por defecto' },
+              { key: 'ratio_conv_agenda' as const, label: 'Conv → Agenda', unit: '%', factor: 100, desc: '12% por defecto' },
+              { key: 'show_rate' as const, label: 'Show rate', unit: '%', factor: 100, desc: '70% por defecto' },
+              { key: 'eur_por_show' as const, label: '€ por show', unit: '€', factor: 1, desc: '50€ por defecto' },
+              { key: 'eur_por_cierre' as const, label: '€ por cierre', unit: '€', factor: 1, desc: '100€ por defecto' },
+            ].map(({ key, label, unit, factor, desc }) => (
+              <div key={key}>
+                <label className="block text-caption-2 font-medium text-label-secondary">
+                  {label}
+                  <span className="ml-1 text-label-tertiary">({desc})</span>
+                </label>
+                <div className="mt-1 flex items-center gap-2">
+                  <input
+                    type="number"
+                    step={factor === 100 ? 1 : 10}
+                    min={0}
+                    value={factor === 100
+                      ? Math.round(settings.ratios[key] * 100)
+                      : settings.ratios[key]
+                    }
+                    onChange={(e) =>
+                      handleRatio(
+                        key,
+                        factor === 100
+                          ? String(parseFloat(e.target.value) / 100)
+                          : e.target.value
+                      )
+                    }
+                    className="w-full rounded-radius-sm border border-separator bg-tint/40 px-3 py-2 text-callout text-label-primary focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/25 transition"
+                  />
+                  <span className="shrink-0 text-caption-1 text-label-tertiary">{unit}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Toggles de comportamiento */}
+        <div>
+          <p className="text-caption-2 font-medium uppercase tracking-wider text-label-tertiary mb-3">Comportamiento</p>
+          <div className="space-y-2">
+            {[
+              { key: 'modo_estricto' as const, label: 'Modo estricto', desc: 'No definir reto rompe la racha' },
+              { key: 'animacion_allin' as const, label: 'Animación all-in', desc: 'Counter animado al cerrar reto' },
+              { key: 'confetti' as const, label: 'Confetti al ganar', desc: 'Animación al cerrar día WON' },
+              { key: 'mostrar_payout_en_reto' as const, label: 'Payout en reto', desc: 'Mostrar € estimados al crear reto' },
+            ].map(({ key, label, desc }) => (
+              <div key={key} className="flex items-center justify-between rounded-radius-md bg-tint/30 px-3 py-2.5">
+                <div>
+                  <p className="text-caption-1 font-medium text-label-primary">{label}</p>
+                  <p className="text-caption-2 text-label-tertiary">{desc}</p>
+                </div>
+                <button
+                  onClick={() => toggleBool(key)}
+                  className={cn(
+                    'rounded-full px-3 py-1 text-caption-2 font-medium transition',
+                    settings[key]
+                      ? 'bg-success/15 text-success'
+                      : 'bg-tint text-label-tertiary'
+                  )}
+                >
+                  {settings[key] ? 'ON' : 'OFF'}
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {saved && (
           <span className="flex items-center gap-1 text-xs text-emerald-400">
             <CheckCircle className="h-3.5 w-3.5" />
@@ -293,6 +408,7 @@ export default function Settings() {
         <SectionVault />
         <SectionModels />
         <SectionObjetivos />
+        <SectionBetting />
       </div>
     </div>
   );

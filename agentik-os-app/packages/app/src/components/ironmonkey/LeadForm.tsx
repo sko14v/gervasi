@@ -46,24 +46,24 @@ const SENSACIONES: Array<{
   label: string;
   color: string;
 }> = [
-  { value: 'caliente', emoji: '🔥', label: 'Caliente', color: 'rose' },
-  { value: 'tibio', emoji: '🟡', label: 'Tibio', color: 'amber' },
-  { value: 'frio', emoji: '🟠', label: 'Frío', color: 'sky' },
-  { value: 'descartado', emoji: '⛔', label: 'Descartado', color: 'slate' },
-];
+    { value: 'caliente', emoji: '🔥', label: 'Caliente', color: 'danger' },
+    { value: 'tibio', emoji: '🟡', label: 'Tibio', color: 'warning' },
+    { value: 'frio', emoji: '🟠', label: 'Frío', color: 'info' },
+    { value: 'descartado', emoji: '⛔', label: 'Descartado', color: 'tint' },
+  ];
 
 const COLOR_CLASSES: Record<string, string> = {
-  rose: 'border-rose-500/60 bg-rose-500/10 text-rose-200 hover:bg-rose-500/20',
-  amber: 'border-amber-500/60 bg-amber-500/10 text-amber-200 hover:bg-amber-500/20',
-  sky: 'border-sky-500/60 bg-sky-500/10 text-sky-200 hover:bg-sky-500/20',
-  slate: 'border-slate-600 bg-slate-800/60 text-slate-300 hover:bg-slate-700',
+  danger: 'border-danger/60 bg-danger/10 text-danger hover:bg-danger/20',
+  warning: 'border-warning/60 bg-warning/10 text-warning hover:bg-warning/20',
+  info: 'border-info/60 bg-info/10 text-info hover:bg-info/20',
+  tint: 'border-separator bg-tint/50 text-label-secondary hover:bg-tint/30',
 };
 
 const COLOR_ACTIVE: Record<string, string> = {
-  rose: 'border-rose-400 bg-rose-500/20 text-rose-100 ring-2 ring-rose-400/40',
-  amber: 'border-amber-400 bg-amber-500/20 text-amber-100 ring-2 ring-amber-400/40',
-  sky: 'border-sky-400 bg-sky-500/20 text-sky-100 ring-2 ring-sky-400/40',
-  slate: 'border-slate-400 bg-slate-700 text-slate-100 ring-2 ring-slate-400/40',
+  danger: 'border-danger bg-danger/20 text-danger ring-2 ring-danger/40',
+  warning: 'border-warning bg-warning/20 text-warning ring-2 ring-warning/40',
+  info: 'border-info bg-info/20 text-info ring-2 ring-info/40',
+  tint: 'border-label-tertiary bg-tint text-label-primary ring-2 ring-label-tertiary/40',
 };
 
 export interface LeadFormProps {
@@ -172,7 +172,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
         {submitError && (
           <div
             role="alert"
-            className="flex items-start gap-2 rounded-md border border-rose-500/40 bg-rose-500/10 px-3 py-2 text-sm text-rose-200"
+            className="flex items-start gap-2 rounded-radius-md border border-danger/40 bg-danger/10 px-3 py-2 text-subhead text-danger"
           >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>{submitError}</span>
@@ -182,7 +182,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
         {savedAsPending && (
           <div
             role="status"
-            className="flex items-start gap-2 rounded-md border border-amber-500/40 bg-amber-500/10 px-3 py-2 text-sm text-amber-200"
+            className="flex items-start gap-2 rounded-radius-md border border-warning/40 bg-warning/10 px-3 py-2 text-subhead text-warning"
           >
             <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
             <span>
@@ -195,7 +195,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
 
         {/* BLOQUE 1 — Datos de contacto */}
         <fieldset>
-          <legend className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <legend className="mb-3 text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
             Datos de contacto
           </legend>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -252,7 +252,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
 
         {/* BLOQUE 2 — Datos del evento */}
         <fieldset>
-          <legend className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <legend className="mb-3 text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
             Datos del evento
           </legend>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -321,7 +321,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
 
         {/* BLOQUE 3 — Sensación */}
         <fieldset>
-          <legend className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          <legend className="mb-3 text-caption-2 font-semibold uppercase tracking-wider text-label-secondary">
             Sensación
           </legend>
           <Controller
@@ -337,7 +337,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
                       key={s.value}
                       onClick={() => field.onChange(s.value)}
                       className={cn(
-                        'flex flex-col items-center justify-center gap-1 rounded-lg border px-3 py-3 text-sm font-medium transition-all',
+                        'flex flex-col items-center justify-center gap-1 rounded-radius-md border px-3 py-3 text-subhead font-medium transition-all',
                         active ? COLOR_ACTIVE[s.color] : COLOR_CLASSES[s.color],
                       )}
                       aria-pressed={active}
@@ -353,18 +353,18 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
             )}
           />
           {errors.sensacion?.message && (
-            <p className="mt-1 text-xs text-rose-300">
+            <p className="mt-1 text-caption-2 text-danger">
               {errors.sensacion.message}
             </p>
           )}
         </fieldset>
 
         {/* Footer con submit */}
-        <div className="flex items-center justify-end gap-2 border-t border-slate-800 pt-4">
+        <div className="flex items-center justify-end gap-2 border-t border-separator pt-4">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-md border border-slate-700 px-3 py-1.5 text-sm text-slate-300 transition-colors hover:bg-slate-800"
+            className="rounded-radius-md border border-separator bg-tint/30 text-label-secondary px-3 py-1.5 text-subhead transition-colors hover:bg-tint/50"
           >
             Cancelar
           </button>
@@ -372,8 +372,8 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
             type="submit"
             disabled={isSubmitting}
             className={cn(
-              'inline-flex items-center gap-2 rounded-md bg-primary-600 px-3 py-1.5 text-sm font-medium text-white transition-colors',
-              'hover:bg-primary-500 active:bg-primary-700',
+              'inline-flex items-center gap-2 rounded-radius-sm bg-charter px-3 py-1.5 text-subhead font-medium text-label-inverse transition-colors',
+              'hover:bg-charter/80 active:bg-charter',
               'disabled:cursor-not-allowed disabled:opacity-60',
             )}
           >
@@ -393,7 +393,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
 /* ---------- Helpers internos ---------- */
 
 const inputClass =
-  'w-full rounded-md border border-slate-700 bg-slate-950/40 px-3 py-1.5 text-sm text-slate-100 placeholder:text-slate-600 transition-colors focus:border-primary-500 focus:outline-none focus:ring-1 focus:ring-primary-500/40';
+  'w-full rounded-radius-sm border border-separator bg-surface px-3 py-1.5 text-subhead text-label-primary placeholder:text-label-quaternary transition-colors focus:border-charter focus:outline-none focus:ring-1 focus:ring-charter/40';
 
 interface FieldProps {
   label: string;
@@ -406,12 +406,12 @@ interface FieldProps {
 function Field({ label, required, error, className, children }: FieldProps) {
   return (
     <div className={cn('flex flex-col gap-1', className)}>
-      <label className="text-xs font-medium text-slate-300">
+      <label className="text-caption-2 font-medium text-label-secondary">
         {label}
-        {required && <span className="ml-0.5 text-rose-400">*</span>}
+        {required && <span className="ml-0.5 text-danger">*</span>}
       </label>
       {children}
-      {error && <span className="text-xs text-rose-300">{error}</span>}
+      {error && <span className="text-caption-2 text-danger">{error}</span>}
     </div>
   );
 }

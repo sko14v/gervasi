@@ -26,7 +26,7 @@ export function AudioUploader() {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    
+
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFiles = Array.from(e.dataTransfer.files).filter((file) =>
         /\.(mp3|m4a|wav|ogg)$/i.test(file.name)
@@ -68,10 +68,10 @@ export function AudioUploader() {
         onDragLeave={handleDrag}
         onDrop={handleDrop}
         className={cn(
-          'relative flex flex-col items-center justify-center rounded-xl border border-dashed p-8 text-center transition-colors',
+          'relative flex flex-col items-center justify-center rounded-radius-xl border border-dashed p-8 text-center transition-colors',
           dragActive
             ? 'border-primary-500 bg-primary-500/5'
-            : 'border-slate-800 bg-slate-900/10 hover:border-slate-700',
+            : 'border-separator bg-tint/10 hover:border-separator',
           uploading && 'pointer-events-none opacity-50'
         )}
       >
@@ -146,7 +146,7 @@ export function AudioUploader() {
               Esto puede tomar entre 1 y 3 minutos según la longitud de los audios.
             </p>
           </div>
-          
+
           {/* Progress sequence animation representation */}
           <div className="max-w-xs mx-auto text-left text-[11px] text-slate-500 space-y-1.5 border-t border-slate-800 pt-3">
             <div className="flex justify-between">

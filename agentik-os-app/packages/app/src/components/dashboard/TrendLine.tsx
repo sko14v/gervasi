@@ -1,8 +1,6 @@
 /**
  * TrendLine.tsx — Gráfico de tendencia ICL con Recharts.
- *
- * Muestra el ICL promedio de las últimas sesiones de Growing.
- * Verde si la tendencia sube, rojo si baja.
+ * Design system tokens for container.
  */
 
 import {
@@ -17,33 +15,33 @@ import {
 } from 'recharts';
 
 interface TrendLineProps {
-  data: number[];   // ICL de últimas sesiones (índice 0 = más antigua)
-  objetivo?: number; // Línea de referencia (default 75)
+  data: number[];
+  objetivo?: number;
   loading?: boolean;
 }
 
 function SkeletonChart() {
   return (
-    <div className="animate-pulse rounded-xl border border-slate-800 bg-slate-900/60 p-5">
-      <div className="mb-4 h-4 w-40 rounded bg-slate-700" />
-      <div className="h-40 rounded bg-slate-800/60" />
+    <div className="animate-pulse rounded-radius-xl border border-separator bg-surface p-5">
+      <div className="mb-4 h-4 w-40 rounded-radius-sm bg-tint" />
+      <div className="h-40 rounded-radius-md bg-tint/30" />
     </div>
   );
 }
 
-interface TooltipProps {
+interface CustomTooltipData {
   active?: boolean;
   payload?: Array<{ value: number }>;
   label?: string | number;
 }
 
-function CustomTooltip({ active, payload }: TooltipProps) {
+function CustomTooltip({ active, payload }: CustomTooltipData) {
   if (!active || !payload?.length) return null;
   const val = payload[0]?.value ?? 0;
   return (
-    <div className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm shadow-xl">
-      <span className="font-semibold text-slate-100">ICL: {val}</span>
-      <span className="ml-2 text-slate-400">/ 100</span>
+    <div className="rounded-radius-md border border-separator bg-surface px-3 py-2 text-sm shadow-popover">
+      <span className="font-semibold text-label-primary">ICL: {val}</span>
+      <span className="ml-2 text-label-secondary">/ 100</span>
     </div>
   );
 }
@@ -53,9 +51,9 @@ export function TrendLine({ data, objetivo = 75, loading = false }: TrendLinePro
 
   if (data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center rounded-xl border border-slate-800 bg-slate-900/60 p-8 text-center">
-        <p className="text-sm text-slate-400">Sin sesiones analizadas aún.</p>
-        <p className="mt-1 text-xs text-slate-500">Sube un audio en Growing para ver la evolución.</p>
+      <div className="flex flex-col items-center justify-center rounded-radius-xl border border-separator bg-surface p-8 text-center">
+        <p className="text-callout text-label-secondary">Sin sesiones analizadas aún.</p>
+        <p className="mt-1 text-caption-1 text-label-tertiary">Sube un audio en Growing para ver la evolución.</p>
       </div>
     );
   }
@@ -65,14 +63,14 @@ export function TrendLine({ data, objetivo = 75, loading = false }: TrendLinePro
   const trendColor = data[data.length - 1]! >= objetivo ? '#10b981' : '#f59e0b';
 
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+    <div className="rounded-radius-xl border border-separator bg-surface p-5">
       <div className="mb-4 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold text-slate-200">Evolución ICL Growing</h3>
-          <p className="text-xs text-slate-500">Últimas {data.length} sesiones analizadas</p>
+          <h3 className="text-subhead font-semibold text-label-primary">Evolución ICL Growing</h3>
+          <p className="text-caption-1 text-label-secondary">Últimas {data.length} sesiones analizadas</p>
         </div>
         <div
-          className="rounded-full px-2 py-0.5 text-xs font-medium"
+          className="rounded-full px-2 py-0.5 text-caption-1 font-medium"
           style={{ background: `${trendColor}20`, color: trendColor }}
         >
           {isUp ? '▲ Subiendo' : '▼ Bajando'}
@@ -81,11 +79,11 @@ export function TrendLine({ data, objetivo = 75, loading = false }: TrendLinePro
 
       <ResponsiveContainer width="100%" height={160}>
         <LineChart data={chartData} margin={{ top: 5, right: 10, bottom: 5, left: -20 }}>
-          <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" />
-          <XAxis dataKey="sesion" tick={{ fill: '#64748b', fontSize: 11 }} />
-          <YAxis domain={[0, 100]} tick={{ fill: '#64748b', fontSize: 11 }} />
+          <CartesianGrid strokeDasharray="3 3" stroke="var(--separator)" />
+          <XAxis dataKey="sesion" tick={{ fill: 'var(--label-tertiary)', fontSize: 11 }} />
+          <YAxis domain={[0, 100]} tick={{ fill: 'var(--label-tertiary)', fontSize: 11 }} />
           <Tooltip content={<CustomTooltip />} />
-          <ReferenceLine y={objetivo} stroke="#f59e0b" strokeDasharray="4 4" strokeWidth={1} />
+          <ReferenceLine y={objetivo} stroke="var(--warning)" strokeDasharray="4 4" strokeWidth={1} />
           <Line
             type="monotone"
             dataKey="icl"
@@ -98,7 +96,7 @@ export function TrendLine({ data, objetivo = 75, loading = false }: TrendLinePro
       </ResponsiveContainer>
 
       <div className="mt-2 flex justify-end">
-        <span className="text-[10px] text-slate-500">— objetivo: {objetivo}</span>
+        <span className="text-caption-2 text-label-tertiary">— objetivo: {objetivo}</span>
       </div>
     </div>
   );

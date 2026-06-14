@@ -44,6 +44,7 @@ import { sessionsRouter } from './routes/sessions.js';
 import { digestRouter } from './routes/digest.js';
 import { graphRouter } from './routes/graph.js';
 import { vaultRouter } from './routes/vault.js';
+import { bettingRouter } from './routes/betting.js';
 
 import { SERVER_PORT } from './config/paths.js';
 import { logger } from './utils/logger.js';
@@ -106,6 +107,7 @@ app.route('/sessions', sessionsRouter);
 app.route('/digest', digestRouter);
 app.route('/graph', graphRouter);
 app.route('/vault', vaultRouter);
+app.route('/growing/betting', bettingRouter);
 
 
 export type AppType = typeof app;
