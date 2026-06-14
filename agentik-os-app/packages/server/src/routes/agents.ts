@@ -1,4 +1,4 @@
-/**
+import { rateLimiter } from '../middleware/rate-limiter.js';/**
  * Rutas de los agentes.
  *
  *   POST /agents/icp              body: { leadId, nota, sensacion? }
@@ -53,7 +53,7 @@ const ALLOWED_AUDIO_EXTS = new Set(['.mp3', '.mpeg', '.wav', '.m4a', '.ogg', '.w
 function sanitizeAudioFileName(name: string): string {
   const ext = nodePath.extname(name).toLowerCase();
   const safeExt = ALLOWED_AUDIO_EXTS.has(ext) ? ext : '.mp3';
-  const base = nodePath.basename(name, ext);
+  const base = nodePath.basename(name, nodePath.extname(name));
   const sanitizedBase = base.replace(/[^A-Za-z0-9._-]/g, '_');
   if (!sanitizedBase || sanitizedBase.startsWith('.') || sanitizedBase.includes('..')) {
     throw new Error(`nombre de archivo no válido: ${name}`);
@@ -254,19 +254,39 @@ agentsRouter.post('/proposal', async (c) => {
  * cliente espera la respuesta (puede tardar 1-5 min). En Fase 4 lo
  * convertimos a SSE con progreso en tiempo real.
  */
-agentsRouter.post('/call-analyzer', async (c) => {
+agentsRouter.post('/call-analyzer', rateLimiter(), async (c) => {
   const formData = await c.req.formData();
   const rawFiles = formData.getAll('audio');
   const audioFiles: any[] = [];
+  let totalBytes = 0;
+  const MAX_TOTAL_BYTES = 500 * 1024 * 1024; // 500MB
+  const MAX_CHUNKS = 20;
+
   for (const f of rawFiles) {
     if (f && typeof f !== 'string') {
       audioFiles.push(f);
+      totalBytes += f.size || 0;
     }
   }
 
   if (audioFiles.length === 0) {
     return c.json(
       { error: 'se requiere al menos un archivo de audio en el campo "audio"', code: 400 },
+      400,
+    );
+  }
+
+  if (audioFiles.length > MAX_CHUNKS) {
+    return c.json(
+      { error: `max ${MAX_CHUNKS} audio chunks allowed (got ${audioFiles.length})`, code: 400 },
+      400,
+    );
+  }
+
+  if (totalBytes > MAX_TOTAL_BYTES) {
+    const mb = Math.round(totalBytes / 1024 / 1024);
+    return c.json(
+      { error: `total audio size ${mb}MB exceeds limit of 500MB`, code: 400 },
       400,
     );
   }

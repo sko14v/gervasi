@@ -153,7 +153,7 @@
 ### Script de llamadas
 - **Source of truth:** `guion_llamadas_frias_growing.md` (178 líneas, 5 pasos + 8 objeciones).
 - El script es el mismo para todos los mercados y zonas en España.
-- Se actualiza desde dirección comercial. Xisco me avisa y lo替换.
+- Se actualiza desde dirección comercial. Xisco me avisa y lo actualizo.
 - Minor tono variations según perfil del prospecto, pero el guion base no cambia.
 
 ### Filtros de cualificación (los 3 que hay que passar)

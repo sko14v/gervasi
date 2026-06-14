@@ -96,7 +96,7 @@ Xisco incluye o no el APA en la oferta según su criterio comercial. El APA se l
 | Condición | Detalle |
 |---|---|
 | Confirmación de reserva | Depósito según Charter Agreement |
-| Pago剩余 | Según términos del Charter Agreement |
+| PagoSegún acuerdo | Según términos del Charter Agreement |
 | APA (si se incluye) | Porcentaje personalizado + liquidación final según consumo real |
 
 ---

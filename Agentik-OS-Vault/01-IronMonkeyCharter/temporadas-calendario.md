@@ -16,7 +16,7 @@
 | Evento | Fecha aproximada | Impacto en reservas |
 |---|---|---|
 | **Palma Vela** | Inicios de mayo | Despierta demanda de espectadores y navegantes — inicio de temporada strong |
-| **Noche de San Juan** | Finales de junio | Explosión de demanda de Sunset Charters — fulminante y早早 |
+| **Noche de San Juan** | Finales de junio | Explosión de demanda de Sunset Charters — fulminante y breve |
 | **Copa del Rey de Vela** | Julio / Agosto | Satura marina y opciones de alojamiento. Espectadores buscan charters de lujo. |
 | **Inicio vacaciones escolares europeas** | Junio final / Julio inicio | Reservas familiares masivas — pico de demanda de cabinas y charters semanales |
 

@@ -14,6 +14,7 @@
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 import { execFileP } from '../utils/process-manager.js';
+import { watch } from 'chokidar';
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 
@@ -144,4 +145,49 @@ export async function query(question: string): Promise<Result<{ answer: string }
       duration_ms: Math.round(performance.now() - start),
     };
   }
+}
+
+let watcherStarted = false;
+
+export function startWatcher(): void {
+  if (watcherStarted) return;
+  watcherStarted = true;
+
+  const debounceMs = 5_000;
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const watcher = watch(`${VAULT_PATHS.root}/**/*.md`, {
+    ignored: /[\/\\]\./,
+    persistent: true,
+    ignoreInitial: true,
+  });
+
+  watcher.on('change', (path) => {
+    logger.info('graphify', `vault change detected: ${path}`);
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      logger.info('graphify', 'debounced reindex starting');
+      void reindex();
+    }, debounceMs);
+  });
+
+  watcher.on('add', (path) => {
+    logger.info('graphify', `vault add detected: ${path}`);
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      logger.info('graphify', 'debounced reindex starting');
+      void reindex();
+    }, debounceMs);
+  });
+
+  watcher.on('unlink', (path) => {
+    logger.info('graphify', `vault unlink detected: ${path}`);
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      logger.info('graphify', 'debounced reindex starting');
+      void reindex();
+    }, debounceMs);
+  });
+
+  logger.info('graphify', `watcher started on ${VAULT_PATHS.root}`);
 }

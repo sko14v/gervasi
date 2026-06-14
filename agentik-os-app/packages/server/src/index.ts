@@ -47,6 +47,7 @@ import { SERVER_PORT } from './config/paths.js';
 import { logger } from './utils/logger.js';
 import { closeBrowser } from './services/pdf.service.js';
 import { killAllActiveProcesses } from './utils/process-manager.js';
+import { startWatcher } from './services/graphify.service.js';
 
 const app = new Hono();
 
@@ -114,6 +115,7 @@ const server = serve(
   },
   (info) => {
     logger.info('server', `Agentik OS backend listo en http://localhost:${info.port}`);
+    startWatcher();
   },
 );
 

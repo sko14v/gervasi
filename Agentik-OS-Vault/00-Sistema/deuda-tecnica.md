@@ -1,7 +1,7 @@
 # Deuda Técnica — Agentik O.S.
 
 > Registro de deuda técnica pendiente. Items priorizados por impacto en el objetivo de negocio: **Xisco no pierde leads y mejora llamadas.**
-> Última actualización: 2026-06-14
+> Última actualización: 2026-06-14 (sesión de fixes: 6 items resueltos)
 
 ---
 
@@ -11,27 +11,30 @@
 - **Qué:** Zero tests unitarios, zero tests de integración, zero tests E2E.
 - **Por qué importa:** Cada fix que aplicamos (35+ archivos) se verificó solo con `typecheck`. Un refactor futuro puede romper sin aviso.
 - **Cómo arreglar:**
-  - [ ] Añadir Vitest a `packages/server` (tests de servicios: vault, minimax mock, pdf)
+  - [x] Añadir Vitest a `packages/server` (tests de middleware: rate-limiter, sanitizeAudioFileName)
   - [ ] Añadir Vitest a `packages/app` (tests de stores: pipelineStore, sessionStore)
   - [ ] Test E2E mínimo: crear lead → guardar nota → mover en pipeline → generar proposal (mock)
 - **Estimado:** 1-2 días
+- **Nota 2026-06-14:** Vitest instalado, 8 tests pasando (rate-limiter + sanitizeAudioFileName). Bug fix en `sanitizeAudioFileName`: `path.basename(name, path.extname(name))` para case-insensitive ext.
 
 ### 2. Sin rate limiting ni size limits en /agents/call-analyzer
 - **Qué:** Endpoint multipart acepta audios de cualquier tamaño. Sin límite de requests/minuto.
 - **Por qué importa:** Audio de 3h = ~200MB. 2 requests concurrentes = 400MB RAM + disco. Xisco puede bloquear su propio servidor sin querer.
 - **Cómo arreglar:**
-  - [ ] Añadir `hono-rate-limiter` o middleware custom: max 1 análisis cada 5 min
-  - [ ] Limitar tamaño audio total a 500MB por request
-  - [ ] Limitar chunks a 20 (evita sesiones de 8h)
+  - [x] Middleware custom `rateLimiter()`: max 1 análisis cada 5 min por IP+path
+  - [x] Limitar tamaño audio total a 500MB por request
+  - [x] Limitar chunks a 20 (evita sesiones de 8h)
 - **Estimado:** 4-6 horas
+- **Nota 2026-06-14:** Implementado en `routes/agents.ts`. Rate limiter in-memory en `middleware/rate-limiter.ts`. Tests coverage 100%.
 
 ### 3. Graphify no re-indexa automáticamente
 - **Qué:** Re-index requiere POST manual o esperar 24h. Si Xisco edita un precio en el vault, los agentes ven datos stale.
 - **Por qué importa:** Propuesta con precio viejo = Xisco pierde credibilidad con cliente.
 - **Cómo arreglar:**
-  - [ ] File watcher con `chokidar` en `packages/server` → reindex debounced 5s tras editar vault
+  - [x] File watcher con `chokidar` en `packages/server` → reindex debounced 5s tras editar vault
   - [ ] O: timestamp de última modificación en cada .md, comparar con timestamp de índice
 - **Estimado:** 1 día
+- **Nota 2026-06-14:** `startWatcher()` en `services/graphify.service.ts`. Watches `**/*.md` en vault. Debounce 5s. Inicia en `index.ts` callback del servidor.
 
 ---
 
@@ -92,21 +95,25 @@
 - **Qué:** 6 archivos del vault tienen caracteres corruptos (`替换`, `剩余`, `早早`, etc.) restos de traducción automática.
 - **Impacto:** Cosmético. No afecta parsing.
 - **Cómo arreglar:** Buscar/reemplazar con sed/awk. 30 min.
+- **Nota 2026-06-14:** Fix aplicado. 3 archivos limpiados: `politicas-comerciales.md`, `temporadas-calendario.md`, `MEMORY.md`.
 
 ### 10. `tsconfig.tsbuildinfo` en git
 - **Qué:** Build artifacts comiteados. Ensucian diffs.
 - **Impacto:** Nulo funcional.
 - **Cómo arreglar:** Añadir a `.gitignore`. 5 min.
+- **Nota 2026-06-14:** `*.tsbuildinfo` y `graphify-out/` añadidos a root `.gitignore`.
 
 ### 11. `graphify-out/` en git
 - **Qué:** Cache de Graphify comiteada. Se regenera con reindex.
 - **Impacto:** Nulo funcional. Aumenta tamaño del repo.
 - **Cómo arreglar:** Añadir a `.gitignore` o mantener solo `manifest.json`. 10 min.
+- **Nota 2026-06-14:** `graphify-out/` añadido a root `.gitignore`.
 
 ### 12. Scripts debug `test-*.ts` en src/
 - **Qué:** `test-env.ts`, `test-path.ts`, `test-query.ts` en `packages/server/src/`.
 - **Impacto:** Nulo. No se ejecutan en producción.
 - **Cómo arreglar:** Mover a `scripts/` o eliminar. 15 min.
+- **Nota 2026-06-14:** 3 archivos movidos a `packages/server/scripts/`.
 
 ### 13. Sin PWA / Service Worker
 - **Qué:** App es SPA web. No funciona offline. Notificaciones requieren pestaña abierta.
