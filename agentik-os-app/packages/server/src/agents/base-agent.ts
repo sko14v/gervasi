@@ -22,6 +22,21 @@ import * as graphify from '../services/graphify.service.js';
 
 export type OutputMode = 'caveman' | 'formal';
 
+/**
+ * `formal` está reservado para documentos visibles al cliente final
+ * (propuestas, feedback enviado al prospecto). NO añade tono caveman.
+ * En el system prompt del modo formal se permite texto enriquecido
+ * (markdown) y se pide que NO se devuelva JSON, sino el cuerpo del
+ * documento en Markdown estructurado.
+ */
+export const FORMAL_SYSTEM_PROMPT = [
+  'Eres un agente de Agentik OS. Estás escribiendo un documento formal',
+  'dirigido al cliente final. Tono: profesional, elegante, claro y conciso.',
+  'NO uses JSON. NO uses bloques ```json```. Devuelve el cuerpo del',
+  'documento en Markdown limpio con secciones ## y bullet lists cuando',
+  'proceda. No inventes datos que no estén en el contexto del vault.',
+].join(' ');
+
 export interface AgentContext {
   /** Snippet de texto relevante traído por Graphify. */
   graphifySnippets: string[];
@@ -31,7 +46,7 @@ export interface AgentContext {
   graphifyOk: boolean;
 }
 
-export interface AgentResult<T> {
+export interface AgentResult<T, TPersisted = unknown> {
   ok: boolean;
   data?: T;
   /** Texto crudo devuelto por el modelo (útil para debug). */
@@ -40,7 +55,7 @@ export interface AgentResult<T> {
   /** Duración total en ms. */
   duration_ms: number;
   /** Datos devueltos tras persistir en el vault. */
-  persisted?: unknown;
+  persisted?: TPersisted;
 }
 
 export interface BaseAgentConfig {
@@ -50,7 +65,7 @@ export interface BaseAgentConfig {
   maxTokensBudget: number;
 }
 
-export abstract class BaseAgent<TInput, TResult> {
+export abstract class BaseAgent<TInput, TResult, TPersisted = unknown> {
   protected readonly name: string;
   protected readonly model: MiniMaxModel;
   protected readonly outputMode: OutputMode;
@@ -112,7 +127,7 @@ export abstract class BaseAgent<TInput, TResult> {
    * Persiste el resultado en el vault. Las subclases DEBEN implementarlo.
    * Devuelve un payload ligero para devolver al caller (ej: ruta del .md).
    */
-  protected abstract persist(result: TResult, input: TInput): Promise<unknown>;
+  protected abstract persist(result: TResult, input: TInput): Promise<TPersisted>;
 
   /**
    * Ejecuta el prompt contra el modelo.
@@ -123,11 +138,14 @@ export abstract class BaseAgent<TInput, TResult> {
       { role: 'system', content: systemPrompt },
       { role: 'user', content: prompt },
     ];
+    // El modo `formal` no fuerza JSON (el LLM devuelve Markdown).
+    // El modo `caveman` siempre fuerza JSON estructurado.
+    const useJson = this.outputMode !== 'formal';
     return chat(messages, {
       model: this.model,
       temperature: this.model === 'minimax-m2.5' ? 0.2 : 0.3,
       max_tokens: this.maxTokensBudget,
-      json: true,
+      json: useJson,
     });
   }
 
@@ -142,6 +160,9 @@ export abstract class BaseAgent<TInput, TResult> {
         'Sin markdown, sin ```json. Solo el objeto JSON literal.',
       ].join(' ');
     }
+    if (this.outputMode === 'formal') {
+      return FORMAL_SYSTEM_PROMPT;
+    }
     return [
       'Eres un agente de Agentik OS. Hablas formal y profesional.',
       'Devuelve SIEMPRE JSON válido. Sin markdown, sin ```json.',
@@ -154,7 +175,7 @@ export abstract class BaseAgent<TInput, TResult> {
    * + parseOutput + persist. No captura errores — los propaga al caller
    * para que el handler HTTP los convierta a status code.
    */
-  async run(input: TInput): Promise<AgentResult<TResult>> {
+  async run(input: TInput): Promise<AgentResult<TResult, TPersisted>> {
     const start = performance.now();
     try {
       logger.info(this.name, `run() start`);

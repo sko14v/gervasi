@@ -17,7 +17,7 @@
 
 import { create } from 'zustand';
 import type { EstadoLead, Lead, SensacionLead } from '@/types';
-import { listLeads, ApiError } from '@/lib/api/leads.api';
+import { listLeads, updateLead, ApiError } from '@/lib/api/leads.api';
 import {
   runIcp,
   type ICPResult,
@@ -108,7 +108,11 @@ export const usePipelineStore = create<PipelineState>((set, get) => ({
     }
   },
 
-  moveLead: (id, newEstado) => {
+  moveLead: async (id, newEstado) => {
+    const oldLeads = get().leads;
+    const oldCurrentLead = get().currentLead;
+
+    // 1) Actualización local optimista
     set((state) => ({
       leads: state.leads.map((l) =>
         l.id === id
@@ -124,6 +128,18 @@ export const usePipelineStore = create<PipelineState>((set, get) => ({
             }
           : state.currentLead,
     }));
+
+    // 2) Llamada a la API de backend para persistir
+    try {
+      await updateLead(id, { estado: newEstado });
+    } catch (err) {
+      // 3) Revertir en caso de error
+      set({
+        leads: oldLeads,
+        currentLead: oldCurrentLead,
+        error: err instanceof Error ? err.message : 'Error al guardar el cambio de estado en el servidor',
+      });
+    }
   },
 
   setSelectedLead: (id) => set({ selectedLeadId: id }),
@@ -190,7 +206,7 @@ export const usePipelineStore = create<PipelineState>((set, get) => ({
 /* ---------- Selectors ---------- */
 
 /** Agrupa leads por estado. */
-export function selectByEstado(state: PipelineState): Record<EstadoLead, Lead[]> {
+export function selectByEstado(leads: Lead[]): Record<EstadoLead, Lead[]> {
   const empty: Record<EstadoLead, Lead[]> = {
     nuevo: [],
     contactado: [],
@@ -203,7 +219,7 @@ export function selectByEstado(state: PipelineState): Record<EstadoLead, Lead[]>
     perdido: [],
     descartado: [],
   };
-  for (const lead of state.leads) {
+  for (const lead of leads) {
     empty[lead.estado].push(lead);
   }
   return empty;

@@ -17,7 +17,7 @@
  *  - Cierra el modal y refetch pipeline al guardar.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, Save } from 'lucide-react';
@@ -88,7 +88,7 @@ function isoToDateInput(iso?: string): string {
 export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
   const fetchLeads = usePipelineStore((s) => s.fetchLeads);
 
-  const defaults: LeadFormValues = {
+  const defaults = useMemo<LeadFormValues>(() => ({
     nombre: lead?.nombre ?? '',
     telefono: lead?.telefono ?? '',
     email: lead?.email ?? '',
@@ -101,7 +101,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
     presupuesto_min: lead?.presupuesto_min,
     presupuesto_max: lead?.presupuesto_max,
     sensacion: (lead?.sensacion as SensacionLead) ?? 'tibio',
-  };
+  }), [lead]);
 
   const {
     register,
@@ -117,8 +117,7 @@ export function LeadForm({ open, onClose, mode, lead }: LeadFormProps) {
   // Reset cuando cambia el lead o el modo.
   useEffect(() => {
     if (open) reset(defaults);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, lead?.id, mode]);
+  }, [open, defaults, reset]);
 
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [savedAsPending, setSavedAsPending] = useState<boolean>(false);

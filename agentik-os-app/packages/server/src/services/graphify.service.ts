@@ -70,27 +70,69 @@ export interface ReindexResult {
   stderr: string;
 }
 
+let lastRunTime = 0;
+let runTimeout: ReturnType<typeof setTimeout> | null = null;
+let activePromise: Promise<Result<ReindexResult>> | null = null;
+
 export async function reindex(): Promise<Result<ReindexResult>> {
-  const start = performance.now();
-  try {
-    logger.info('graphify', `reindex → ${VAULT_PATHS.root}`);
-    const { stdout, stderr, duration_ms } = await run(
-      ['-m', 'graphify', 'update', VAULT_PATHS.root, '--no-cluster', '--force'],
-      120_000, // el reindex puede tardar más que el resto
-    );
-    return {
-      ok: true,
-      data: { vault_path: VAULT_PATHS.root, stdout, stderr },
-      duration_ms,
-    };
-  } catch (err) {
-    logger.error('graphify', 'reindex failed', err);
-    return {
-      ok: false,
-      error: err instanceof Error ? err.message : String(err),
-      duration_ms: Math.round(performance.now() - start),
-    };
+  // Si ya hay una indexación en curso, devolvemos su promesa
+  if (activePromise) {
+    return activePromise;
   }
+
+  const now = Date.now();
+  const timeSinceLastRun = now - lastRunTime;
+
+  if (timeSinceLastRun < 30_000) {
+    // Si se llamó muy pronto, programamos su ejecución
+    const delay = 30_000 - timeSinceLastRun;
+    logger.info('graphify', `Reindex solicitado demasiado pronto. Debounce de ${Math.round(delay / 1000)}s`);
+
+    if (runTimeout) {
+      // Ya está programado, devolvemos éxito provisional
+      return {
+        ok: true,
+        data: { vault_path: VAULT_PATHS.root, stdout: 'Throttled (ya programado)', stderr: '' },
+        duration_ms: 0,
+      };
+    }
+
+    return new Promise((resolve) => {
+      runTimeout = setTimeout(async () => {
+        runTimeout = null;
+        const res = await reindex();
+        resolve(res);
+      }, delay);
+    });
+  }
+
+  lastRunTime = now;
+  activePromise = (async () => {
+    const start = performance.now();
+    try {
+      logger.info('graphify', `reindex → ${VAULT_PATHS.root}`);
+      const { stdout, stderr, duration_ms } = await run(
+        ['-m', 'graphify', 'update', VAULT_PATHS.root, '--no-cluster', '--force'],
+        120_000, // el reindex puede tardar más que el resto
+      );
+      return {
+        ok: true,
+        data: { vault_path: VAULT_PATHS.root, stdout, stderr },
+        duration_ms,
+      };
+    } catch (err) {
+      logger.error('graphify', 'reindex failed', err);
+      return {
+        ok: false,
+        error: err instanceof Error ? err.message : String(err),
+        duration_ms: Math.round(performance.now() - start),
+      };
+    } finally {
+      activePromise = null;
+    }
+  })();
+
+  return activePromise;
 }
 
 export async function query(question: string): Promise<Result<{ answer: string }>> {

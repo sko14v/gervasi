@@ -15,7 +15,7 @@
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
-import type { Lead, EstadoLead } from '@agentik-os/shared';
+import { ESTADOS_LEAD, type Lead, type EstadoLead, type Sesion, type FeedbackSesion, type EstadoSesion } from '@agentik-os/shared';
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 
@@ -43,12 +43,7 @@ async function readDirSafe(dir: string): Promise<string[]> {
 }
 
 function parseEstado(raw: unknown): EstadoLead {
-  const valid: EstadoLead[] = [
-    'nuevo', 'contactado', 'cualificado', 'tibio',
-    'propuesta_borrador', 'propuesta_enviada', 'en_negociacion',
-    'ganado', 'perdido', 'descartado',
-  ];
-  if (typeof raw === 'string' && (valid as string[]).includes(raw)) {
+  if (typeof raw === 'string' && (ESTADOS_LEAD as string[]).includes(raw)) {
     return raw as EstadoLead;
   }
   return 'nuevo';
@@ -109,7 +104,7 @@ export async function listLeads(filters: ListLeadsFilters = {}): Promise<Lead[]>
     if (v instanceof Date) return v.getTime();
     return Date.parse(String(v ?? '')) || 0;
   };
-  leads.sort((a, b) => toMs(a.updated_at) - toMs(b.updated_at));
+  leads.sort((a, b) => toMs(b.updated_at) - toMs(a.updated_at));
   return leads;
 }
 
@@ -172,7 +167,13 @@ export async function writeLead(lead: Lead, body = ''): Promise<string> {
   const fullPath = path.join(dir, `${lead.id}.md`);
   const updated: Lead = { ...lead, updated_at: new Date().toISOString() };
   const { notas, ...fmData } = updated;
-  const file = matter.stringify(body, fmData as unknown as Record<string, unknown>);
+  const cleanFmData: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(fmData)) {
+    if (v !== undefined) {
+      cleanFmData[k] = v;
+    }
+  }
+  const file = matter.stringify(body, cleanFmData);
   await fs.writeFile(fullPath, file, 'utf8');
   logger.info('vault', `lead escrito: ${lead.id}`);
   return fullPath;
@@ -319,4 +320,242 @@ export async function appendToLog(entry: LogEntry): Promise<string> {
 /** Útil para health check y para evitar errores en arranque. */
 export function getVaultPath(): string {
   return VAULT_PATHS.root;
+}
+
+/* ---------- SESIONES (Growing) ---------- */
+
+/**
+ * Lista todas las sesiones del vault ordenadas por fecha descendente.
+ * Lee los .md de `vault/02-GrowingInmobiliario/sesiones/`.
+ */
+export async function listSessions(): Promise<Sesion[]> {
+  const dir = VAULT_PATHS.growingSesiones;
+  const files = (await readDirSafe(dir)).filter(
+    (f) => f.endsWith('.md') && !f.startsWith('_'),
+  );
+
+  const sesiones: Sesion[] = [];
+  for (const file of files) {
+    const fullPath = path.join(dir, file);
+    try {
+      const raw = await fs.readFile(fullPath, 'utf8');
+      const parsed = matter(raw);
+      const fm = parsed.data as Record<string, unknown>;
+      sesiones.push({
+        id: (fm.id as string) ?? file.replace(/\.md$/, ''),
+        fecha: (fm.fecha as string) ?? '',
+        duracion_total_seg: typeof fm.duracion_total_seg === 'number' ? fm.duracion_total_seg : 0,
+        num_llamadas: typeof fm.num_llamadas === 'number' ? fm.num_llamadas : 0,
+        num_citas: typeof fm.num_citas === 'number' ? fm.num_citas : 0,
+        icl_promedio: typeof fm.icl_promedio === 'number' ? fm.icl_promedio : undefined,
+        icl_promedio_grado: (fm.icl_promedio_grado as Sesion['icl_promedio_grado']) ?? undefined,
+        talk_ratio_promedio: typeof fm.talk_ratio_promedio === 'number' ? fm.talk_ratio_promedio : undefined,
+        sentimiento_general: (fm.sentimiento_general as Sesion['sentimiento_general']) ?? undefined,
+        estado: (fm.estado as EstadoSesion) ?? 'subida',
+        audio_paths: Array.isArray(fm.audio_paths) ? (fm.audio_paths as string[]) : [],
+        feedback_id: (fm.feedback_id as string) ?? undefined,
+        created_at: (fm.created_at as string) ?? new Date().toISOString(),
+        updated_at: (fm.updated_at as string) ?? new Date().toISOString(),
+      });
+    } catch (err) {
+      logger.warn('vault', `no se pudo parsear sesion ${fullPath}`, err);
+    }
+  }
+
+  sesiones.sort((a, b) => (a.fecha > b.fecha ? -1 : a.fecha < b.fecha ? 1 : 0));
+  return sesiones;
+}
+
+/**
+ * Lee una sesión por su ID (ej. "SES-2026-06-13").
+ * Devuelve null si no existe.
+ */
+export async function getSession(id: string): Promise<Sesion | null> {
+  const safe = id.replace(/[^A-Za-z0-9_-]/g, '');
+  const fullPath = path.join(VAULT_PATHS.growingSesiones, `${safe}.md`);
+  if (!(await fileExists(fullPath))) return null;
+
+  const raw = await fs.readFile(fullPath, 'utf8');
+  const parsed = matter(raw);
+  const fm = parsed.data as Record<string, unknown>;
+  return {
+    id: (fm.id as string) ?? safe,
+    fecha: (fm.fecha as string) ?? '',
+    duracion_total_seg: typeof fm.duracion_total_seg === 'number' ? fm.duracion_total_seg : 0,
+    num_llamadas: typeof fm.num_llamadas === 'number' ? fm.num_llamadas : 0,
+    num_citas: typeof fm.num_citas === 'number' ? fm.num_citas : 0,
+    icl_promedio: typeof fm.icl_promedio === 'number' ? fm.icl_promedio : undefined,
+    icl_promedio_grado: (fm.icl_promedio_grado as Sesion['icl_promedio_grado']) ?? undefined,
+    talk_ratio_promedio: typeof fm.talk_ratio_promedio === 'number' ? fm.talk_ratio_promedio : undefined,
+    sentimiento_general: (fm.sentimiento_general as Sesion['sentimiento_general']) ?? undefined,
+    estado: (fm.estado as EstadoSesion) ?? 'subida',
+    audio_paths: Array.isArray(fm.audio_paths) ? (fm.audio_paths as string[]) : [],
+    feedback_id: (fm.feedback_id as string) ?? undefined,
+    created_at: (fm.created_at as string) ?? new Date().toISOString(),
+    updated_at: (fm.updated_at as string) ?? new Date().toISOString(),
+  };
+}
+
+/**
+ * Escribe una sesión en `vault/02-GrowingInmobiliario/sesiones/{id}.md`.
+ * Si la sesión tiene `llamadas` o `feedback_id`, los persiste también.
+ */
+export async function writeSession(sesion: Sesion): Promise<string> {
+  const dir = VAULT_PATHS.growingSesiones;
+  await ensureDir(dir);
+  const fullPath = path.join(dir, `${sesion.id}.md`);
+  const updated: Sesion = { ...sesion, updated_at: new Date().toISOString() };
+
+  const { llamadas, ...fmData } = updated;
+  const fm = fmData as unknown as Record<string, unknown>;
+
+  let body = `# Sesión Growing — ${sesion.fecha}\n\n`;
+  if (llamadas && llamadas.length > 0) {
+    body += `## Llamadas (${llamadas.length})\n\n`;
+    for (const ll of llamadas) {
+      body += `### ${ll.id} — ${ll.duracion_seg}s — ICL ${ll.icl ?? '?'}\n\n`;
+      if (ll.transcripcion) {
+        body += `**Transcripción:**\n\n> ${ll.transcripcion.replace(/\n/g, '\n> ')}\n\n`;
+      }
+      if (ll.talk_ratio !== undefined) body += `- Talk ratio: ${(ll.talk_ratio * 100).toFixed(0)}%\n`;
+      if (ll.sentimiento) body += `- Sentimiento: ${ll.sentimiento}\n`;
+      if (ll.cita_agendada) body += `- ✅ Cita agendada\n`;
+      if (ll.resultado) body += `- Resultado: ${ll.resultado}\n`;
+      if (ll.errores_fatales && ll.errores_fatales.length > 0) {
+        body += `- Errores fatales: ${ll.errores_fatales.join(', ')}\n`;
+      }
+      if (ll.errores_criticos && ll.errores_criticos.length > 0) {
+        body += `- Errores críticos: ${ll.errores_criticos.join(', ')}\n`;
+      }
+      body += `\n`;
+    }
+  }
+
+  const file = matter.stringify(body, fm);
+  await fs.writeFile(fullPath, file, 'utf8');
+  logger.info('vault', `sesion escrita: ${sesion.id}`);
+  return fullPath;
+}
+
+/* ---------- FEEDBACK SESIONES (Growing) ---------- */
+
+/**
+ * Lee el feedback estructurado de una sesión.
+ * Busca en `vault/02-GrowingInmobiliario/feedback/{sesionId}.md`.
+ * Devuelve null si no existe.
+ */
+export async function getFeedback(sesionId: string): Promise<FeedbackSesion | null> {
+  const safe = sesionId.replace(/[^A-Za-z0-9_-]/g, '');
+  const feedbackDir = path.join(VAULT_PATHS.growing, 'feedback');
+  const fullPath = path.join(feedbackDir, `${safe}.md`);
+  if (!(await fileExists(fullPath))) return null;
+
+  const raw = await fs.readFile(fullPath, 'utf8');
+  const parsed = matter(raw);
+  const fm = parsed.data as Record<string, unknown>;
+  return {
+    sesion_id: (fm.sesion_id as string) ?? safe,
+    fecha: (fm.fecha as string) ?? '',
+    score_global: typeof fm.score_global === 'number' ? fm.score_global : 0,
+    grado: (fm.grado as FeedbackSesion['grado']) ?? 'F',
+    score_anterior: typeof fm.score_anterior === 'number' ? fm.score_anterior : undefined,
+    wins: Array.isArray(fm.wins) ? (fm.wins as string[]) : [],
+    improvements: Array.isArray(fm.improvements) ? (fm.improvements as string[]) : [],
+    fipas: Array.isArray(fm.fipas) ? (fm.fipas as FeedbackSesion['fipas']) : [],
+    tendencia_5: Array.isArray(fm.tendencia_5) ? (fm.tendencia_5 as number[]) : [],
+    recomendacion: (fm.recomendacion as string) ?? '',
+  };
+}
+
+/**
+ * Escribe el feedback de una sesión.
+ * Persiste en `vault/02-GrowingInmobiliario/feedback/{sesionId}.md`.
+ */
+export async function writeFeedback(feedback: FeedbackSesion): Promise<string> {
+  const feedbackDir = path.join(VAULT_PATHS.growing, 'feedback');
+  await ensureDir(feedbackDir);
+  const fullPath = path.join(feedbackDir, `${feedback.sesion_id}.md`);
+
+  const fm = feedback as unknown as Record<string, unknown>;
+
+  let body = `# Feedback — ${feedback.fecha}\n\n`;
+  body += `**Score global:** ${feedback.score_global}/100 (${feedback.grado})\n\n`;
+  if (feedback.score_anterior !== undefined) {
+    body += `**Score anterior:** ${feedback.score_anterior}/100\n\n`;
+  }
+  if (feedback.wins.length > 0) {
+    body += `## Wins\n\n`;
+    for (const w of feedback.wins) body += `- ${w}\n`;
+    body += `\n`;
+  }
+  if (feedback.improvements.length > 0) {
+    body += `## Improvements\n\n`;
+    for (const i of feedback.improvements) body += `- ${i}\n`;
+    body += `\n`;
+  }
+  if (feedback.fipas.length > 0) {
+    body += `## FIPAs (Focus Improvement Plan for Action)\n\n`;
+    for (const f of feedback.fipas) {
+      body += `### ${f.area}\n`;
+      body += `- **Insight:** ${f.insight}\n`;
+      body += `- **Objetivo:** ${f.objetivo}\n`;
+      body += `- **Aplicado:** ${f.aplicado ? '✅' : '❌'}\n\n`;
+    }
+  }
+  if (feedback.recomendacion) {
+    body += `## Recomendación del coach\n\n${feedback.recomendacion}\n\n`;
+  }
+
+  const file = matter.stringify(body, fm);
+  await fs.writeFile(fullPath, file, 'utf8');
+  logger.info('vault', `feedback escrito: ${feedback.sesion_id}`);
+  return fullPath;
+}
+
+/**
+ * Actualiza un FIPA específico de un feedback (marcarlo como aplicado/no aplicado).
+ * Devuelve la ruta del .md actualizado.
+ */
+export async function patchFipaAplicado(
+  sesionId: string,
+  index: number,
+  aplicado: boolean,
+): Promise<{ path: string; feedback: FeedbackSesion | null }> {
+  const safe = sesionId.replace(/[^A-Za-z0-9_-]/g, '');
+  const feedbackDir = path.join(VAULT_PATHS.growing, 'feedback');
+  const fullPath = path.join(feedbackDir, `${safe}.md`);
+
+  if (!(await fileExists(fullPath))) {
+    return { path: fullPath, feedback: null };
+  }
+
+  const raw = await fs.readFile(fullPath, 'utf8');
+  const parsed = matter(raw);
+  const fm = parsed.data as Record<string, unknown>;
+
+  const fipas = Array.isArray(fm.fipas) ? (fm.fipas as FeedbackSesion['fipas']) : [];
+  if (index < 0 || index >= fipas.length) {
+    throw new Error(`fipa index fuera de rango: ${index} (hay ${fipas.length} fipas)`);
+  }
+  fipas[index] = { ...fipas[index]!, aplicado };
+  fm.fipas = fipas;
+
+  const file = matter.stringify(parsed.content, fm);
+  await fs.writeFile(fullPath, file, 'utf8');
+
+  return {
+    path: fullPath,
+    feedback: {
+      sesion_id: (fm.sesion_id as string) ?? safe,
+      fecha: (fm.fecha as string) ?? '',
+      score_global: typeof fm.score_global === 'number' ? fm.score_global : 0,
+      grado: (fm.grado as FeedbackSesion['grado']) ?? 'F',
+      score_anterior: typeof fm.score_anterior === 'number' ? fm.score_anterior : undefined,
+      wins: Array.isArray(fm.wins) ? (fm.wins as string[]) : [],
+      improvements: Array.isArray(fm.improvements) ? (fm.improvements as string[]) : [],
+      fipas,
+      tendencia_5: Array.isArray(fm.tendencia_5) ? (fm.tendencia_5 as number[]) : [],
+      recomendacion: (fm.recomendacion as string) ?? '',
+    },
+  };
 }

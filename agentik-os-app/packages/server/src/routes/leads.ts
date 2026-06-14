@@ -1,13 +1,11 @@
 /**
- * GET    /leads          → lista todos los leads del vault
- * GET    /leads/:id      → devuelve un lead por `IM-YYYY-NNN`
- * POST   /leads          → crear un nuevo lead y guardarlo en el Vault
- * PATCH  /leads/:id      → actualizar datos del lead en el Vault sin perder notas
+ * GET    /leads                       → lista todos los leads del vault
+ * GET    /leads/:id                   → devuelve un lead por `IM-YYYY-NNN`
+ * POST   /leads                       → crear un nuevo lead y guardarlo en el Vault
+ * PATCH  /leads/:id                   → actualizar datos del lead en el Vault sin perder notas
+ * GET    /leads/:id/proposal/:version → servir el PDF de la propuesta
  *
- * En Fase 2 añadiremos:
- *   POST   /leads         → crear
- *   PATCH  /leads/:id     → actualizar estado/notas
- *   DELETE → no permitido (mover a _archive/)
+ * DELETE → no permitido (mover a _archive/)
  */
 
 import { Hono } from 'hono';
@@ -22,18 +20,23 @@ import {
   writeLead,
   appendToLog,
 } from '../services/vault.service.js';
-import type { Lead, EstadoLead } from '@agentik-os/shared';
+import { ESTADOS_LEAD, type Lead, type EstadoLead } from '@agentik-os/shared';
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 import * as graphify from '../services/graphify.service.js';
 
 export const leadsRouter = new Hono();
 
-const validEstados: EstadoLead[] = [
-  'nuevo', 'contactado', 'cualificado', 'tibio',
-  'propuesta_borrador', 'propuesta_enviada', 'en_negociacion',
-  'ganado', 'perdido', 'descartado',
-];
+async function fileExists(p: string): Promise<boolean> {
+  try {
+    await fs.access(p);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const validEstados = ESTADOS_LEAD;
 
 const createLeadSchema = z.object({
   nombre: z.string().min(2).max(120),
@@ -52,7 +55,9 @@ const createLeadSchema = z.object({
   notas: z.string().max(10000).optional(),
 });
 
-const updateLeadSchema = createLeadSchema.partial();
+const updateLeadSchema = createLeadSchema.partial().extend({
+  estado: z.enum(ESTADOS_LEAD as [string, ...string[]]).optional(),
+});
 
 leadsRouter.get('/', async (c) => {
   const estado = c.req.query('estado') as EstadoLead | undefined;
@@ -68,9 +73,10 @@ leadsRouter.get('/', async (c) => {
 
 leadsRouter.get('/:id', async (c) => {
   const id = c.req.param('id');
-  const lead = await getLead(id);
+  const safeId = id.replace(/[^A-Za-z0-9_-]/g, '');
+  const lead = await getLead(safeId);
   if (!lead) {
-    return c.json({ error: `lead no encontrado: ${id}`, code: 404 }, 404);
+    return c.json({ error: `lead no encontrado: ${safeId}`, code: 404 }, 404);
   }
   return c.json(lead);
 });
@@ -134,9 +140,10 @@ leadsRouter.post('/', async (c) => {
 
 leadsRouter.patch('/:id', async (c) => {
   const id = c.req.param('id');
-  const existing = await getLead(id);
+  const safeId = id.replace(/[^A-Za-z0-9_-]/g, '');
+  const existing = await getLead(safeId);
   if (!existing) {
-    return c.json({ error: `lead no encontrado: ${id}`, code: 404 }, 404);
+    return c.json({ error: `lead no encontrado: ${safeId}`, code: 404 }, 404);
   }
 
   let body: z.infer<typeof updateLeadSchema>;
@@ -148,7 +155,7 @@ leadsRouter.patch('/:id', async (c) => {
     return c.json({ error: `body inválido: ${message}`, code: 400 }, 400);
   }
 
-  const safe = id.replace(/[^A-Za-z0-9_-]/g, '');
+  const safe = safeId;
   const fullPath = path.join(VAULT_PATHS.ironMonkeyLeads, `${safe}.md`);
   let contentBody = '';
   try {
@@ -186,5 +193,45 @@ leadsRouter.patch('/:id', async (c) => {
     .catch((e) => logger.warn('leads', `graphify reindex threw: ${e}`));
 
   return c.json(updatedLead);
+});
+
+/* ---------- /leads/:id/proposal/:version ---------- */
+
+/**
+ * Sirve el PDF de una propuesta generada por el Proposal Agent.
+ * - Devuelve 404 si la propuesta no existe.
+ * - Devuelve el PDF como `application/pdf` con `Content-Disposition: inline`
+ *   para que el navegador lo muestre embebido en un `<iframe>`.
+ */
+leadsRouter.get('/:id/proposal/:version', async (c) => {
+  const id = c.req.param('id');
+  const versionStr = c.req.param('version');
+  const version = parseInt(versionStr, 10);
+  if (!Number.isFinite(version) || version < 1) {
+    return c.json({ error: `versión inválida: ${versionStr}`, code: 400 }, 400);
+  }
+
+  const safe = id.replace(/[^A-Za-z0-9_-]/g, '');
+  const filename = `${safe}-v${version}.pdf`;
+  const fullPath = path.join(VAULT_PATHS.ironMonkeyPropuestas, filename);
+
+  if (!(await fileExists(fullPath))) {
+    return c.json(
+      { error: `propuesta no encontrada: ${filename}`, code: 404 },
+      404,
+    );
+  }
+
+  const buffer = await fs.readFile(fullPath);
+  // Hono puede recibir un Buffer/ArrayBuffer como body
+  return new Response(buffer, {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Content-Disposition': `inline; filename="${filename}"`,
+      'Content-Length': String(buffer.length),
+      'Cache-Control': 'private, max-age=3600',
+    },
+  });
 });
 

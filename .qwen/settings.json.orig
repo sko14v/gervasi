@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir *)",
+      "Bash(npm run *)",
+      "Bash(ffmpeg *)",
+      "Bash(npm install *)",
+      "Bash(npx *)",
+      "Bash(powershell *)",
+      "Bash(select-object *)",
+      "Bash(del *)",
+      "Bash($env:agentik_vault_path *)",
+      "Bash(ping *)"
+    ]
+  },
+  "$version": 4
+}

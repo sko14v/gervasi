@@ -47,7 +47,9 @@ export interface CreateLeadPayload {
   notas?: string;
 }
 
-export type UpdateLeadPayload = Partial<CreateLeadPayload>;
+export interface UpdateLeadPayload extends Partial<CreateLeadPayload> {
+  estado?: Lead['estado'];
+}
 
 const PENDING_KEY = 'agentik:pending-leads';
 

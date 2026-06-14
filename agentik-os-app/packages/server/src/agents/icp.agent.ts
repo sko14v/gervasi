@@ -64,7 +64,7 @@ export type IcpResult = z.infer<typeof icpResultSchema>;
 
 /* ---------- AGENT ---------- */
 
-export class IcpAgent extends BaseAgent<IcpInput, IcpResult> {
+export class IcpAgent extends BaseAgent<IcpInput, IcpResult, { path: string }> {
   constructor() {
     super({
       name: 'icp',
@@ -131,17 +131,34 @@ export class IcpAgent extends BaseAgent<IcpInput, IcpResult> {
   }
 
   protected parseOutput(raw: string): IcpResult {
-    // El modelo a veces envuelve el JSON en texto. Intentamos extraer
-    // el primer bloque {...} que parezca un objeto de nivel superior.
     const trimmed = raw.trim();
-    const start = trimmed.indexOf('{');
-    const end = trimmed.lastIndexOf('}');
-    if (start === -1 || end === -1 || end <= start) {
-      throw new Error('no JSON object found in model output');
+    // 1) Intentar parsear la cadena completa directamente por si viene limpia
+    try {
+      return icpResultSchema.parse(JSON.parse(trimmed));
+    } catch {
+      // Ignorar e ir a la extracción por bloques
     }
-    const candidate = trimmed.slice(start, end + 1);
-    const json = JSON.parse(candidate);
-    return icpResultSchema.parse(json);
+
+    // 2) Buscar todas las ocurrencias de '{'
+    const matches = [...trimmed.matchAll(/\{/g)];
+    for (const match of matches) {
+      const start = match.index!;
+      const end = trimmed.lastIndexOf('}');
+      if (end > start) {
+        let currentEnd = end;
+        while (currentEnd > start) {
+          const candidate = trimmed.slice(start, currentEnd + 1);
+          try {
+            const json = JSON.parse(candidate);
+            return icpResultSchema.parse(json);
+          } catch {
+            // Reintentar buscando el siguiente cierre de llave anterior
+            currentEnd = trimmed.lastIndexOf('}', currentEnd - 1);
+          }
+        }
+      }
+    }
+    throw new Error('No valid JSON object matching ICP schema found in model output');
   }
 
   /**
@@ -183,7 +200,7 @@ export class IcpAgent extends BaseAgent<IcpInput, IcpResult> {
 /** Helper para el handler HTTP. */
 export async function runIcpAgent(
   input: IcpInput,
-): Promise<AgentResult<IcpResult>> {
+): Promise<AgentResult<IcpResult, { path: string }>> {
   const agent = new IcpAgent();
   return agent.run(input);
 }

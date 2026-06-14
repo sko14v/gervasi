@@ -175,3 +175,393 @@ Nothing to update or rebuild failed — check output above.
 [2026-06-14 01:24:19] [INFO] [http] [POST] [/agents/icp] [200] [1580ms]
 [2026-06-14 01:24:19] [icp] [nota-procesada] lead=IM-2026-001 score=10 estado=cualificado follow_ups=2
 [2026-06-14 01:24:20] [INFO] [agents] graphify reindex OK en 1261ms
+[2026-06-14 01:24:36] [WARN] [http] [POST] [/agents/icp] [400] [2ms]
+[2026-06-14 01:38:28] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 01:38:28] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:38:28] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:38:37] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:38:37] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 01:38:37] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:39:41] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 01:39:41] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 01:39:41] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:02:43] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:02:43] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:02:43] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:02:54] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:02:54] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:02:54] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:02:57] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:02:57] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:02:57] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:02] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:02] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:02] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:09] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:09] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:09] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:17] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:17] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:17] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:21] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:21] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:21] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:25] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:25] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:25] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:29] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:29] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:29] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:35] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:35] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:03:35] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:42] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:03:42] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:03:42] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:04:18] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:04:18] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:04:18] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:04:22] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:04:22] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:04:22] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:04:42] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:04:43] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:04:49] [INFO] [pdf] pdf generado: 201608 bytes en 5795ms
+[2026-06-14 02:04:49] [WARN] [proposal] no se pudo actualizar el estado del lead: unacceptable kind of an object to dump [object Undefined]
+[2026-06-14 02:04:49] [proposal] [propuesta-generada] lead=IM-2026-001 version=v1 pdf=IM-2026-001-v1.pdf size=201608B graphify=ok dev_mock=false
+[2026-06-14 02:04:49] [INFO] [proposal] propuesta v1 generada para IM-2026-001 → IM-2026-001-v1.pdf (201608B en 7701ms)
+[2026-06-14 02:04:49] [INFO] [http] [POST] [/agents/proposal] [200] [7711ms]
+[2026-06-14 02:04:59] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:04:59] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:04:59] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:05:03] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:05:04] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:05:05] [INFO] [pdf] pdf generado: 201613 bytes en 1513ms
+[2026-06-14 02:05:05] [WARN] [proposal] no se pudo actualizar el estado del lead: fmData is not defined
+[2026-06-14 02:05:05] [proposal] [propuesta-generada] lead=IM-2026-001 version=v2 pdf=IM-2026-001-v2.pdf size=201613B graphify=ok dev_mock=false
+[2026-06-14 02:05:05] [INFO] [proposal] propuesta v2 generada para IM-2026-001 → IM-2026-001-v2.pdf (201613B en 3038ms)
+[2026-06-14 02:05:05] [INFO] [http] [POST] [/agents/proposal] [200] [3045ms]
+[2026-06-14 02:05:14] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:05:14] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:05:14] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:05:16] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:05:17] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:05:19] [INFO] [pdf] pdf generado: 202440 bytes en 1478ms
+[2026-06-14 02:05:19] [INFO] [vault] lead escrito: IM-2026-001
+[2026-06-14 02:05:19] [proposal] [propuesta-generada] lead=IM-2026-001 version=v3 pdf=IM-2026-001-v3.pdf size=202440B graphify=ok dev_mock=false
+[2026-06-14 02:05:19] [INFO] [http] [POST] [/agents/proposal] [200] [3135ms]
+[2026-06-14 02:05:19] [INFO] [proposal] propuesta v3 generada para IM-2026-001 → IM-2026-001-v3.pdf (202440B en 3126ms)
+[2026-06-14 02:08:56] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:08:56] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:08:56] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:09:05] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:09:05] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:09:05] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:09:10] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:09:10] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:09:10] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:10:12] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:10:12] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:10:12] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:10:18] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:10:18] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:10:18] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:10:58] [INFO] [http] [GET] [/] [200] [3ms]
+[2026-06-14 02:11:08] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:11:11] [INFO] [http] [GET] [/] [200] [3ms]
+[2026-06-14 02:11:17] [INFO] [http] [GET] [/leads] [200] [7ms]
+[2026-06-14 02:12:06] [INFO] [http] [GET] [/leads] [200] [16ms]
+[2026-06-14 02:12:06] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:12:06] [INFO] [http] [GET] [/health] [200] [113ms]
+[2026-06-14 02:12:06] [INFO] [http] [GET] [/health] [200] [101ms]
+[2026-06-14 02:12:11] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:12:11] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:12:34] [INFO] [icp] run() start
+[2026-06-14 02:12:35] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:12:36] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:12:36] [INFO] [icp] run() ok in 1615ms
+[2026-06-14 02:12:36] [INFO] [vault] lead IM-2026-001 actualizado → score 9 estado cualificado (+6 bullets)
+[2026-06-14 02:12:36] [INFO] [icp] lead IM-2026-001 → score 9/10 estado cualificado (6 bullets)
+[2026-06-14 02:12:36] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:12:36] [icp] [nota-procesada] lead=IM-2026-001 score=9 estado=cualificado follow_ups=2
+[2026-06-14 02:12:36] [INFO] [http] [POST] [/agents/icp] [200] [1632ms]
+[2026-06-14 02:12:36] [INFO] [http] [GET] [/health] [200] [87ms]
+[2026-06-14 02:12:37] [INFO] [agents] graphify reindex OK en 1229ms
+[2026-06-14 02:13:06] [INFO] [http] [GET] [/health] [200] [102ms]
+[2026-06-14 02:13:10] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:13:11] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:13:12] [INFO] [pdf] pdf generado: 201609 bytes en 1682ms
+[2026-06-14 02:13:12] [INFO] [vault] lead escrito: IM-2026-001
+[2026-06-14 02:13:12] [proposal] [propuesta-generada] lead=IM-2026-001 version=v4 pdf=IM-2026-001-v4.pdf size=201609B graphify=ok dev_mock=false
+[2026-06-14 02:13:12] [INFO] [proposal] propuesta v4 generada para IM-2026-001 → IM-2026-001-v4.pdf (201609B en 3330ms)
+[2026-06-14 02:13:12] [INFO] [http] [POST] [/agents/proposal] [200] [3332ms]
+[2026-06-14 02:13:13] [INFO] [http] [GET] [/leads/IM-2026-001/proposal/4] [200] [3ms]
+[2026-06-14 02:13:36] [INFO] [http] [GET] [/health] [200] [88ms]
+[2026-06-14 02:13:41] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:13:49] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:13:49] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:14:06] [INFO] [http] [GET] [/health] [200] [91ms]
+[2026-06-14 02:14:35] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:14:35] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:14:36] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:14:36] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:14:36] [INFO] [http] [GET] [/health] [200] [83ms]
+[2026-06-14 02:14:36] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:14:36] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:14:42] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:15:06] [INFO] [http] [GET] [/health] [200] [83ms]
+[2026-06-14 02:15:36] [INFO] [http] [GET] [/health] [200] [66ms]
+[2026-06-14 02:16:06] [INFO] [http] [GET] [/health] [200] [59ms]
+[2026-06-14 02:16:36] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:17:06] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:17:36] [INFO] [http] [GET] [/health] [200] [59ms]
+[2026-06-14 02:18:06] [INFO] [http] [GET] [/health] [200] [70ms]
+[2026-06-14 02:18:36] [INFO] [http] [GET] [/health] [200] [69ms]
+[2026-06-14 02:19:06] [INFO] [http] [GET] [/health] [200] [71ms]
+[2026-06-14 02:19:21] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:19:21] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:19:21] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:19:36] [INFO] [http] [GET] [/health] [200] [72ms]
+[2026-06-14 02:19:56] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:19:56] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:19:56] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:20:06] [INFO] [http] [GET] [/health] [200] [69ms]
+[2026-06-14 02:20:36] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:20:53] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:20:53] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:20:53] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:21:06] [INFO] [http] [GET] [/health] [200] [66ms]
+[2026-06-14 02:21:36] [INFO] [http] [GET] [/health] [200] [63ms]
+[2026-06-14 02:22:06] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:22:36] [INFO] [http] [GET] [/health] [200] [62ms]
+[2026-06-14 02:23:06] [INFO] [http] [GET] [/health] [200] [65ms]
+[2026-06-14 02:23:29] [INFO] [http] [GET] [/leads] [200] [20ms]
+[2026-06-14 02:23:29] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:23:29] [INFO] [http] [GET] [/health] [200] [77ms]
+[2026-06-14 02:23:29] [INFO] [http] [GET] [/health] [200] [72ms]
+[2026-06-14 02:23:59] [INFO] [http] [GET] [/health] [200] [71ms]
+[2026-06-14 02:24:04] [INFO] [http] [GET] [/leads] [200] [13ms]
+[2026-06-14 02:24:04] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:24:04] [INFO] [http] [GET] [/health] [200] [84ms]
+[2026-06-14 02:24:04] [INFO] [http] [GET] [/health] [200] [78ms]
+[2026-06-14 02:24:34] [INFO] [http] [GET] [/health] [200] [67ms]
+[2026-06-14 02:25:04] [INFO] [http] [GET] [/health] [200] [62ms]
+[2026-06-14 02:25:34] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:26:04] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:26:34] [INFO] [http] [GET] [/health] [200] [64ms]
+[2026-06-14 02:26:47] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:26:47] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:27:04] [INFO] [http] [GET] [/health] [200] [74ms]
+[2026-06-14 02:27:34] [INFO] [http] [GET] [/health] [200] [73ms]
+[2026-06-14 02:28:04] [INFO] [http] [GET] [/health] [200] [75ms]
+[2026-06-14 02:28:11] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:28:11] [INFO] [http] [GET] [/digest/growing] [200] [2ms]
+[2026-06-14 02:28:11] [INFO] [crm-manager] digest OK: 2 alertas, 4 leads
+[2026-06-14 02:28:11] [INFO] [http] [GET] [/digest/ironmonkey] [200] [6ms]
+[2026-06-14 02:28:11] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:28:11] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:28:19] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:28:19] [INFO] [http] [GET] [/health] [200] [75ms]
+[2026-06-14 02:28:20] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:28:27] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/sessions] [200] [9ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/leads] [200] [13ms]
+[2026-06-14 02:28:27] [INFO] [crm-manager] digest OK: 2 alertas, 4 leads
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/digest/ironmonkey] [200] [26ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/health] [200] [97ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/health] [200] [97ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:28:27] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:28:39] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/digest/ironmonkey] [200] [4ms]
+[2026-06-14 02:28:39] [INFO] [crm-manager] digest OK: 2 alertas, 4 leads
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/health] [200] [79ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/sessions] [200] [7ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/leads] [200] [10ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/health] [200] [80ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:28:39] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:28:43] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 02:28:43] [INFO] [server] Agentik OS backend listo en http://localhost:3002
+[2026-06-14 02:28:43] [INFO] [server] Agentik OS backend listo en http://localhost:3099
+[2026-06-14 02:29:09] [INFO] [http] [GET] [/health] [200] [80ms]
+[2026-06-14 02:29:39] [INFO] [http] [GET] [/health] [200] [62ms]
+[2026-06-14 02:30:09] [INFO] [http] [GET] [/health] [200] [62ms]
+[2026-06-14 02:30:39] [INFO] [http] [GET] [/health] [200] [63ms]
+[2026-06-14 02:31:09] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:31:39] [INFO] [http] [GET] [/health] [200] [76ms]
+[2026-06-14 02:32:09] [INFO] [http] [GET] [/health] [200] [63ms]
+[2026-06-14 02:32:39] [INFO] [http] [GET] [/health] [200] [63ms]
+[2026-06-14 02:33:09] [INFO] [http] [GET] [/health] [200] [57ms]
+[2026-06-14 02:33:39] [INFO] [http] [GET] [/health] [200] [58ms]
+[2026-06-14 02:34:09] [INFO] [http] [GET] [/health] [200] [58ms]
+[2026-06-14 02:34:39] [INFO] [http] [GET] [/health] [200] [65ms]
+[2026-06-14 02:34:50] [INFO] [http] [GET] [/health] [200] [74ms]
+[2026-06-14 02:34:50] [WARN] [http] [GET] [/favicon.ico] [404] [0ms]
+[2026-06-14 02:34:57] [INFO] [http] [GET] [/] [200] [0ms]
+[2026-06-14 02:35:09] [INFO] [http] [GET] [/health] [200] [74ms]
+[2026-06-14 02:35:09] [INFO] [http] [GET] [/health] [200] [71ms]
+[2026-06-14 02:35:12] [INFO] [http] [GET] [/health] [200] [64ms]
+[2026-06-14 02:35:13] [INFO] [http] [GET] [/] [200] [0ms]
+[2026-06-14 02:35:20] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:35:22] [INFO] [http] [GET] [/leads] [200] [8ms]
+[2026-06-14 02:35:23] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:35:32] [INFO] [http] [GET] [/graphify/status] [200] [63ms]
+[2026-06-14 02:35:33] [INFO] [http] [GET] [/digest/ironmonkey] [200] [3ms]
+[2026-06-14 02:35:33] [INFO] [crm-manager] digest OK: 2 alertas, 4 leads
+[2026-06-14 02:35:34] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:35:34] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:35:39] [INFO] [http] [GET] [/health] [200] [59ms]
+[2026-06-14 02:35:46] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:35:46] [INFO] [http] [GET] [/agents/goal-tracker] [200] [1ms]
+[2026-06-14 02:35:47] [INFO] [http] [GET] [/graph] [200] [6ms]
+[2026-06-14 02:35:48] [INFO] [http] [GET] [/leads/IM-2026-001] [200] [1ms]
+[2026-06-14 02:36:00] [INFO] [vault] lead escrito: IM-2026-005
+[2026-06-14 02:36:00] [system] [lead-creado] lead=IM-2026-005 nombre=Test Bug origen=web sensacion=tibio
+[2026-06-14 02:36:00] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:36:00] [INFO] [http] [POST] [/leads] [200] [15ms]
+[2026-06-14 02:36:01] [INFO] [leads] graphify reindex OK en 1271ms
+[2026-06-14 02:36:01] [INFO] [vault] lead escrito: IM-2026-005
+[2026-06-14 02:36:01] [system] [lead-actualizado] lead=IM-2026-005 campos=estado
+[2026-06-14 02:36:01] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 29s
+[2026-06-14 02:36:01] [INFO] [http] [PATCH] [/leads/IM-2026-005] [200] [7ms]
+[2026-06-14 02:36:02] [INFO] [http] [GET] [/leads/IM-2026-005] [200] [1ms]
+[2026-06-14 02:36:09] [INFO] [http] [GET] [/health] [200] [68ms]
+[2026-06-14 02:36:11] [INFO] [icp] run() start
+[2026-06-14 02:36:11] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:36:12] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:36:12] [INFO] [icp] run() ok in 1588ms
+[2026-06-14 02:36:12] [INFO] [icp] lead IM-2026-005 → score 9/10 estado cualificado (6 bullets)
+[2026-06-14 02:36:12] [INFO] [vault] lead IM-2026-005 actualizado → score 9 estado cualificado (+6 bullets)
+[2026-06-14 02:36:12] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 17s
+[2026-06-14 02:36:12] [icp] [nota-procesada] lead=IM-2026-005 score=9 estado=cualificado follow_ups=2
+[2026-06-14 02:36:12] [INFO] [agents] graphify reindex OK en 0ms
+[2026-06-14 02:36:12] [INFO] [http] [POST] [/agents/icp] [200] [1589ms]
+[2026-06-14 02:36:14] [WARN] [http] [POST] [/agents/crm-manager] [400] [3ms]
+[2026-06-14 02:36:24] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:36:24] [INFO] [http] [POST] [/agents/crm-manager] [200] [5ms]
+[2026-06-14 02:36:30] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:36:31] [INFO] [leads] graphify reindex OK en 928ms
+[2026-06-14 02:36:34] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:36:35] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:36:39] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:36:40] [INFO] [pdf] pdf generado: 194511 bytes en 5389ms
+[2026-06-14 02:36:40] [INFO] [vault] lead escrito: IM-2026-005
+[2026-06-14 02:36:40] [proposal] [propuesta-generada] lead=IM-2026-005 version=v1 pdf=IM-2026-005-v1.pdf size=194511B graphify=ok dev_mock=false
+[2026-06-14 02:36:40] [INFO] [proposal] propuesta v1 generada para IM-2026-005 → IM-2026-005-v1.pdf (194511B en 6916ms)
+[2026-06-14 02:36:40] [INFO] [http] [POST] [/agents/proposal] [200] [6918ms]
+[2026-06-14 02:37:06] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:37:06] [INFO] [http] [GET] [/digest/ironmonkey] [200] [4ms]
+[2026-06-14 02:37:06] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:37:06] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:37:09] [INFO] [http] [GET] [/health] [200] [71ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/digest/growing] [200] [15ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/sessions] [200] [14ms]
+[2026-06-14 02:37:13] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/leads] [200] [19ms]
+[2026-06-14 02:37:13] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/digest/ironmonkey] [200] [22ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/health] [200] [107ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/health] [200] [109ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:37:13] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:37:16] [INFO] [http] [GET] [/graph] [200] [4ms]
+[2026-06-14 02:37:16] [INFO] [http] [GET] [/graph] [200] [3ms]
+[2026-06-14 02:37:16] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:37:17] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:37:18] [INFO] [vault] lead escrito: IM-2026-004
+[2026-06-14 02:37:18] [system] [lead-actualizado] lead=IM-2026-004 campos=estado
+[2026-06-14 02:37:18] [INFO] [http] [PATCH] [/leads/IM-2026-004] [200] [7ms]
+[2026-06-14 02:37:18] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:37:20] [INFO] [leads] graphify reindex OK en 1233ms
+[2026-06-14 02:37:24] [INFO] [vault] lead escrito: IM-2026-005
+[2026-06-14 02:37:24] [system] [lead-actualizado] lead=IM-2026-005 campos=estado
+[2026-06-14 02:37:24] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 24s
+[2026-06-14 02:37:24] [INFO] [http] [PATCH] [/leads/IM-2026-005] [200] [6ms]
+[2026-06-14 02:37:25] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:37:26] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:37:27] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:37:27] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:37:27] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:37:27] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:37:31] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:37:31] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:37:39] [INFO] [http] [GET] [/health] [200] [83ms]
+[2026-06-14 02:37:41] [INFO] [http] [GET] [/graph] [200] [4ms]
+[2026-06-14 02:37:41] [INFO] [http] [GET] [/graph] [200] [4ms]
+[2026-06-14 02:37:43] [INFO] [http] [GET] [/health] [200] [89ms]
+[2026-06-14 02:37:48] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:37:48] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:37:48] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:37:50] [INFO] [leads] graphify reindex OK en 1297ms
+[2026-06-14 02:38:04] [INFO] [http] [GET] [/graph] [200] [3ms]
+[2026-06-14 02:38:04] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:38:09] [INFO] [http] [GET] [/health] [200] [87ms]
+[2026-06-14 02:38:14] [INFO] [http] [GET] [/health] [200] [79ms]
+[2026-06-14 02:38:28] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:38:28] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:38:39] [INFO] [http] [GET] [/health] [200] [76ms]
+[2026-06-14 02:38:44] [INFO] [http] [GET] [/health] [200] [71ms]
+[2026-06-14 02:39:07] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:39:09] [INFO] [http] [GET] [/health] [200] [85ms]
+[2026-06-14 02:39:12] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:39:12] [INFO] [http] [GET] [/graph] [200] [3ms]
+[2026-06-14 02:39:13] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:39:14] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:39:14] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:39:16] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:39:17] [INFO] [http] [POST] [/graphify/reindex] [200] [1144ms]
+[2026-06-14 02:39:22] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:39:22] [INFO] [http] [GET] [/graph] [200] [3ms]
+[2026-06-14 02:39:27] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:39:27] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:39:28] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:39:28] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:39:35] [INFO] [icp] run() start
+[2026-06-14 02:39:36] [WARN] [minimax] intento 1 falló (status 0) → reintento en 1000ms
+[2026-06-14 02:39:37] [WARN] [minimax] Error de red/conexión al llamar a MiniMax (Connection error.). Cayendo a modo [DEV-MOCK] por resiliencia.
+[2026-06-14 02:39:37] [INFO] [vault] lead IM-2026-004 actualizado → score 9 estado cualificado (+6 bullets)
+[2026-06-14 02:39:37] [INFO] [icp] run() ok in 1540ms
+[2026-06-14 02:39:37] [INFO] [icp] lead IM-2026-004 → score 9/10 estado cualificado (6 bullets)
+[2026-06-14 02:39:37] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 9s
+[2026-06-14 02:39:37] [icp] [nota-procesada] lead=IM-2026-004 score=9 estado=cualificado follow_ups=2
+[2026-06-14 02:39:37] [INFO] [http] [POST] [/agents/icp] [200] [1540ms]
+[2026-06-14 02:39:39] [INFO] [http] [GET] [/health] [200] [78ms]
+[2026-06-14 02:39:44] [INFO] [http] [GET] [/health] [200] [73ms]
+[2026-06-14 02:39:46] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:39:47] [INFO] [agents] graphify reindex OK en 1068ms
+[2026-06-14 02:39:58] [INFO] [http] [GET] [/digest/ironmonkey] [200] [5ms]
+[2026-06-14 02:39:58] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:39:59] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:39:59] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:40:00] [WARN] [http] [GET] [/agents/crm-manager] [404] [0ms]
+[2026-06-14 02:40:05] [INFO] [http] [GET] [/graph] [200] [3ms]
+[2026-06-14 02:40:05] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:40:06] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:40:07] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:40:08] [INFO] [http] [GET] [/leads/IM-2026-005/proposal/1] [200] [2ms]
+[2026-06-14 02:40:09] [INFO] [http] [GET] [/health] [200] [83ms]
+[2026-06-14 02:40:10] [WARN] [http] [GET] [/agents/icp] [404] [0ms]
+[2026-06-14 02:40:14] [INFO] [http] [GET] [/health] [200] [65ms]
+[2026-06-14 02:40:15] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:40:15] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:40:17] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:40:17] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:40:17] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:40:18] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:40:18] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:40:18] [INFO] [http] [GET] [/leads] [200] [7ms]
+[2026-06-14 02:40:18] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:40:19] [INFO] [http] [GET] [/leads/IM-2026-005] [200] [1ms]
+[2026-06-14 02:40:19] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:40:20] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:40:20] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:40:20] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:40:22] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:40:22] [INFO] [http] [GET] [/leads] [200] [4ms]
+[2026-06-14 02:40:22] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:40:22] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:40:39] [INFO] [http] [GET] [/health] [200] [66ms]
+[2026-06-14 02:41:09] [INFO] [http] [GET] [/health] [200] [60ms]

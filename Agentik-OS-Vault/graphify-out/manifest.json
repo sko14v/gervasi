@@ -115,8 +115,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/leads/IM-2026-001.md": {
-    "mtime": 1781393059.4668188,
-    "ast_hash": "aa1439bc76c596f6f0df190534cb0590",
+    "mtime": 1781395992.8344035,
+    "ast_hash": "72298af80e0da25fceb93a2b6d104a02",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/leads/IM-2026-002.md": {
@@ -130,8 +130,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/leads/IM-2026-004.md": {
-    "mtime": 1781381348.4540842,
-    "ast_hash": "6ec96448154611bb4db849d250199276",
+    "mtime": 1781397577.451846,
+    "ast_hash": "21dfca29cee3cb54a8e2e4b926d27220",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/politicas-comerciales.md": {
@@ -250,8 +250,8 @@
     "semantic_hash": ""
   },
   "03-Memoria/_logs/log.md": {
-    "mtime": 1781393059.4777055,
-    "ast_hash": "bec7e8e198cf3c41c8a0754cd87fc457",
+    "mtime": 1781397586.2799742,
+    "ast_hash": "7ca5738e963f53d1e6143c2d242b6e7a",
     "semantic_hash": ""
   },
   "04-Conocimiento/guias-agentes/addendum-cerebro-transcripciones-persistencia.md": {
@@ -292,6 +292,41 @@
   "log.md": {
     "mtime": 1781361290.6989398,
     "ast_hash": "52712c255860e075e7500f156bdf301e",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/propuestas/IM-2026-001-v1.pdf": {
+    "mtime": 1781395489.1020017,
+    "ast_hash": "e69d60062143c6e178f92ce985a922e3",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/propuestas/IM-2026-001-v2.pdf": {
+    "mtime": 1781395505.8153703,
+    "ast_hash": "34602998875fcf907cb8a0c15f2fd577",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/propuestas/IM-2026-001-v3.pdf": {
+    "mtime": 1781395519.2312527,
+    "ast_hash": "599f6d9edd5d906c332b9edcb2645596",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/leads/IM-2026-005.md": {
+    "mtime": 1781397444.9629798,
+    "ast_hash": "255c27fcdba745b29eae1024c005fb74",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/pipeline-actual.md": {
+    "mtime": 1781397433.579728,
+    "ast_hash": "d73c13aecf336bd3da7055ec4c11c77d",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/propuestas/IM-2026-001-v4.pdf": {
+    "mtime": 1781395992.8318262,
+    "ast_hash": "2dd17cd3e9a64ddee661175f8d3f0161",
+    "semantic_hash": ""
+  },
+  "01-IronMonkeyCharter/propuestas/IM-2026-005-v1.pdf": {
+    "mtime": 1781397400.60937,
+    "ast_hash": "25e55dde98b623160925ecb5139137af",
     "semantic_hash": ""
   }
 }

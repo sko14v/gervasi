@@ -85,10 +85,9 @@ export function Pipeline() {
       // Sincroniza si han cambiado los datos importantes.
       setCurrentLead(fresh);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [leads]);
+  }, [leads, currentLead, setCurrentLead]);
 
-  const grouped = useMemo(() => selectByEstado({ leads } as never), [leads]);
+  const grouped = useMemo(() => selectByEstado(leads), [leads]);
 
   const activeLead: Lead | null = useMemo(
     () => (activeId ? leads.find((l) => l.id === activeId) ?? null : null),

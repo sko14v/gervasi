@@ -30,14 +30,17 @@ const BASE_URL = '/api';
 
 function buildUrl(path: string, query?: ApiOptions['query']): string {
   const cleanPath = path.startsWith('/') ? path : `/${path}`;
-  const url = new URL(BASE_URL + cleanPath, window.location.origin);
-  if (query) {
-    for (const [k, v] of Object.entries(query)) {
-      if (v === undefined || v === null) continue;
-      url.searchParams.set(k, String(v));
+  const fullPath = BASE_URL + cleanPath;
+  if (!query) return fullPath;
+
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(query)) {
+    if (v !== undefined && v !== null) {
+      qs.set(k, String(v));
     }
   }
-  return url.pathname + (url.search || '');
+  const qsStr = qs.toString();
+  return qsStr ? `${fullPath}?${qsStr}` : fullPath;
 }
 
 export async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {

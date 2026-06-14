@@ -54,11 +54,19 @@ const DEFAULT_MAX_TOKENS = 1024;
 const DEFAULT_TEMPERATURE = 0.3;
 
 let _client: OpenAI | null = null;
+let _cachedKey: string | null = null;
+let _cachedEndpoint: string | null = null;
+
 function client(): OpenAI {
-  if (!_client) {
+  const currentKey = process.env.MINIMAX_API_KEY ?? '';
+  const currentEndpoint = process.env.MINIMAX_ENDPOINT ?? 'https://api.minimax.com/v1';
+
+  if (!_client || _cachedKey !== currentKey || _cachedEndpoint !== currentEndpoint) {
+    _cachedKey = currentKey;
+    _cachedEndpoint = currentEndpoint;
     _client = new OpenAI({
-      apiKey: API_KEY,
-      baseURL: ENDPOINT,
+      apiKey: currentKey,
+      baseURL: currentEndpoint,
       timeout: DEFAULT_TIMEOUT_MS,
       maxRetries: 0, // manejamos los reintentos nosotros
     });
@@ -68,12 +76,12 @@ function client(): OpenAI {
 
 /** ¿La API key está configurada? */
 export function isConfigured(): boolean {
-  return API_KEY.trim().length > 0;
+  return (process.env.MINIMAX_API_KEY ?? '').trim().length > 0;
 }
 
 function resolveModel(model: MiniMaxModel | undefined): string {
-  if (model === 'minimax-m3') return M3_MODEL;
-  return M2_5_MODEL;
+  if (model === 'minimax-m3') return process.env.MINIMAX_M3 ?? 'minimax-m3';
+  return process.env.MINIMAX_M2_5 ?? 'minimax-m2.5';
 }
 
 /**
