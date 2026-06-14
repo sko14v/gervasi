@@ -40,13 +40,26 @@ import { runFeedbackCoachAgent } from '../agents/feedback-coach.agent.js';
 import { runGoalTrackerAgent } from '../agents/goal-tracker.agent.js';
 import { promises as fs } from 'node:fs';
 import nodePath from 'node:path';
-import { VAULT_PATHS } from '../config/paths.js';
+import { VAULT_PATHS, assertPathInside } from '../config/paths.js';
 import { appendToLog, writeSession, getSession } from '../services/vault.service.js';
 import type { Sesion } from '@agentik-os/shared';
 import * as graphify from '../services/graphify.service.js';
 import { logger } from '../utils/logger.js';
 
 export const agentsRouter = new Hono();
+
+const ALLOWED_AUDIO_EXTS = new Set(['.mp3', '.mpeg', '.wav', '.m4a', '.ogg', '.webm']);
+
+function sanitizeAudioFileName(name: string): string {
+  const ext = nodePath.extname(name).toLowerCase();
+  const safeExt = ALLOWED_AUDIO_EXTS.has(ext) ? ext : '.mp3';
+  const base = nodePath.basename(name, ext);
+  const sanitizedBase = base.replace(/[^A-Za-z0-9._-]/g, '_');
+  if (!sanitizedBase || sanitizedBase.startsWith('.') || sanitizedBase.includes('..')) {
+    throw new Error(`nombre de archivo no válido: ${name}`);
+  }
+  return `${sanitizedBase}${safeExt}`;
+}
 
 /* ---------- /agents/icp ---------- */
 
@@ -272,8 +285,19 @@ agentsRouter.post('/call-analyzer', async (c) => {
 
   for (let i = 0; i < audioFiles.length; i++) {
     const f = audioFiles[i]!;
-    const safeName = `${sesionId}-part${i + 1}${nodePath.extname(f.name) || '.mp3'}`;
-    const destAbs = nodePath.join(audioDir, safeName);
+    let safeName: string;
+    try {
+      safeName = `${sesionId}-part${i + 1}-${sanitizeAudioFileName(f.name)}`;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return c.json({ error: message, code: 400 }, 400);
+    }
+    const destAbs = nodePath.resolve(audioDir, safeName);
+    try {
+      assertPathInside(audioDir, destAbs);
+    } catch {
+      return c.json({ error: 'path de destino fuera del directorio permitido', code: 400 }, 400);
+    }
     const buf = Buffer.from(await f.arrayBuffer());
     await fs.writeFile(destAbs, buf);
     audioPaths.push(`sesiones/audio/${safeName}`);

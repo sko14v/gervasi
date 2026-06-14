@@ -105,7 +105,7 @@ export async function runGoalTrackerAgent(
 
     // --- Calcular días laborables transcurridos esta semana ---
     const todayDay = now.getDay(); // 0=Dom
-    const diasLaborables = todayDay === 0 ? 5 : Math.min(todayDay, 5); // Lun-Vie
+    const diasLaborables = todayDay === 0 ? 0 : Math.min(todayDay, 5); // Lun-Vie
 
     // --- Cargar sesiones de la semana actual ---
     const todasSesiones = await listSessions();

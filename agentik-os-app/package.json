@@ -10,7 +10,7 @@
     "dev": "npm run dev --workspaces --if-present",
     "dev:app": "npm run dev -w @agentik-os/app",
     "dev:server": "npm run dev -w @agentik-os/server",
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @agentik-os/shared && npm run build -w @agentik-os/server && npm run build -w @agentik-os/app",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "check-health": "node scripts/check-health.mjs"
   },

@@ -1,5 +1,15 @@
 /**
- * Rutas absolutas a los recursos del vault.
+ * Rutas absolutas a los recursos del vault y configuración del servidor.
+ *
+ * Variables de entorno críticas que lee este archivo:
+ *   - AGENTIK_VAULT_PATH → ruta absoluta a Agentik-OS-Vault (requerida).
+ *   - PORT               → puerto del backend Hono (default: 3001).
+ *
+ * Otras env vars críticas del sistema (ver packages/server/.env.example):
+ *   - MINIMAX_API_KEY    → clave de API de MiniMax (modo [DEV-MOCK] si falta).
+ *   - MINIMAX_BASE_URL   → endpoint OpenAI-compatible de MiniMax.
+ *   - GEMINI_API_KEY     → clave de API de Google Gemini (transcripción audio).
+ *
  * El vault vive como hermano de `agentik-os-app/`:
  *
  *   C:\Users\xisco\OneDrive\Escritorio\GERVASI\
@@ -56,5 +66,17 @@ export const VAULT_PATHS = {
   logFile: path.join(VAULT_PATH, '03-Memoria', '_logs', 'log.md'),
   graphifyOut: path.join(VAULT_PATH, 'graphify-out'),
 } as const;
+
+/**
+ * Lanza si `targetPath` no está contenido dentro de `baseDir`.
+ * Protege contra path traversal (ej. `../`).
+ */
+export function assertPathInside(baseDir: string, targetPath: string): void {
+  const base = path.resolve(baseDir);
+  const target = path.resolve(targetPath);
+  if (target !== base && !target.startsWith(base + path.sep)) {
+    throw new Error(`path traversal detectado: ${targetPath}`);
+  }
+}
 
 export const SERVER_PORT = Number(process.env.PORT ?? 3001);

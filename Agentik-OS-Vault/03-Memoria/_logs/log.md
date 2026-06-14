@@ -565,3 +565,48 @@ Nothing to update or rebuild failed — check output above.
 [2026-06-14 02:40:22] [INFO] [http] [GET] [/leads] [200] [2ms]
 [2026-06-14 02:40:39] [INFO] [http] [GET] [/health] [200] [66ms]
 [2026-06-14 02:41:09] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:41:39] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:41:40] [INFO] [http] [GET] [/health] [200] [57ms]
+[2026-06-14 02:42:09] [INFO] [http] [GET] [/health] [200] [60ms]
+[2026-06-14 02:42:14] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:42:14] [INFO] [http] [GET] [/digest/ironmonkey] [200] [3ms]
+[2026-06-14 02:42:14] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:42:14] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:42:39] [INFO] [http] [GET] [/health] [200] [61ms]
+[2026-06-14 02:42:40] [INFO] [http] [GET] [/health] [200] [66ms]
+[2026-06-14 02:43:09] [INFO] [http] [GET] [/health] [200] [67ms]
+[2026-06-14 02:43:17] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:17] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:43:20] [INFO] [vault] lead escrito: IM-2026-004
+[2026-06-14 02:43:20] [system] [lead-actualizado] lead=IM-2026-004 campos=estado
+[2026-06-14 02:43:20] [INFO] [http] [PATCH] [/leads/IM-2026-004] [200] [8ms]
+[2026-06-14 02:43:20] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 02:43:21] [INFO] [leads] graphify reindex OK en 1056ms
+[2026-06-14 02:43:22] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:25] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:43:25] [WARN] [http] [GET] [/health/detailed] [404] [0ms]
+[2026-06-14 02:43:25] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:43:25] [INFO] [http] [GET] [/graph] [200] [2ms]
+[2026-06-14 02:43:26] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 02:43:26] [INFO] [http] [GET] [/digest/growing] [200] [1ms]
+[2026-06-14 02:43:26] [INFO] [http] [GET] [/digest/ironmonkey] [200] [6ms]
+[2026-06-14 02:43:26] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 02:43:26] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:26] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:27] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:43:27] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:43:27] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:28] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:28] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:43:28] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:29] [INFO] [http] [GET] [/sessions] [200] [0ms]
+[2026-06-14 02:43:29] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:43:29] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:29] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:31] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:32] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:34] [INFO] [http] [GET] [/leads] [200] [2ms]
+[2026-06-14 02:43:34] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:34] [INFO] [http] [GET] [/leads] [200] [3ms]
+[2026-06-14 02:43:35] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 02:43:38] [INFO] [http] [GET] [/health] [200] [88ms]

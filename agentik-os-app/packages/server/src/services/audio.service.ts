@@ -1,17 +1,27 @@
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import path from 'node:path';
 import { promises as fs } from 'node:fs';
 import { FFMPEG_BIN } from '../config/models.js';
 import { logger } from '../utils/logger.js';
+import { execFileP } from '../utils/process-manager.js';
 
-const execFileP = promisify(execFile);
+function resolveFfprobe(): string {
+  const bin = FFMPEG_BIN;
+  // Si es un path absoluto, reemplazamos ffmpeg por ffprobe en el mismo directorio
+  if (path.isAbsolute(bin)) {
+    const dir = path.dirname(bin);
+    const base = path.basename(bin);
+    const ffprobeBase = base.replace(/ffmpeg(\.exe)?$/i, 'ffprobe$1');
+    return path.join(dir, ffprobeBase);
+  }
+  // Si es un comando en PATH (ej: 'ffmpeg'), devolvemos 'ffprobe'
+  return bin.replace(/ffmpeg(\.exe)?$/i, 'ffprobe$1');
+}
 
 /**
  * Obtener la duración en segundos del audio usando ffprobe o ffmpeg.
  */
 export async function getAudioDuration(filePath: string): Promise<number> {
-  const probeBin = FFMPEG_BIN.replace(/ffmpeg(\.exe)?$/i, 'ffprobe$1');
+  const probeBin = resolveFfprobe();
   
   try {
     const { stdout } = await execFileP(probeBin, [

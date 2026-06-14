@@ -72,6 +72,26 @@ async function getBrowser(): Promise<Browser> {
   return _launchingPromise;
 }
 
+export async function closeBrowser(): Promise<void> {
+  if (_browser) {
+    try {
+      await _browser.close();
+    } catch {
+      // ignore
+    }
+    _browser = null;
+  }
+  if (_launchingPromise) {
+    try {
+      const b = await _launchingPromise;
+      await b.close();
+    } catch {
+      // ignore
+    }
+    _launchingPromise = null;
+  }
+}
+
 export async function htmlToPdf(
   html: string,
   opts: PdfOptions = {},

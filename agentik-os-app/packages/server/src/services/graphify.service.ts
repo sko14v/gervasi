@@ -11,12 +11,9 @@
  * el server. El caller decide qué hacer (mostrar alerta, fallback, etc.).
  */
 
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
-
-const execFileP = promisify(execFile);
+import { execFileP } from '../utils/process-manager.js';
 
 const DEFAULT_TIMEOUT_MS = 30_000;
 
@@ -89,12 +86,7 @@ export async function reindex(): Promise<Result<ReindexResult>> {
     logger.info('graphify', `Reindex solicitado demasiado pronto. Debounce de ${Math.round(delay / 1000)}s`);
 
     if (runTimeout) {
-      // Ya está programado, devolvemos éxito provisional
-      return {
-        ok: true,
-        data: { vault_path: VAULT_PATHS.root, stdout: 'Throttled (ya programado)', stderr: '' },
-        duration_ms: 0,
-      };
+      clearTimeout(runTimeout);
     }
 
     return new Promise((resolve) => {

@@ -142,19 +142,19 @@ vault/
 |   |-- calendario-ejecucion.md       # Cadencias y triggers
 |   `-- orquestacion.md               # Capa React + digest
 |
-|-- 01-IronMonkey/
+|-- 01-IronMonkeyCharter/
 |   |-- catalogo-embarcaciones.md     # Embarcaciones
-|   |-- servicios-adicionales.md      # Catering, extras
-|   |-- precios-tarifas.md            # Tarifas por temporada
+|   |-- competencia.md                # Otros charter
+|   |-- faq-clientes.md               # Preguntas frecuentes
+|   |-- pipeline-actual.md            # Pipeline + alertas
 |   |-- politicas-comerciales.md      # Pagos, cancelaciones
-|   |-- tono-marca.md                 # Voz, estilo
+|   |-- precios-tarifas.md            # Tarifas por temporada
+|   |-- servicios-adicionales.md      # Catering, extras
 |   |-- temporadas-calendario.md      # Alta/media/baja
+|   |-- tono-marca.md                 # Voz, estilo
 |   |-- zonas-navegacion.md           # Puertos, rutas
-|   |-- guia-calificacion-leads.md    # Ficha ICP manual
-|   |-- plantilla-propuesta.md        # Estructura del PDF
-|   |-- pipeline-crm.md               # Pipeline + alertas
-|   |-- faq-clientes.md
-|   `-- competencia.md
+|   |-- leads/                        # Fichas individuales
+|   `-- propuestas/                   # PDFs generados
 |
 `-- 02-GrowingInmobiliario/
     |-- script-cold-calling.md        # Guion completo
@@ -206,7 +206,7 @@ Mapa maestro del sistema. Todo agente lo lee primero.
 | Goal Tracker | Growing | Daily 18:00 + FIPAs en digest 08:00 | MiniMax M2.5 |
 
 ## Vault
-- `/01-IronMonkey/` — Catalogo, servicios, politicas, tono
+- `/01-IronMonkeyCharter/` — Catalogo, servicios, politicas, tono
 - `/02-GrowingInmobiliario/` — Script, ICP, objeciones, scorecard
 
 ## Comandos del sistema

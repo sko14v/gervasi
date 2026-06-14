@@ -263,7 +263,7 @@ updated_at: 2026-06-02T15:45:00
 
 ```
 vault/
-├── 01-IronMonkey/
+├── 01-IronMonkeyCharter/
 │   ├── leads/                          ← fichas individuales
 │   │   ├── IM-2026-001.md
 │   │   ├── IM-2026-002.md
@@ -295,7 +295,7 @@ vault/
 - `MEMORY.md` (aprendizajes) — solo lectura
 - `AGENTS.md` (reglas operativas) — solo lectura
 - `00-Sistema/*.md` (configuración) — solo lectura
-- `01-IronMonkey/catalogo-embarcaciones.md`, `precios-tarifas.md`,
+- `01-IronMonkeyCharter/catalogo-embarcaciones.md`, `precios-tarifas.md`,
   `politicas-comerciales.md` — solo lectura
 - `02-GrowingInmobiliario/script-cold-calling.md`, `scorecard-evaluacion.md`,
   `objeciones-respuestas.md` — solo lectura

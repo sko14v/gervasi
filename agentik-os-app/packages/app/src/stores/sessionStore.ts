@@ -70,6 +70,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
   uploadAudios: async (files: File[]) => {
     set({ uploading: true, error: null });
+    const controller = new AbortController();
     try {
       const formData = new FormData();
       for (const file of files) {
@@ -79,6 +80,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       const res = await fetch('/api/agents/call-analyzer', {
         method: 'POST',
         body: formData,
+        signal: controller.signal,
       });
       
       const data = await res.json();
@@ -94,6 +96,10 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       
       set({ uploading: false });
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') {
+        set({ uploading: false });
+        return;
+      }
       set({
         uploading: false,
         error: err instanceof Error ? err.message : 'Error al analizar los audios',
@@ -102,20 +108,21 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   toggleFipa: async (sesionId: string, index: number, aplicado: boolean) => {
-    // Optimistic update
+    // Guardar feedback actual para posible revert
     const previousFeedback = get().currentFeedback;
-    if (previousFeedback) {
-      const updatedFipas = [...previousFeedback.fipas];
-      if (updatedFipas[index]) {
-        updatedFipas[index] = { ...updatedFipas[index]!, aplicado };
-      }
-      set({
-        currentFeedback: {
-          ...previousFeedback,
-          fipas: updatedFipas
-        }
-      });
+    if (!previousFeedback) return;
+
+    // Optimistic update
+    const updatedFipas = [...previousFeedback.fipas];
+    if (updatedFipas[index]) {
+      updatedFipas[index] = { ...updatedFipas[index]!, aplicado };
     }
+    set({
+      currentFeedback: {
+        ...previousFeedback,
+        fipas: updatedFipas
+      }
+    });
 
     try {
       const res = await api<{ ok: boolean; feedback: FeedbackSesion }>(`/sessions/${sesionId}/fipa/${index}`, {

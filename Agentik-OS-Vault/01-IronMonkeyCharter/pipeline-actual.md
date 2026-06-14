@@ -1,6 +1,6 @@
 # Pipeline Actual — Iron Monkey Charter
 
-> Generado: 2026-06-14 02:39
+> Generado: 2026-06-14 02:43
 
 ## Resumen
 
@@ -11,7 +11,7 @@
 
 ## Pipeline por estado
 
-- **cualificado**: 1
+- **contactado**: 1
 - **tibio**: 1
 - **propuesta_borrador**: 1
 - **propuesta_enviada**: 1

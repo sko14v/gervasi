@@ -146,6 +146,7 @@ export abstract class BaseAgent<TInput, TResult, TPersisted = unknown> {
       temperature: this.model === 'minimax-m2.5' ? 0.2 : 0.3,
       max_tokens: this.maxTokensBudget,
       json: useJson,
+      agent: this.name,
     });
   }
 

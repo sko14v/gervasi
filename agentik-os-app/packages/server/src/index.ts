@@ -45,16 +45,21 @@ import { digestRouter } from './routes/digest.js';
 import { graphRouter } from './routes/graph.js';
 import { SERVER_PORT } from './config/paths.js';
 import { logger } from './utils/logger.js';
+import { closeBrowser } from './services/pdf.service.js';
+import { killAllActiveProcesses } from './utils/process-manager.js';
 
 const app = new Hono();
 
 app.use('*', requestLogger());
+// CORS restrictivo: solo el frontend local servido por Vite.
+// En producción esto debe reemplazarse por el dominio real o una env var.
 app.use(
   '*',
   cors({
     origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
     allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     allowHeaders: ['Content-Type', 'Authorization'],
+    credentials: false,
   }),
 );
 
@@ -102,7 +107,7 @@ export type AppType = typeof app;
 
 const port = SERVER_PORT;
 
-serve(
+const server = serve(
   {
     fetch: app.fetch,
     port,
@@ -111,3 +116,25 @@ serve(
     logger.info('server', `Agentik OS backend listo en http://localhost:${info.port}`);
   },
 );
+
+server.on('error', (err: any) => {
+  if (err.code === 'EADDRINUSE') {
+    logger.error('server', `Puerto ${port} ocupado. Cierra otra instancia o cambia PORT.`);
+    process.exit(1);
+  }
+  logger.error('server', `Error del servidor: ${err.message}`);
+});
+
+function shutdown(signal: string): void {
+  logger.info('server', `${signal} recibido, iniciando cierre graceful...`);
+  killAllActiveProcesses();
+  void closeBrowser().then(() => {
+    server.close(() => {
+      logger.info('server', 'servidor cerrado');
+      process.exit(0);
+    });
+  });
+}
+
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));

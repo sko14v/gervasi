@@ -24,6 +24,7 @@ import { ESTADOS_LEAD, type Lead, type EstadoLead } from '@agentik-os/shared';
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 import * as graphify from '../services/graphify.service.js';
+import { lock } from 'proper-lockfile';
 
 export const leadsRouter = new Hono();
 
@@ -91,31 +92,48 @@ leadsRouter.post('/', async (c) => {
     return c.json({ error: `body inválido: ${message}`, code: 400 }, 400);
   }
 
-  const nextId = await getNextLeadId();
+  const dir = VAULT_PATHS.ironMonkeyLeads;
+  await fs.mkdir(dir, { recursive: true });
 
-  const lead: Lead = {
-    id: nextId,
-    nombre: body.nombre,
-    telefono: body.telefono ?? '',
-    email: body.email ?? '',
-    idioma: body.idioma,
-    origen: body.origen,
-    estado: 'nuevo',
-    score: 5,
-    sensacion: body.sensacion,
-    fecha_evento: body.fecha_evento ?? undefined,
-    fecha_evento_alt: body.fecha_evento_alt ?? undefined,
-    personas: body.personas ?? undefined,
-    tipo_evento: body.tipo_evento ?? undefined,
-    presupuesto_min: body.presupuesto_min ?? undefined,
-    presupuesto_max: body.presupuesto_max ?? undefined,
-    servicios_mencionados: body.servicios_mencionados ?? [],
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  };
+  const release = await lock(dir, {
+    retries: { retries: 10, minTimeout: 50 },
+  });
 
-  const bodyText = `# Lead: ${lead.nombre}\n\n## Notas\n${body.notas ? body.notas + '\n' : ''}`;
-  await writeLead(lead, bodyText);
+  let lead: Lead;
+  try {
+    let nextId: string;
+    let fullPath: string;
+    do {
+      nextId = await getNextLeadId();
+      fullPath = path.join(dir, `${nextId}.md`);
+    } while (await fileExists(fullPath));
+
+    lead = {
+      id: nextId,
+      nombre: body.nombre,
+      telefono: body.telefono ?? '',
+      email: body.email ?? '',
+      idioma: body.idioma,
+      origen: body.origen,
+      estado: 'nuevo',
+      score: 5,
+      sensacion: body.sensacion,
+      fecha_evento: body.fecha_evento ?? undefined,
+      fecha_evento_alt: body.fecha_evento_alt ?? undefined,
+      personas: body.personas ?? undefined,
+      tipo_evento: body.tipo_evento ?? undefined,
+      presupuesto_min: body.presupuesto_min ?? undefined,
+      presupuesto_max: body.presupuesto_max ?? undefined,
+      servicios_mencionados: body.servicios_mencionados ?? [],
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    };
+
+    const bodyText = `# Lead: ${lead.nombre}\n\n## Notas\n${body.notas ? body.notas + '\n' : ''}`;
+    await writeLead(lead, bodyText);
+  } finally {
+    await release();
+  }
 
   await appendToLog({
     agente: 'system',

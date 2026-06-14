@@ -16,18 +16,21 @@ export function requestLogger(): MiddlewareHandler {
     const url = new URL(c.req.url);
     const path = url.pathname;
 
-    await next();
+    let status = 500;
+    try {
+      await next();
+      status = c.res.status;
+    } finally {
+      const duration = Math.round(performance.now() - start);
+      const line = `[${method}] [${path}] [${status}] [${duration}ms]`;
 
-    const duration = Math.round(performance.now() - start);
-    const status = c.res.status;
-    const line = `[${method}] [${path}] [${status}] [${duration}ms]`;
-
-    if (status >= 500) {
-      logger.error('http', line);
-    } else if (status >= 400) {
-      logger.warn('http', line);
-    } else {
-      logger.info('http', line);
+      if (status >= 500) {
+        logger.error('http', line);
+      } else if (status >= 400) {
+        logger.warn('http', line);
+      } else {
+        logger.info('http', line);
+      }
     }
   };
 }

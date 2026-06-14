@@ -21,6 +21,18 @@ npm run dev
 
 > **Importante:** el backend lee la ruta del vault de `process.env.AGENTIK_VAULT_PATH`. Si no se exporta, intenta deducirla y puede apuntar a una carpeta fantasma de OneDrive (caso visto en smoke test — exporta la env var siempre).
 
+## Variables de entorno críticas
+
+Copia `packages/server/.env.example` a `packages/server/.env` y rellena al menos:
+
+| Variable | Para qué sirve | Requerida |
+|---|---|---|
+| `AGENTIK_VAULT_PATH` | Ruta absoluta a `Agentik-OS-Vault` | Sí |
+| `MINIMAX_API_KEY` | Llamadas a MiniMax M2.5 / M3 | No (modo [DEV-MOCK] si falta) |
+| `MINIMAX_BASE_URL` | Endpoint OpenAI-compatible de MiniMax | No (default `https://api.minimax.chat/v1`) |
+| `GEMINI_API_KEY` | Transcripción de audio en Call Analyzer | No (mock si falta) |
+| `PORT` | Puerto del backend Hono | No (default `3001`) |
+
 ---
 
 ## Lo que está hecho (v1)

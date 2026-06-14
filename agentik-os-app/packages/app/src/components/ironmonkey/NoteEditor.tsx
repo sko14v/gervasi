@@ -148,7 +148,8 @@ export function NoteEditor({ lead, onClose }: NoteEditorProps) {
   useEffect(() => {
     setNota('');
     setIcpResult(null);
-    setTimeout(() => textareaRef.current?.focus(), 50);
+    const t = setTimeout(() => textareaRef.current?.focus(), 50);
+    return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lead.id]);
 

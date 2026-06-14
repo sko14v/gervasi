@@ -72,8 +72,8 @@ export async function runFeedbackCoachAgent(
     // 2) Obtener listado de sesiones para calcular tendencia e ICL anterior
     const allSessions = await listSessions();
     const sortedSessions = allSessions
-      .filter((s) => s.icl_promedio !== undefined && s.fecha <= sesion.fecha)
-      .sort((a, b) => a.fecha.localeCompare(b.fecha)); // De más antigua a más nueva
+      .filter((s) => s.icl_promedio !== undefined && String(s.fecha) <= String(sesion.fecha))
+      .sort((a, b) => String(a.fecha).localeCompare(String(b.fecha))); // De más antigua a más nueva
 
     const currentIdx = sortedSessions.findIndex((s) => s.id === sesionId);
     
@@ -185,7 +185,7 @@ export async function runFeedbackCoachAgent(
     const minimaxRes = await chat([
       { role: 'system', content: systemPrompt },
       { role: 'user', content: prompt }
-    ], { model: 'minimax-m3', temperature: 0.3, max_tokens: 1800, json: true });
+    ], { model: 'minimax-m3', temperature: 0.3, max_tokens: 1800, json: true, agent: 'feedback-coach' });
 
     let parsed: any;
     try {

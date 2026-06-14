@@ -295,7 +295,7 @@ Lo que Xisco necesita ver a primera hora:
 Los dashboards **leen del vault** mediante la capa `lib/vault/reader.ts`.
 Cada gráfico se calcula on-the-fly a partir de:
 
-- `01-IronMonkey/leads/*.md` (con su frontmatter).
+- `01-IronMonkeyCharter/leads/*.md` (con su frontmatter).
 - `02-GrowingInmobiliario/sesiones/*.md`.
 - `02-GrowingInmobiliario/feedback/*.md`.
 - `MEMORY.md` (objetivos del mes).

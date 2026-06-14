@@ -21,7 +21,7 @@ export const MODEL_CONFIG = {
       process.env.MINIMAX_M25_BASE_URL ??
       process.env.MINIMAX_BASE_URL ??
       'https://api.minimax.chat/v1',
-    model: process.env.MINIMAX_M25_MODEL ?? 'minimax-M2.5',
+    model: process.env.MINIMAX_M25_MODEL ?? 'minimax-m2.5',
     apiKey: process.env.MINIMAX_M25_API_KEY ?? process.env.MINIMAX_API_KEY ?? '',
   },
   /** Gemini 2.5 Flash-Lite — transcripción de audio */

@@ -64,10 +64,10 @@
 3. **Yates a motor** (MyMallorcaCharter) — 2,500–3,500 €/día + combustible, 20–25 nudos
 
 ### KPI pipeline (pendiente de datos reales)
-- **Días medios lead → cierre:** _[pendiente]_
-- **Ratio lead → propuesta:** _[pendiente]_
-- **Ratio propuesta → cierre:** _[pendiente]_
-- **Ticket medio:** _[pendiente]_
+- **Días medios lead → cierre:** _[Xisco: medir desde primer contacto hasta firma]_
+- **Ratio lead → propuesta:** _[Xisco: leads contactados / propuestas generadas]_
+- **Ratio propuesta → cierre:** _[Xisco: propuestas enviadas / contratos firmados]_
+- **Ticket medio:** _[Xisco: facturación total / número de reservas]_
 
 ### Aprendizajes operativos
 - Regla: nunca ofrecer descuentos — ofrecer valor añadido (upgrades)
@@ -85,7 +85,7 @@
 - **Objetivo diario:** 100 llamadas / 25 conversaciones / 3 agendas.
 - **Mejor marca:** 117 llamadas en un día, 5 agendas en un día.
 - **Duración típica:** 1-14 min según la calidad de la llamada.
-- **Score promedio sesiones anteriores:** _[pendiente]_.
+- **Score promedio sesiones anteriores:** _[Xisco: calcular media ICL de últimas 10 sesiones]_.
 - **Score objetivo:** ≥ 75/100.
 
 ### Script
@@ -174,7 +174,7 @@
 
 ### Gamificación
 - **Modo estándar:** 100 calls / 25 conversaciones / 3 agendas.
-- **Racha actual:** _[pendiente]_
+- **Racha actual:** _[Xisco: días consecutivos cumpliendo objetivo]_
 - **Mejor marca:** 117 calls / 5 agendas.
 - Digest 08:00 con FIPAs (Feedback Insights Para Aplicar).
 
@@ -217,9 +217,9 @@
 
 ## 5. Backlog de mejoras del sistema
 
-- [ ] _[Ideas pendientes de implementar]_.
-- [ ] ...
-- [ ] ...
+- [ ] _[Xisco: ideas de mejoras que surjan durante operación]_
+- [ ] _[Xisco: ajustes de prompts o flujos]_
+- [ ] _[Xisco: integraciones deseadas]_
 
 ---
 

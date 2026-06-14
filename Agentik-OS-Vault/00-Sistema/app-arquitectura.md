@@ -316,7 +316,7 @@ Campos (ver `guia-calificacion-leads.md`):
 
 Al guardar:
 - Validación con zod.
-- Escritura en `vault/01-IronMonkey/leads/IM-YYYY-NNN.md`.
+- Escritura en `vault/01-IronMonkeyCharter/leads/IM-YYYY-NNN.md`.
 - Si la app detecta score alto, sugiere "Generar propuesta".
 
 ### 5.2 ProposalModal (generar PDF)
@@ -326,7 +326,7 @@ Pasos:
 2. App llama al worker → Proposal Generator.
 3. Worker consulta Graphify (catálogo, precios, tono, políticas).
 4. Worker genera HTML → Playwright → PDF.
-5. PDF se guarda en `vault/01-IronMonkey/propuestas/IM-YYYY-NNN-v1.pdf`.
+5. PDF se guarda en `vault/01-IronMonkeyCharter/propuestas/IM-YYYY-NNN-v1.pdf`.
 6. Modal muestra el PDF con preview + botón "Descargar".
 7. Estado del lead → `propuesta_borrador` (NO `propuesta_enviada`
    hasta que Xisco confirme envío).
@@ -437,7 +437,7 @@ export interface Sesion {
 1. Xisco abre la app → click "+ Nuevo lead"
 2. Rellena el formulario inicial (datos de contacto + evento)
 3. Click "Guardar perfil"
-4. App escribe vault/01-IronMonkey/leads/IM-2026-NNN.md
+4. App escribe vault/01-IronMonkeyCharter/leads/IM-2026-NNN.md
 5. Estado: "nuevo" — PERFIL VACÍO
 6. La app NO hace nada más. Es solo un registro.
 7. La app muestra: "Perfil creado. Llama al cliente y vuelve

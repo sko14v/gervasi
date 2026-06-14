@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 export function useKeyboard() {
   const navigate = useNavigate();
   const [showShortcuts, setShowShortcuts] = useState(false);
-  const [lastKeyPressed, setLastKeyPressed] = useState<{ key: string; time: number } | null>(null);
+  const lastKeyPressedRef = useRef<{ key: string; time: number } | null>(null);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -22,15 +22,15 @@ export function useKeyboard() {
       const key = event.key.toLowerCase();
       const now = Date.now();
 
-      // Help Modal
-      if (event.key === '?') {
+      // Help Modal — support both '?' and '¿' (Spanish keyboard Shift+/)
+      if (event.key === '?' || event.key === '¿') {
         event.preventDefault();
         setShowShortcuts((prev) => !prev);
         return;
       }
 
       // Check sequence 'g' -> target key within 1 second
-      if (lastKeyPressed && lastKeyPressed.key === 'g' && now - lastKeyPressed.time < 1000) {
+      if (lastKeyPressedRef.current && lastKeyPressedRef.current.key === 'g' && now - lastKeyPressedRef.current.time < 1000) {
         let matched = true;
         if (key === 'd') {
           navigate('/dashboard');
@@ -50,21 +50,22 @@ export function useKeyboard() {
 
         if (matched) {
           event.preventDefault();
-          setLastKeyPressed(null);
+          lastKeyPressedRef.current = null;
           return;
         }
       }
 
       if (key === 'g') {
-        setLastKeyPressed({ key: 'g', time: now });
+        lastKeyPressedRef.current = { key: 'g', time: now };
       } else {
-        setLastKeyPressed(null);
+        lastKeyPressedRef.current = null;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [lastKeyPressed, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [navigate]);
 
   return { showShortcuts, setShowShortcuts };
 }

@@ -9,7 +9,7 @@
 
 | Negocio | Qué hace | Carpeta |
 |---------|----------|---------|
-| **Iron Monkey Charter** | Charter de barcos. Xisco contacta por teléfono, mete notas manualmente, el sistema genera oferta PDF y gestiona el pipeline + follow-ups. | `01-IronMonkey/` |
+| **Iron Monkey Charter** | Charter de barcos. Xisco contacta por teléfono, mete notas manualmente, el sistema genera oferta PDF y gestiona el pipeline + follow-ups. | `01-IronMonkeyCharter/` |
 | **Growing Inmobiliario** | Consultoría inmobiliaria. Xisco graba las llamadas, el sistema transcribe y da feedback. | `02-GrowingInmobiliario/` |
 
 ---
@@ -33,15 +33,15 @@ Presupuesto operativo estimado: **~62 EUR/mes**.
 
 | # | Agente | Negocio | Trigger | Modelo | Carpeta de skill |
 |---|--------|---------|---------|--------|------------------|
-| 1 | **ICP (Ingreso manual de leads)** | Iron Monkey | Xisco mete un lead o notas en la ficha | MiniMax M2.5 | `01-IronMonkey/` |
-| 2 | **Proposal Generator** | Iron Monkey | Xisco marca "generar oferta" en una ficha | MiniMax M3 | `01-IronMonkey/` |
-| 3 | **CRM Manager (Pipeline)** | Iron Monkey | Cada cambio de estado + diario 08:00 | MiniMax M2.5 | `01-IronMonkey/` |
+| 1 | **ICP (Ingreso manual de leads)** | Iron Monkey | Xisco mete un lead o notas en la ficha | MiniMax M2.5 | `01-IronMonkeyCharter/` |
+| 2 | **Proposal Generator** | Iron Monkey | Xisco marca "generar oferta" en una ficha | MiniMax M3 | `01-IronMonkeyCharter/` |
+| 3 | **CRM Manager (Pipeline)** | Iron Monkey | Cada cambio de estado + diario 08:00 | MiniMax M2.5 | `01-IronMonkeyCharter/` |
 | 4 | **Call Analyzer** | Growing | Audio subido (3-4x/día) | Gemini Flash Lite | `02-GrowingInmobiliario/` |
 | 5 | **Feedback Coach** | Growing | Análisis completo + semanal | MiniMax M3 | `02-GrowingInmobiliario/` |
 | 6 | **Prospect Note Taker** | Growing | Cita agendada | MiniMax M2.5 | `02-GrowingInmobiliario/` |
 | 7 | **Goal Tracker** | Growing | Diario 18:00 + semanal | MiniMax M2.5 | `02-GrowingInmobiliario/` |
 
-Detalle completo de cada agente en `AGENTIK-OS.md` (sección 5).
+Detalle completo de cada agente en `../AGENTIK-OS.md` (sección 5).
 
 > **Nota importante Iron Monkey:** los tres agentes (ICP, Proposal
 > Generator, CRM Manager) **nunca** contactan al cliente. Toda llamada,
@@ -67,18 +67,19 @@ Agentik-OS-Vault/
 │   ├── metricas-objetivos.md         ← KPIs globales del sistema
 │   └── calendario-ejecucion.md       ← cadencias, triggers, horarios
 │
-├── 01-IronMonkey/
+├── 01-IronMonkeyCharter/
 │   ├── catalogo-embarcaciones.md     ← barcos, capacidades, precios
-│   ├── servicios-adicionales.md      ← catering, tripulación, extras
-│   ├── precios-tarifas.md            ← tarifas por temporada
-│   ├── politicas-comerciales.md      ← depósitos, cancelaciones, descuentos
-│   ├── tono-marca.md                 ← voz, estilo, palabras prohibidas
-│   ├── temporadas-calendario.md      ← alta/media/baja, eventos
-│   ├── zonas-navegacion.md           ← rutas, puertos base
-│   ├── guia-calificacion-leads.md    ← scorecard 1-10
-│   ├── plantilla-propuesta.md        ← estructura del PDF
+│   ├── competencia.md                ← otros charter del mercado
 │   ├── faq-clientes.md               ← preguntas frecuentes
-│   └── competencia.md                ← otros charter del mercado
+│   ├── pipeline-actual.md            ← estado actual del pipeline CRM
+│   ├── politicas-comerciales.md      ← depósitos, cancelaciones, descuentos
+│   ├── precios-tarifas.md            ← tarifas por temporada
+│   ├── servicios-adicionales.md      ← catering, tripulación, extras
+│   ├── temporadas-calendario.md      ← alta/media/baja, eventos
+│   ├── tono-marca.md                 ← voz, estilo, palabras prohibidas
+│   ├── zonas-navegacion.md           ← rutas, puertos base
+│   ├── leads/                        ← fichas de leads
+│   └── propuestas/                   ← PDFs de propuestas generadas
 │
 └── 02-GrowingInmobiliario/
     ├── script-cold-calling.md        ← guion completo con estructura

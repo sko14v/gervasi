@@ -8,6 +8,7 @@ import { chat, isConfigured } from '../services/minimax.service.js';
 import { writeSession, getSession, appendToLog } from '../services/vault.service.js';
 import * as graphify from '../services/graphify.service.js';
 import { logger } from '../utils/logger.js';
+import { VAULT_PATHS, assertPathInside } from '../config/paths.js';
 
 export interface CallAnalyzerInput {
   sesionId: string;
@@ -117,6 +118,21 @@ export async function runCallAnalyzerAgent(
 ): Promise<AgentResult<CallAnalyzerResult>> {
   const start = performance.now();
   const sesionId = input.sesionId;
+
+  // Validar que los paths de audio estén dentro del vault permitido.
+  const allowedAudioDir = path.resolve(VAULT_PATHS.growingSesiones, 'audio');
+  for (const audioPath of input.audioPaths) {
+    try {
+      assertPathInside(allowedAudioDir, audioPath);
+    } catch {
+      return {
+        ok: false,
+        error: `audioPath no permitido: ${audioPath}`,
+        duration_ms: Math.round(performance.now() - start),
+      };
+    }
+  }
+
   const isDevMode = !isConfigured() || !process.env.GEMINI_API_KEY;
 
   if (isDevMode) {
@@ -231,7 +247,7 @@ export async function runCallAnalyzerAgent(
         const minimaxRes = await chat([
           { role: 'system', content: systemPrompt },
           { role: 'user', content: prompt }
-        ], { model: 'minimax-m3', temperature: 0.2, max_tokens: 1500, json: true });
+        ], { model: 'minimax-m3', temperature: 0.2, max_tokens: 1500, json: true, agent: 'call-analyzer' });
 
         // Intentar parsear el JSON de MiniMax
         try {

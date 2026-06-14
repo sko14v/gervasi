@@ -171,6 +171,16 @@ export async function runProposalAgent(
   const version = input.version ?? (maxV + 1);
   const filename = `${lead.id}-v${version}.pdf`;
 
+  // 2b) Verificar que no exista ya
+  const pdfFullPath = path.join(VAULT_PATHS.ironMonkeyPropuestas, filename);
+  try {
+    await fs.access(pdfFullPath);
+    const duration = Math.round(performance.now() - start);
+    return { ok: false, error: `PDF ya existe: ${filename}. Usa una versión diferente.`, duration_ms: duration };
+  } catch {
+    // no existe → seguimos
+  }
+
   // 3) Contexto del vault via Graphify
   let contextStr = '';
   let graphifyOk = false;
@@ -248,7 +258,7 @@ export async function runProposalAgent(
         },
         { role: 'user', content: prompt },
       ],
-      { model: 'minimax-m3', temperature: 0.4, max_tokens: 1800, json: false },
+      { model: 'minimax-m3', temperature: 0.4, max_tokens: 1800, json: false, agent: 'proposal' }
     );
     if (raw.startsWith('[ERROR]')) {
       // Fallback a mock si el modelo falla
@@ -272,7 +282,6 @@ export async function runProposalAgent(
 
   // 8) Guardar el PDF
   await fs.mkdir(VAULT_PATHS.ironMonkeyPropuestas, { recursive: true });
-  const pdfFullPath = path.join(VAULT_PATHS.ironMonkeyPropuestas, filename);
   await fs.writeFile(pdfFullPath, pdfRes.buffer);
 
   // 9) Actualizar el lead a propuesta_borrador

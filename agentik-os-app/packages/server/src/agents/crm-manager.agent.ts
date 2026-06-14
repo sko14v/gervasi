@@ -90,7 +90,7 @@ export async function runCrmManagerAgent(
     for (const lead of leads) {
       if (lead.estado === 'descartado') continue;
 
-      const dias = daysSince(lead.updated_at as string);
+      const dias = daysSince(String(lead.updated_at));
 
       // Alerta ALTA: leads calientes sin movimiento >1 día
       if (lead.sensacion === 'caliente' && dias >= 1 && lead.estado !== 'ganado') {

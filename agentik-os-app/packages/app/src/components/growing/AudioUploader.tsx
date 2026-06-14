@@ -51,8 +51,12 @@ export function AudioUploader() {
   const handleUpload = async () => {
     if (files.length === 0) return;
     clearError();
-    await uploadAudios(files);
-    setFiles([]); // Reset file list on success
+    try {
+      await uploadAudios(files);
+      setFiles([]); // Reset file list on success
+    } catch {
+      // keep files on error
+    }
   };
 
   return (

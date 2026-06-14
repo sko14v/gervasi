@@ -14,8 +14,9 @@
 
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
 import matter from 'gray-matter';
-import { ESTADOS_LEAD, type Lead, type EstadoLead, type Sesion, type FeedbackSesion, type EstadoSesion } from '@agentik-os/shared';
+import { ESTADOS_LEAD, type Lead, type EstadoLead, type Sesion, type Llamada, type FeedbackSesion, type EstadoSesion } from '@agentik-os/shared';
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 
@@ -40,6 +41,65 @@ async function readDirSafe(dir: string): Promise<string[]> {
     if ((err as NodeJS.ErrnoException).code === 'ENOENT') return [];
     throw err;
   }
+}
+
+function toIsoString(v: unknown): string {
+  if (v instanceof Date) return v.toISOString();
+  return typeof v === 'string' ? v : new Date().toISOString();
+}
+
+function toDateString(v: unknown): string {
+  if (v instanceof Date) return v.toISOString().slice(0, 10);
+  return typeof v === 'string' ? v : '';
+}
+
+function parseLlamadasFromBody(content: string): Llamada[] {
+  const llamadas: Llamada[] = [];
+  const blocks = content.split('\n### ').slice(1);
+  for (const block of blocks) {
+    const lines = block.split('\n');
+    const header = lines[0] ?? '';
+    const m = header.match(/^(?<id>\S+)\s+—\s+(?<duracion>\d+)s\s+—\s+ICL\s+(?<icl>[^\s]+)/);
+    if (!m?.groups?.id) continue;
+    const id = m.groups.id;
+    const duracion_seg = Number(m.groups.duracion);
+    const iclRaw = m.groups.icl;
+    const icl = iclRaw === '?' ? undefined : Number(iclRaw);
+    const rest = lines.slice(1).join('\n');
+    const transMatch = rest.match(/\*\*Transcripción:\*\*\s*\n+> ?([\s\S]*?)(?=\n\s*\n- |\n\s*\n\n|\n### |$)/);
+    const transcripcion = transMatch
+      ? transMatch[1]!.replace(/^> ?/gm, '').trim()
+      : undefined;
+    const talkMatch = rest.match(/- Talk ratio: (\d+)%/);
+    const talk_ratio = talkMatch ? Number(talkMatch[1]) / 100 : undefined;
+    const sentMatch = rest.match(/- Sentimiento: (\S+)/);
+    const sentimiento = sentMatch ? (sentMatch[1] as Llamada['sentimiento']) : undefined;
+    const cita_agendada = /- ✅ Cita agendada/.test(rest) ? true : undefined;
+    const resMatch = rest.match(/- Resultado: (\S+)/);
+    const resultado = resMatch ? (resMatch[1] as Llamada['resultado']) : undefined;
+    const efMatch = rest.match(/- Errores fatales: (.+)/);
+    const errores_fatales = efMatch
+      ? efMatch[1]!.split(',').map((s) => s.trim()).filter(Boolean)
+      : undefined;
+    const ecMatch = rest.match(/- Errores críticos: (.+)/);
+    const errores_criticos = ecMatch
+      ? ecMatch[1]!.split(',').map((s) => s.trim()).filter(Boolean)
+      : undefined;
+    llamadas.push({
+      id,
+      sesion_id: '',
+      duracion_seg,
+      icl,
+      transcripcion,
+      talk_ratio,
+      sentimiento,
+      cita_agendada,
+      resultado,
+      errores_fatales,
+      errores_criticos,
+    });
+  }
+  return llamadas;
 }
 
 function parseEstado(raw: unknown): EstadoLead {
@@ -165,6 +225,7 @@ export async function writeLead(lead: Lead, body = ''): Promise<string> {
   const dir = VAULT_PATHS.ironMonkeyLeads;
   await ensureDir(dir);
   const fullPath = path.join(dir, `${lead.id}.md`);
+  const tmpPath = path.join(dir, `.${lead.id}.${randomUUID()}.tmp`);
   const updated: Lead = { ...lead, updated_at: new Date().toISOString() };
   const { notas, ...fmData } = updated;
   const cleanFmData: Record<string, unknown> = {};
@@ -174,7 +235,8 @@ export async function writeLead(lead: Lead, body = ''): Promise<string> {
     }
   }
   const file = matter.stringify(body, cleanFmData);
-  await fs.writeFile(fullPath, file, 'utf8');
+  await fs.writeFile(tmpPath, file, 'utf8');
+  await fs.rename(tmpPath, fullPath);
   logger.info('vault', `lead escrito: ${lead.id}`);
   return fullPath;
 }
@@ -343,7 +405,7 @@ export async function listSessions(): Promise<Sesion[]> {
       const fm = parsed.data as Record<string, unknown>;
       sesiones.push({
         id: (fm.id as string) ?? file.replace(/\.md$/, ''),
-        fecha: (fm.fecha as string) ?? '',
+        fecha: toDateString(fm.fecha),
         duracion_total_seg: typeof fm.duracion_total_seg === 'number' ? fm.duracion_total_seg : 0,
         num_llamadas: typeof fm.num_llamadas === 'number' ? fm.num_llamadas : 0,
         num_citas: typeof fm.num_citas === 'number' ? fm.num_citas : 0,
@@ -354,8 +416,8 @@ export async function listSessions(): Promise<Sesion[]> {
         estado: (fm.estado as EstadoSesion) ?? 'subida',
         audio_paths: Array.isArray(fm.audio_paths) ? (fm.audio_paths as string[]) : [],
         feedback_id: (fm.feedback_id as string) ?? undefined,
-        created_at: (fm.created_at as string) ?? new Date().toISOString(),
-        updated_at: (fm.updated_at as string) ?? new Date().toISOString(),
+        created_at: toIsoString(fm.created_at),
+        updated_at: toIsoString(fm.updated_at),
       });
     } catch (err) {
       logger.warn('vault', `no se pudo parsear sesion ${fullPath}`, err);
@@ -378,9 +440,11 @@ export async function getSession(id: string): Promise<Sesion | null> {
   const raw = await fs.readFile(fullPath, 'utf8');
   const parsed = matter(raw);
   const fm = parsed.data as Record<string, unknown>;
+  const fmLlamadas = Array.isArray(fm.llamadas) ? (fm.llamadas as Llamada[]) : undefined;
+  const bodyLlamadas = fmLlamadas ?? parseLlamadasFromBody(parsed.content);
   return {
     id: (fm.id as string) ?? safe,
-    fecha: (fm.fecha as string) ?? '',
+    fecha: toDateString(fm.fecha),
     duracion_total_seg: typeof fm.duracion_total_seg === 'number' ? fm.duracion_total_seg : 0,
     num_llamadas: typeof fm.num_llamadas === 'number' ? fm.num_llamadas : 0,
     num_citas: typeof fm.num_citas === 'number' ? fm.num_citas : 0,
@@ -389,10 +453,11 @@ export async function getSession(id: string): Promise<Sesion | null> {
     talk_ratio_promedio: typeof fm.talk_ratio_promedio === 'number' ? fm.talk_ratio_promedio : undefined,
     sentimiento_general: (fm.sentimiento_general as Sesion['sentimiento_general']) ?? undefined,
     estado: (fm.estado as EstadoSesion) ?? 'subida',
+    llamadas: bodyLlamadas.length > 0 ? bodyLlamadas : undefined,
     audio_paths: Array.isArray(fm.audio_paths) ? (fm.audio_paths as string[]) : [],
     feedback_id: (fm.feedback_id as string) ?? undefined,
-    created_at: (fm.created_at as string) ?? new Date().toISOString(),
-    updated_at: (fm.updated_at as string) ?? new Date().toISOString(),
+    created_at: toIsoString(fm.created_at),
+    updated_at: toIsoString(fm.updated_at),
   };
 }
 
@@ -406,8 +471,8 @@ export async function writeSession(sesion: Sesion): Promise<string> {
   const fullPath = path.join(dir, `${sesion.id}.md`);
   const updated: Sesion = { ...sesion, updated_at: new Date().toISOString() };
 
-  const { llamadas, ...fmData } = updated;
-  const fm = fmData as unknown as Record<string, unknown>;
+  const { llamadas } = updated;
+  const fm = updated as unknown as Record<string, unknown>;
 
   let body = `# Sesión Growing — ${sesion.fecha}\n\n`;
   if (llamadas && llamadas.length > 0) {

@@ -55,7 +55,7 @@ export const bulletsSchema = z.object({
 export const icpResultSchema = z.object({
   score: z.number().int().min(1).max(10),
   estado: z.enum(['cualificado', 'tibio', 'descartado']),
-  sensacion: z.enum(['caliente', 'tibio', 'frio']),
+  sensacion: z.enum(['caliente', 'tibio', 'frio', 'descartado']).transform((v) => v === 'descartado' ? 'frio' : v),
   follow_ups: z.array(followUpSchema).min(1).max(5),
   bullets_estructurados: bulletsSchema,
 });

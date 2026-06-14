@@ -1,16 +1,25 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
+    "composite": true,
     "outDir": "dist",
     "rootDir": "src",
+    "baseUrl": ".",
     "noEmit": false,
     "declaration": true,
     "sourceMap": true,
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "customConditions": ["development"],
+    "paths": {
+      "@agentik-os/shared": ["../shared/src/index.ts"]
+    },
     "lib": ["ES2022"],
     "types": ["node"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules", "dist"],
+  "references": [
+    { "path": "../shared" }
+  ]
 }

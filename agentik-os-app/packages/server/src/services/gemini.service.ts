@@ -2,6 +2,8 @@ import { promises as fs } from 'node:fs';
 import { MODEL_CONFIG } from '../config/models.js';
 import { logger } from '../utils/logger.js';
 
+const GEMINI_TIMEOUT_MS = Number(process.env.GEMINI_TIMEOUT_MS ?? '60000');
+
 export interface RawTurn {
   t: string;       // relative time (e.g. HH:MM:SS or MM:SS)
   speaker: string; // SPEAKER_1, XISCO, etc.
@@ -51,9 +53,11 @@ export async function transcribeChunk(chunkPath: string, offsetSeconds: number):
   }
 
   logger.info('gemini', `Leyendo archivo de audio para transcribir: ${chunkPath}`);
-  const audioBase64 = await fs.readFile(chunkPath, { encoding: 'base64' });
 
-  const prompt = `
+  try {
+    const audioBase64 = await fs.readFile(chunkPath, { encoding: 'base64' });
+
+    const prompt = `
 [TAREA]
 Transcribir este audio de una llamada de ventas fría (cold calling).
 Identificar exactamente 2 locutores:
@@ -68,87 +72,107 @@ Identificar exactamente 2 locutores:
 - Timestamps relativos al inicio del chunk
 `;
 
-  const url = `${MODEL_CONFIG.gemini.baseUrl}/v1/models/${MODEL_CONFIG.gemini.model}:generateContent?key=${apiKey}`;
+    const url = `${MODEL_CONFIG.gemini.baseUrl}/v1/models/${MODEL_CONFIG.gemini.model}:generateContent`;
 
-  const requestBody = {
-    contents: [
-      {
-        parts: [
-          {
-            inlineData: {
-              mimeType: 'audio/mp3',
-              data: audioBase64
+    const requestBody = {
+      contents: [
+        {
+          parts: [
+            {
+              inlineData: {
+                mimeType: 'audio/mpeg',
+                data: audioBase64
+              }
+            },
+            {
+              text: prompt
             }
-          },
-          {
-            text: prompt
-          }
-        ]
-      }
-    ],
-    generationConfig: {
-      responseMimeType: 'application/json',
-      responseSchema: {
-        type: 'ARRAY',
-        items: {
-          type: 'OBJECT',
-          properties: {
-            t: { type: 'STRING' },
-            speaker: { type: 'STRING' },
-            text: { type: 'STRING' }
-          },
-          required: ['t', 'speaker', 'text']
+          ]
         }
-      },
-      temperature: 0.2
-    }
-  };
-
-  logger.info('gemini', `Llamando a la API de Gemini para: ${chunkPath}`);
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(requestBody)
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    logger.error('gemini', `Error en la llamada a Gemini: status=${response.status} body=${errorText}`);
-    throw new Error(`Gemini API error (status ${response.status}): ${errorText}`);
-  }
-
-  const result = (await response.json()) as any;
-  const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!responseText) {
-    throw new Error('Gemini devolvió una respuesta vacía');
-  }
-
-  const rawTurns: RawTurn[] = JSON.parse(responseText.trim());
-  logger.info('gemini', `Chunk transcrito con éxito: ${rawTurns.length} turnos detectados`);
-
-  // Normalizar turnos y calcular tiempos absolutos
-  return rawTurns.map((rt) => {
-    const relativeSec = parseTimeToSeconds(rt.t);
-    const absSec = offsetSeconds + relativeSec;
-    
-    // Normalización de speaker
-    let speaker: 'setter' | 'prospecto' = 'setter';
-    const cleanSp = rt.speaker.toLowerCase();
-    if (cleanSp.includes('prospect') || cleanSp.includes('client') || cleanSp.includes('receptor') || cleanSp.includes('speaker_2') || cleanSp.includes('2')) {
-      speaker = 'prospecto';
-    } else if (cleanSp.includes('xisco') || cleanSp.includes('vendedor') || cleanSp.includes('setter') || cleanSp.includes('speaker_1') || cleanSp.includes('1')) {
-      speaker = 'setter';
-    }
-    
-    return {
-      t: secondsToTime(absSec),
-      absSec,
-      speaker,
-      text: rt.text
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: {
+          type: 'ARRAY',
+          items: {
+            type: 'OBJECT',
+            properties: {
+              t: { type: 'STRING' },
+              speaker: { type: 'STRING' },
+              text: { type: 'STRING' }
+            },
+            required: ['t', 'speaker', 'text']
+          }
+        },
+        temperature: 0.2
+      }
     };
-  });
+
+    logger.info('gemini', `Llamando a la API de Gemini para: ${chunkPath}`);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), GEMINI_TIMEOUT_MS);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey
+      },
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      logger.error('gemini', `Error en la llamada a Gemini: status=${response.status}`);
+      throw new Error(`Gemini API error (status ${response.status}): ${errorText}`);
+    }
+
+    const result = (await response.json()) as any;
+    const responseText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!responseText) {
+      throw new Error('Gemini devolvió una respuesta vacía');
+    }
+
+    let rawTurns: RawTurn[];
+    try {
+      rawTurns = JSON.parse(responseText.trim()) as RawTurn[];
+    } catch (parseErr) {
+      logger.error('gemini', `Respuesta de Gemini no es JSON válido para ${chunkPath}: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}`);
+      throw new Error(`Gemini response parse error: ${parseErr instanceof Error ? parseErr.message : String(parseErr)}`);
+    }
+
+    logger.info('gemini', `Chunk transcrito con éxito: ${rawTurns.length} turnos detectados`);
+
+    // Normalizar turnos y calcular tiempos absolutos
+    return rawTurns.map((rt) => {
+      const relativeSec = parseTimeToSeconds(rt.t);
+      const absSec = offsetSeconds + relativeSec;
+
+      // Normalización de speaker
+      let speaker: 'setter' | 'prospecto' = 'setter';
+      const cleanSp = rt.speaker.toLowerCase();
+      if (cleanSp.includes('prospect') || cleanSp.includes('client') || cleanSp.includes('receptor') || cleanSp.includes('speaker_2') || cleanSp.includes('2')) {
+        speaker = 'prospecto';
+      } else if (cleanSp.includes('xisco') || cleanSp.includes('vendedor') || cleanSp.includes('setter') || cleanSp.includes('speaker_1') || cleanSp.includes('1')) {
+        speaker = 'setter';
+      }
+
+      return {
+        t: secondsToTime(absSec),
+        absSec,
+        speaker,
+        text: rt.text
+      };
+    });
+  } catch (err) {
+    logger.error('gemini', `Fallo al transcribir chunk ${chunkPath}: ${err instanceof Error ? err.message : String(err)}`);
+    await fs.unlink(chunkPath).catch((cleanupErr) => {
+      logger.error('gemini', `No se pudo eliminar el chunk temporal ${chunkPath}: ${cleanupErr instanceof Error ? cleanupErr.message : String(cleanupErr)}`);
+    });
+    throw err;
+  }
 }
 
 /**

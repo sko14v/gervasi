@@ -325,11 +325,11 @@ export function SessionDetail({ session }: SessionDetailProps) {
                   <div className="rounded border border-rose-500/20 bg-rose-500/5 p-3 space-y-1">
                     <h4 className="text-xs font-bold text-rose-400">Alertas y Errores Detectados:</h4>
                     <ul className="text-xs text-rose-300 list-disc pl-4 space-y-1">
-                      {selectedCall.errores_fatales?.map((err) => (
-                        <li key={err}><strong>Error Fatal:</strong> {err} (Fase anulada a 0)</li>
+                      {selectedCall.errores_fatales?.map((err, i) => (
+                        <li key={`fatal-${i}`}><strong>Error Fatal:</strong> {err} (Fase anulada a 0)</li>
                       ))}
-                      {selectedCall.errores_criticos?.map((err) => (
-                        <li key={err}><strong>Error Crítico Global:</strong> {err} (ICL máximo limitado a 44)</li>
+                      {selectedCall.errores_criticos?.map((err, i) => (
+                        <li key={`crit-${i}`}><strong>Error Crítico Global:</strong> {err} (ICL máximo limitado a 44)</li>
                       ))}
                     </ul>
                   </div>

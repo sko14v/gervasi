@@ -243,4 +243,4 @@ npm run dev    # → http://localhost:5173
 ---
 
 _Agentik O.S. v1.0 — Stack corregido. Si cambias algo, actualiza
-`MEMORY.md` (sección 3) y `AGENTIK-OS.md` (sección 3)._
+`MEMORY.md` (sección 3) y `../../AGENTIK-OS.md` (sección 3)._

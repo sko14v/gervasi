@@ -13,18 +13,24 @@
  */
 
 import { Hono } from 'hono';
-import { execFile } from 'node:child_process';
-import { promisify } from 'node:util';
 import { VAULT_PATH } from '../config/paths.js';
 import * as graphify from '../services/graphify.service.js';
+import { execFileP } from '../utils/process-manager.js';
 
-const execFileP = promisify(execFile);
+let _ffmpegCached: { ok: boolean; ts: number } | null = null;
+const FFMPEG_CACHE_TTL_MS = 60_000;
 
 async function checkFfmpeg(): Promise<boolean> {
+  const now = Date.now();
+  if (_ffmpegCached && now - _ffmpegCached.ts < FFMPEG_CACHE_TTL_MS) {
+    return _ffmpegCached.ok;
+  }
   try {
     await execFileP('ffmpeg', ['-version'], { timeout: 5_000, windowsHide: true });
+    _ffmpegCached = { ok: true, ts: now };
     return true;
   } catch {
+    _ffmpegCached = { ok: false, ts: now };
     return false;
   }
 }

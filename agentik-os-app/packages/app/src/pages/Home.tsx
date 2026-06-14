@@ -35,23 +35,16 @@ export default function Home() {
     let cancelled = false;
     async function loadStats() {
       try {
-        const [leads, sessions] = await Promise.all([
-          listLeads().catch(() => []),
-          api<any[]>('/sessions').catch(() => []),
-        ]);
+        const sessions = await api<any[]>('/sessions').catch(() => []);
         if (cancelled) return;
-        setStats({
-          leadsCount: leads.length,
+        setStats((prev) => ({
+          ...prev,
           sessionsCount: sessions.length,
-          loading: false,
-        });
-      } catch (err) {
+          loading: prev.leadsCount === 0, // only keep loading if leads not loaded yet
+        }));
+      } catch {
         if (cancelled) return;
-        setStats({
-          leadsCount: 0,
-          sessionsCount: 0,
-          loading: false,
-        });
+        setStats((prev) => ({ ...prev, loading: false }));
       }
     }
     loadStats();
@@ -60,8 +53,24 @@ export default function Home() {
     };
   }, []);
 
+  // Merge digest leads count into stats to avoid duplicate fetch
+  useEffect(() => {
+    if (ironMonkey?.total_leads !== undefined) {
+      setStats((prev) => ({
+        ...prev,
+        leadsCount: ironMonkey.total_leads,
+        loading: false,
+      }));
+    }
+  }, [ironMonkey?.total_leads]);
+
   // Filter high-priority alerts
   const highPriorityAlerts = ironMonkey?.items?.filter((item) => item.priority === 'alta') || [];
+
+  // Remove duplicate alerts by leadId, keep first
+  const uniqueAlerts = highPriorityAlerts.filter((alert, index, self) =>
+    index === self.findIndex((a) => a.leadId === alert.leadId)
+  );
 
   return (
     <div className="min-h-full p-8">
@@ -129,9 +138,9 @@ export default function Home() {
               Alertas Críticas del Día
             </h2>
             <div className="divide-y divide-red-500/10">
-              {highPriorityAlerts.map((alert) => (
+              {uniqueAlerts.map((alert, idx) => (
                 <div
-                  key={alert.leadId}
+                  key={`${alert.leadId}-${idx}`}
                   className="flex items-center justify-between py-3 first:pt-0 last:pb-0"
                 >
                   <div>

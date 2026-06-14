@@ -163,6 +163,7 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
                 src={pdfUrl}
                 title="Propuesta Comercial PDF"
                 className="w-full h-full border-0"
+                sandbox="allow-scripts"
               />
             </div>
 

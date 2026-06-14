@@ -288,10 +288,10 @@ marca como `incompleto` y se pide a Xisco completarla.
 
 ### 8.3 Convención de archivos
 
-- Un archivo por lead: `vault/01-IronMonkey/leads/IM-2026-001.md`.
+- Un archivo por lead: `vault/01-IronMonkeyCharter/leads/IM-2026-001.md`.
 - El ID es inmutable y se asigna al crear.
 - Las propuestas PDF se guardan separadas:
-  `vault/01-IronMonkey/propuestas/IM-2026-001-v1.pdf`.
+  `vault/01-IronMonkeyCharter/propuestas/IM-2026-001-v1.pdf`.
 - El campo `propuesta_actual` en el frontmatter apunta a la última
   versión generada.
 
