@@ -32,3 +32,16 @@ graphifyRouter.post('/reindex', async (c) => {
     stderr_tail: result.data.stderr.slice(-500),
   });
 });
+
+graphifyRouter.get('/query', async (c) => {
+  const q = c.req.query('q') ?? '';
+  if (!q.trim()) {
+    return c.json({ error: 'La consulta no puede estar vacía', code: 400 }, 400);
+  }
+  const result = await graphify.query(q);
+  if (!result.ok) {
+    return c.json({ error: result.error, code: 500 }, 500);
+  }
+  return c.json(result.data);
+});
+

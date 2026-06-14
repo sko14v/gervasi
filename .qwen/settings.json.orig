@@ -10,7 +10,8 @@
       "Bash(select-object *)",
       "Bash(del *)",
       "Bash($env:agentik_vault_path *)",
-      "Bash(ping *)"
+      "Bash(ping *)",
+      "Bash(curl *)"
     ]
   },
   "$version": 4

@@ -43,6 +43,8 @@ import { agentsRouter } from './routes/agents.js';
 import { sessionsRouter } from './routes/sessions.js';
 import { digestRouter } from './routes/digest.js';
 import { graphRouter } from './routes/graph.js';
+import { vaultRouter } from './routes/vault.js';
+
 import { SERVER_PORT } from './config/paths.js';
 import { logger } from './utils/logger.js';
 import { closeBrowser } from './services/pdf.service.js';
@@ -103,6 +105,8 @@ app.route('/agents', agentsRouter);
 app.route('/sessions', sessionsRouter);
 app.route('/digest', digestRouter);
 app.route('/graph', graphRouter);
+app.route('/vault', vaultRouter);
+
 
 export type AppType = typeof app;
 
