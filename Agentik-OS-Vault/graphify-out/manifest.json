@@ -1,12 +1,12 @@
 {
   "00-Sistema/app-arquitectura.md": {
-    "mtime": 1781365230.6705074,
-    "ast_hash": "7082dddf5e64e45da2c5b1c4c45fe7c7",
+    "mtime": 1781435528.123678,
+    "ast_hash": "886a20dcb266143c49a0d1afa5c53749",
     "semantic_hash": ""
   },
   "00-Sistema/dashboards.md": {
-    "mtime": 1781376555.7429028,
-    "ast_hash": "bc3a9a04e66291b9db8fbc11633f6359",
+    "mtime": 1781435421.5170226,
+    "ast_hash": "9e51e5ee3464c40d696e67a94eccb9f9",
     "semantic_hash": ""
   },
   "00-Sistema/metricas-objetivos.md": {
@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "00-Sistema/orquestacion.md": {
-    "mtime": 1781376551.3899717,
-    "ast_hash": "9e1ac8a6c98178c15c9e71c36cae55f6",
+    "mtime": 1781435527.5200243,
+    "ast_hash": "e6d206604b1a991c8abae332a9dcc381",
     "semantic_hash": ""
   },
   "00-Sistema/reglas-prompts.md": {
@@ -25,8 +25,8 @@
     "semantic_hash": ""
   },
   "00-Sistema/stack-tecnico.md": {
-    "mtime": 1781364689.0615616,
-    "ast_hash": "c9c6a3e085a7adebe12e55c5d32addde",
+    "mtime": 1781435422.4113624,
+    "ast_hash": "b9fa1ecbc6a5dc600f802415832d1cef",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/_archive-2026-06-13/_archivo-log.md": {
@@ -55,8 +55,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/_archive-2026-06-13/pipeline-crm.md": {
-    "mtime": 1781365265.7463455,
-    "ast_hash": "bac6f3ed871aa8bd44b6e14e916ca255",
+    "mtime": 1781435426.5059555,
+    "ast_hash": "7cfdab0d9649e4656702bc353525895b",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/_archive-2026-06-13/plantilla-propuesta.md": {
@@ -135,8 +135,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/politicas-comerciales.md": {
-    "mtime": 1781369404.4639163,
-    "ast_hash": "336868ef222a16a82065c767607a931d",
+    "mtime": 1781443506.273711,
+    "ast_hash": "acba886447082b6b2883f7018a559aa9",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/precios-tarifas.md": {
@@ -150,8 +150,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/temporadas-calendario.md": {
-    "mtime": 1781368187.632903,
-    "ast_hash": "c2b7f3fab112e0f52a274a15458ec77b",
+    "mtime": 1781443506.3002248,
+    "ast_hash": "1f677693fdff432e35720a0c4332c299",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/tono-marca.md": {
@@ -165,18 +165,18 @@
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/casos-exito.md": {
-    "mtime": 1781361290.7039065,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441360.5920534,
+    "ast_hash": "392b6ceb4f39d2698253a576641996bf",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/competencia-inmobiliaria.md": {
-    "mtime": 1781361290.7054164,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441416.1073635,
+    "ast_hash": "bc9fec0fddb4df8cd3c316cac2bf1a9d",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/criterios-wins-improvements.md": {
-    "mtime": 1781361290.7073026,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441376.6089284,
+    "ast_hash": "2db7121128515304ae62614934c0fd76",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/gamificacion.md": {
@@ -190,8 +190,8 @@
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/mercado-inmobiliario.md": {
-    "mtime": 1781361290.7054164,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441365.6744227,
+    "ast_hash": "af383eb5fab360aa03f7b2988dd58f6e",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/metricas-kpis.md": {
@@ -215,8 +215,8 @@
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/plantilla-nota-prospecto.md": {
-    "mtime": 1781361290.7064247,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441409.7771447,
+    "ast_hash": "a1457ef9bc471bb8c5d92821c7433402",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/scorecard-evaluacion.md": {
@@ -230,28 +230,28 @@
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/servicios-consultoria.md": {
-    "mtime": 1781361290.7039065,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441371.153188,
+    "ast_hash": "4306e54a57f90c33594ee96a847b99c3",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/tracker-agendas.md": {
-    "mtime": 1781361290.7054164,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441401.5563724,
+    "ast_hash": "0377ef6e7000075e30cb19bdd585a31c",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/tracker-canceladas.md": {
-    "mtime": 1781361290.7064247,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441393.2195182,
+    "ast_hash": "873be1995fa7d9a7bdda5592fdca6be9",
     "semantic_hash": ""
   },
   "02-GrowingInmobiliario/tracker-facturacion.md": {
-    "mtime": 1781361290.7064247,
-    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "mtime": 1781441384.1684268,
+    "ast_hash": "3cf7787e825e45268eb4eceb8dade66e",
     "semantic_hash": ""
   },
   "03-Memoria/_logs/log.md": {
-    "mtime": 1781397800.2143147,
-    "ast_hash": "120d2112f9ebad193e51247bc448d19c",
+    "mtime": 1781458852.5294237,
+    "ast_hash": "a209c29687a408937966128797420cea",
     "semantic_hash": ""
   },
   "04-Conocimiento/guias-agentes/addendum-cerebro-transcripciones-persistencia.md": {
@@ -270,8 +270,8 @@
     "semantic_hash": ""
   },
   "MEMORY.md": {
-    "mtime": 1781376066.7798128,
-    "ast_hash": "97ef878e718c00682ca905db15b5a733",
+    "mtime": 1781443506.3223622,
+    "ast_hash": "4c22584e206157504caa203e9d9066f7",
     "semantic_hash": ""
   },
   "PROJECT-CONTEXT.md": {
@@ -285,8 +285,8 @@
     "semantic_hash": ""
   },
   "index.md": {
-    "mtime": 1781376503.822434,
-    "ast_hash": "43d6a76b9f83071a3ecfb80a4895079e",
+    "mtime": 1781435420.4464264,
+    "ast_hash": "cbe5941c8cfc7a33ed23773c0e727a07",
     "semantic_hash": ""
   },
   "log.md": {
@@ -315,8 +315,8 @@
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/pipeline-actual.md": {
-    "mtime": 1781397734.0281012,
-    "ast_hash": "9caa39b98d4338ed1a95c10876838c5a",
+    "mtime": 1781458809.2742302,
+    "ast_hash": "947e2447dab21c4d6ebda0ec252545ed",
     "semantic_hash": ""
   },
   "01-IronMonkeyCharter/propuestas/IM-2026-001-v4.pdf": {
@@ -327,6 +327,21 @@
   "01-IronMonkeyCharter/propuestas/IM-2026-005-v1.pdf": {
     "mtime": 1781397400.60937,
     "ast_hash": "25e55dde98b623160925ecb5139137af",
+    "semantic_hash": ""
+  },
+  "00-Sistema/calendario-ejecucion.md": {
+    "mtime": 1781441424.9804165,
+    "ast_hash": "781f5854213cbc7b8bc832ce8a13529d",
+    "semantic_hash": ""
+  },
+  "00-Sistema/deuda-tecnica.md": {
+    "mtime": 1781444200.7719011,
+    "ast_hash": "5d6dda46e9e62e344b9c0b78bf023f2b",
+    "semantic_hash": ""
+  },
+  "02-GrowingInmobiliario/_plans/modulo-casa-apuestas.md": {
+    "mtime": 1781456140.902596,
+    "ast_hash": "0cf7cbdb271968118b20b9a3d8c28aab",
     "semantic_hash": ""
   }
 }

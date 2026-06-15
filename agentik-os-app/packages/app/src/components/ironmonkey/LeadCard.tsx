@@ -92,6 +92,12 @@ export function LeadCard({ lead }: LeadCardProps) {
         e.stopPropagation();
         setCurrentLead(lead);
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setCurrentLead(lead);
+        }
+      }}
       className={cn(
         'group cursor-grab select-none rounded-radius-md border bg-tint/50 p-3 shadow-sm transition-all duration-150',
         'border-separator hover:border-charter/60 hover:bg-tint/30 hover:shadow-md',

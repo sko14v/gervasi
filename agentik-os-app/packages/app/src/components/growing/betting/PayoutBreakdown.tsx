@@ -15,11 +15,13 @@ function MercadoRow({
   label,
   icon,
   valoracion,
+  ratios,
   principal,
 }: {
   label: string;
   icon: string;
   valoracion: PayoutPotencial['detalle']['agendas'];
+  ratios: PayoutPotencial['ratios_usados'];
   principal?: boolean;
 }) {
   return (
@@ -48,12 +50,12 @@ function MercadoRow({
       <div className="space-y-1 text-[11px] text-slate-500">
         {valoracion.pipeline.contesta !== undefined && (
           <div className="flex justify-between">
-            <span>{valoracion.input} llamadas × 35% contesta</span>
+            <span>{valoracion.input} llamadas × {Math.round(ratios.ratio_contesta * 100)}% contesta</span>
             <span className="text-slate-400">= {valoracion.pipeline.contesta?.toFixed(0)} conversaciones</span>
           </div>
         )}
         <div className="flex justify-between">
-          <span>{valoracion.pipeline.agendas_esperadas} agendas × 70% show</span>
+          <span>{valoracion.pipeline.agendas_esperadas} agendas × {Math.round(ratios.show_rate * 100)}% show</span>
           <span className="text-slate-400">= {valoracion.pipeline.shows_esperados} shows</span>
         </div>
         <div className="flex justify-between">
@@ -98,17 +100,20 @@ export function PayoutBreakdown({ payout }: Props) {
             label="agendas"
             icon="📅"
             valoracion={payout.detalle.agendas}
+            ratios={payout.ratios_usados}
             principal
           />
           <MercadoRow
             label="conversaciones"
             icon="💬"
             valoracion={payout.detalle.conversaciones}
+            ratios={payout.ratios_usados}
           />
           <MercadoRow
             label="llamadas"
             icon="📞"
             valoracion={payout.detalle.llamadas}
+            ratios={payout.ratios_usados}
           />
 
           <div className="rounded-lg border border-slate-700 bg-slate-800/40 p-3 flex items-center justify-between">

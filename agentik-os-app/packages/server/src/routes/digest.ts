@@ -22,7 +22,8 @@ digestRouter.get('/ironmonkey', async (c) => {
 });
 
 digestRouter.get('/growing', async (c) => {
-  const tipo = (c.req.query('tipo') as 'daily_check' | 'weekly_review') ?? 'daily_check';
+  const rawTipo = c.req.query('tipo');
+  const tipo = rawTipo === 'weekly_review' ? 'weekly_review' : 'daily_check';
 
   const result = await runGoalTrackerAgent({ tipo });
 

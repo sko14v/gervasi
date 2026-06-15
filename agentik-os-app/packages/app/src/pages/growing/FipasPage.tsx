@@ -27,13 +27,13 @@ export default function FipasPage() {
     // Vamos a buscar si hay datos
   });
 
-  const handleCheck = async (sesionId: string, idx: number, area: string) => {
-    const key = `${sesionId}-${idx}-${area}`;
+  const handleCheck = async (sesionId: string, fipaIndex: number, area: string) => {
+    const key = `${sesionId}-${fipaIndex}-${area}`;
     const wasChecked = !!checkedFipas[key];
     setCheckedFipas((prev) => ({ ...prev, [key]: !wasChecked }));
 
     try {
-      await toggleFipa(sesionId, idx, !wasChecked);
+      await toggleFipa(sesionId, fipaIndex, !wasChecked);
       void fetchDigests(); // Recargar digest para actualizar contador
     } catch (err) {
       console.error('Error toggling FIPA', err);
@@ -98,13 +98,13 @@ export default function FipasPage() {
             </div>
           ) : (
             <div className="max-w-xl mx-auto space-y-3">
-              {fipasPendientes.map((f, i) => {
-                const key = `${f.sesionId}-${i}-${f.area}`;
+              {fipasPendientes.map((f) => {
+                const key = `${f.sesionId}-${f.fipaIndex}-${f.area}`;
                 const isChecked = !!checkedFipas[key];
                 return (
                   <div
                     key={key}
-                    onClick={() => handleCheck(f.sesionId, i, f.area)}
+                    onClick={() => handleCheck(f.sesionId, f.fipaIndex, f.area)}
                     className={cn(
                       'flex items-start gap-4 p-4 rounded-radius-xl border cursor-pointer transition-all',
                       isChecked
@@ -114,9 +114,9 @@ export default function FipasPage() {
                   >
                     <button className="mt-0.5 shrink-0 hover:scale-105 transition">
                       {isChecked ? (
-                        <CheckCircle2 className="h-4.5 w-4.5 text-emerald-400" />
-                      ) : (
-                        <Circle className="h-4.5 w-4.5 text-label-quaternary" />
+                      <CheckCircle2 className="h-[1.125rem] w-[1.125rem] text-emerald-400" />
+                    ) : (
+                      <Circle className="h-[1.125rem] w-[1.125rem] text-label-quaternary" />
                       )}
                     </button>
                     <div>

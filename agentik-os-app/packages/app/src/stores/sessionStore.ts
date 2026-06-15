@@ -10,7 +10,7 @@ interface SessionState {
   detailLoading: boolean;
   error: string | null;
   uploading: boolean;
-  
+
   fetchSessions: () => Promise<void>;
   fetchSessionDetail: (id: string) => Promise<void>;
   uploadAudios: (files: File[]) => Promise<void>;
@@ -18,6 +18,9 @@ interface SessionState {
   clearError: () => void;
   setCurrentSession: (session: Sesion | null) => void;
 }
+
+let fetchSessionsPromise: Promise<void> | null = null;
+const UPLOAD_TIMEOUT_MS = 10 * 60 * 1000; // 10 minutos para audios largos
 
 export const useSessionStore = create<SessionState>((set, get) => ({
   sessions: [],
@@ -29,16 +32,24 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   uploading: false,
 
   fetchSessions: async () => {
-    set({ loading: true, error: null });
-    try {
-      const sessions = await api<Sesion[]>('/sessions');
-      set({ sessions, loading: false });
-    } catch (err) {
-      set({
-        loading: false,
-        error: err instanceof Error ? err.message : 'Error al cargar las sesiones',
-      });
-    }
+    if (fetchSessionsPromise) return fetchSessionsPromise;
+
+    fetchSessionsPromise = (async () => {
+      set({ loading: true, error: null });
+      try {
+        const sessions = await api<Sesion[]>('/sessions');
+        set({ sessions, loading: false });
+      } catch (err) {
+        set({
+          loading: false,
+          error: err instanceof Error ? err.message : 'Error al cargar las sesiones',
+        });
+      } finally {
+        fetchSessionsPromise = null;
+      }
+    })();
+
+    return fetchSessionsPromise;
   },
 
   fetchSessionDetail: async (id: string) => {
@@ -71,69 +82,66 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   uploadAudios: async (files: File[]) => {
     set({ uploading: true, error: null });
     const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), UPLOAD_TIMEOUT_MS);
+
     try {
       const formData = new FormData();
       for (const file of files) {
         formData.append('audio', file);
       }
-      
-      const res = await fetch('/api/agents/call-analyzer', {
+
+      const data = await api<{ sesionId?: string; ok?: boolean }>('/agents/call-analyzer', {
         method: 'POST',
         body: formData,
         signal: controller.signal,
       });
-      
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Error al analizar los audios');
-      }
-      
-      // Recargar listado y abrir la sesión analizada
+
       await get().fetchSessions();
       if (data.sesionId) {
         await get().fetchSessionDetail(data.sesionId);
       }
-      
+
       set({ uploading: false });
     } catch (err) {
       if (err instanceof Error && err.name === 'AbortError') {
-        set({ uploading: false });
+        set({ uploading: false, error: 'El análisis ha tardado demasiado. Inténtalo de nuevo.' });
         return;
       }
       set({
         uploading: false,
         error: err instanceof Error ? err.message : 'Error al analizar los audios',
       });
+    } finally {
+      clearTimeout(timeoutId);
     }
   },
 
   toggleFipa: async (sesionId: string, index: number, aplicado: boolean) => {
-    // Guardar feedback actual para posible revert
     const previousFeedback = get().currentFeedback;
     if (!previousFeedback) return;
 
-    // Optimistic update
-    const updatedFipas = [...previousFeedback.fipas];
-    if (updatedFipas[index]) {
-      updatedFipas[index] = { ...updatedFipas[index]!, aplicado };
-    }
+    const target = previousFeedback.fipas[index];
+    if (!target) return;
+
+    const updatedFipas = previousFeedback.fipas.map((f, i) =>
+      i === index ? { ...f, aplicado } : f
+    );
     set({
       currentFeedback: {
         ...previousFeedback,
-        fipas: updatedFipas
-      }
+        fipas: updatedFipas,
+      },
     });
 
     try {
       const res = await api<{ ok: boolean; feedback: FeedbackSesion }>(`/sessions/${sesionId}/fipa/${index}`, {
         method: 'PATCH',
-        body: { aplicado }
+        body: { aplicado },
       });
       if (res.ok && res.feedback) {
         set({ currentFeedback: res.feedback });
       }
     } catch (err) {
-      // Revertir
       set({
         currentFeedback: previousFeedback,
         error: err instanceof Error ? err.message : 'Error al actualizar FIPA',

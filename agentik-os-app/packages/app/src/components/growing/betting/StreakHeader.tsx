@@ -28,7 +28,7 @@ export function StreakHeader({ streak }: Props) {
           racha >= 7
             ? 'border-emerald-500/40 bg-emerald-500/10'
             : racha >= 3
-            ? 'border-amber-500/30 bg-amber-500/8'
+            ? 'border-amber-500/30 bg-amber-500/[0.08]'
             : 'border-slate-700 bg-slate-900/60'
         )}
       >

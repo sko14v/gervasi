@@ -41,7 +41,10 @@ export async function getAudioDuration(filePath: string): Promise<number> {
   // Fallback: parsear la salida de ffmpeg -i
   try {
     // ffmpeg -i sin output file retorna código de error, lo capturamos
-    const res = await execFileP(FFMPEG_BIN, ['-i', filePath], { timeout: 10000 }).catch(e => e);
+    const res = await execFileP(FFMPEG_BIN, ['-i', filePath], { timeout: 10000 }).catch((e) => e);
+    if (res instanceof Error) {
+      throw res;
+    }
     const output = res.stderr || res.stdout || '';
     const match = output.match(/Duration:\s*(\d{2}):(\d{2}):(\d{2})\.(\d{2})/);
     if (match) {

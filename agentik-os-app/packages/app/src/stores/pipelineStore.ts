@@ -52,7 +52,7 @@ interface PipelineState {
   icpError: string | null;
 
   fetchLeads: () => Promise<void>;
-  moveLead: (id: string, newEstado: EstadoLead) => void;
+  moveLead: (id: string, newEstado: EstadoLead) => Promise<void>;
   setSelectedLead: (id: string | null) => void;
   clearError: () => void;
 

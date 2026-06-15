@@ -12,7 +12,7 @@ export const MODEL_CONFIG = {
   /** MiniMax M3 — agente principal (Proposal, Feedback Coach, etc.) */
   minimax: {
     baseUrl: process.env.MINIMAX_BASE_URL ?? 'https://api.minimax.chat/v1',
-    model: process.env.MINIMAX_MODEL ?? 'M3',
+    model: process.env.MINIMAX_MODEL ?? 'minimax-m3',
     apiKey: process.env.MINIMAX_API_KEY ?? '',
   },
   /** MiniMax M2.5 — clasificación rápida, JSON corto (ICP, scoring) */

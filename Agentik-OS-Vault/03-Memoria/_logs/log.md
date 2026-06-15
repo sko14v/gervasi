@@ -610,3 +610,88 @@ Nothing to update or rebuild failed — check output above.
 [2026-06-14 02:43:34] [INFO] [http] [GET] [/leads] [200] [3ms]
 [2026-06-14 02:43:35] [INFO] [http] [GET] [/sessions] [200] [1ms]
 [2026-06-14 02:43:38] [INFO] [http] [GET] [/health] [200] [88ms]
+[2026-06-14 19:39:38] [INFO] [server] Agentik OS backend listo en http://localhost:3001
+[2026-06-14 19:39:38] [INFO] [graphify] watcher started on C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 19:39:47] [INFO] [http] [GET] [/health] [200] [587ms]
+[2026-06-14 19:39:47] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:39:52] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:39:52] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 19:39:52] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:39:57] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 25s
+[2026-06-14 19:39:57] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:39:57] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:02] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:02] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 20s
+[2026-06-14 19:40:02] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:06] [INFO] [http] [GET] [/health] [200] [125ms]
+[2026-06-14 19:40:06] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:07] [INFO] [http] [GET] [/growing/betting/today] [200] [1ms]
+[2026-06-14 19:40:07] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:09] [INFO] [goal-tracker] OK: llamadas=0 citas=0 ICL=0 FIPAs_pendientes=0
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/digest/growing] [200] [4ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/sessions] [200] [13ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/streak] [200] [6ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/today] [200] [4ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/achievements] [200] [3ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/sessions] [200] [2ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/today] [200] [3ms]
+[2026-06-14 19:40:09] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/streak] [200] [5ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/growing/betting/achievements] [200] [2ms]
+[2026-06-14 19:40:09] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\01-IronMonkeyCharter\pipeline-actual.md
+[2026-06-14 19:40:09] [INFO] [crm-manager] digest OK: 2 alertas, 5 leads
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/digest/ironmonkey] [200] [82ms]
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/health] [200] [144ms]
+[2026-06-14 19:40:09] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:09] [INFO] [http] [GET] [/health] [200] [151ms]
+[2026-06-14 19:40:14] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:14] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 8s
+[2026-06-14 19:40:14] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:19] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:19] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 3s
+[2026-06-14 19:40:19] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:22] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 19:40:22] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:27] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 25s
+[2026-06-14 19:40:27] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:27] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:32] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:32] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 20s
+[2026-06-14 19:40:32] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:37] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:37] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 15s
+[2026-06-14 19:40:37] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:39] [INFO] [http] [GET] [/health] [200] [127ms]
+[2026-06-14 19:40:39] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:44] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 8s
+[2026-06-14 19:40:44] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:44] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:49] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:49] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 3s
+[2026-06-14 19:40:49] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:52] [INFO] [graphify] reindex → C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault
+[2026-06-14 19:40:52] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:40:57] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:40:57] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 25s
+[2026-06-14 19:40:57] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:02] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 19:41:02] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:02] [INFO] [http] [GET] [/sessions] [200] [1ms]
+[2026-06-14 19:41:07] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:41:07] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 15s
+[2026-06-14 19:41:07] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/today] [200] [1ms]
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/streak] [200] [2ms]
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/achievements] [200] [1ms]
+[2026-06-14 19:41:09] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/today] [200] [3ms]
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/streak] [200] [2ms]
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/growing/betting/achievements] [200] [2ms]
+[2026-06-14 19:41:09] [INFO] [http] [GET] [/health] [200] [177ms]
+[2026-06-14 19:41:09] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:14] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:41:14] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 8s
+[2026-06-14 19:41:14] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md
+[2026-06-14 19:41:19] [INFO] [graphify] debounced reindex starting
+[2026-06-14 19:41:19] [INFO] [graphify] Reindex solicitado demasiado pronto. Debounce de 3s
+[2026-06-14 19:41:19] [INFO] [graphify] vault change detected: C:\Users\xisco\OneDrive\Escritorio\GERVASI\Agentik-OS-Vault\03-Memoria\_logs\log.md

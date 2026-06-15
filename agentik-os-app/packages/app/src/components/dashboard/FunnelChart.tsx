@@ -5,6 +5,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import type { PipelineCount } from '@/stores/dashboardStore';
+import { ESTADOS_PIPELINE } from '@/types';
 
 interface FunnelChartProps {
   pipeline: PipelineCount[];
@@ -87,7 +88,14 @@ export function FunnelChart({ pipeline, loading = false }: FunnelChartProps) {
 
   const data = [...pipeline]
     .filter((p) => p.estado !== 'descartado')
-    .sort((a, b) => b.count - a.count)
+    .sort((a, b) => {
+      const idxA = ESTADOS_PIPELINE.indexOf(a.estado as typeof ESTADOS_PIPELINE[number]);
+      const idxB = ESTADOS_PIPELINE.indexOf(b.estado as typeof ESTADOS_PIPELINE[number]);
+      if (idxA === -1 && idxB === -1) return a.estado.localeCompare(b.estado);
+      if (idxA === -1) return 1;
+      if (idxB === -1) return -1;
+      return idxA - idxB;
+    })
     .map((p) => ({
       estado: p.estado,
       label: ESTADO_LABELS[p.estado] ?? p.estado,

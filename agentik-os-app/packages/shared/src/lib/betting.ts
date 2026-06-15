@@ -57,9 +57,11 @@ export function valorarMercado(
   // Tasa de cierre: ~20% de los shows terminan en cierre
   const cierres_esperados = shows_esperados * 0.20;
 
+  // Modelo de comisiones: show → eur_por_show; cierre → eur_por_cierre TOTAL
+  // (no suma). Asi el potencial coincide con el payout real.
   const eur_esperado =
     shows_esperados * ratios.eur_por_show +
-    cierres_esperados * ratios.eur_por_cierre;
+    cierres_esperados * (ratios.eur_por_cierre - ratios.eur_por_show);
 
   return {
     input,
@@ -118,7 +120,8 @@ export function calcularPayoutPotencial(
  */
 export function calcularPayoutReal(
   agendas: AgendaStatus[],
-  ratios: RatiosSector = RATIOS_DEFAULT
+  ratios: RatiosSector = RATIOS_DEFAULT,
+  updated_at: string = new Date().toISOString()
 ): PayoutReal {
   let shows_cerrados = 0;
   let cierres_cerrados = 0;
@@ -126,10 +129,13 @@ export function calcularPayoutReal(
   let reagendadas = 0;
 
   for (const a of agendas) {
-    if (a.show === 'presentado') shows_cerrados++;
+    if (a.show === 'presentado') {
+      shows_cerrados++;
+      // Solo pagamos el extra de cierre si el show se presento y cerro
+      if (a.cierre === 'cerrado') cierres_cerrados++;
+    }
     if (a.show === 'cancelado') canceladas++;
     if (a.show === 'reagendado') reagendadas++;
-    if (a.cierre === 'cerrado') cierres_cerrados++;
   }
 
   const eur_real =
@@ -144,7 +150,7 @@ export function calcularPayoutReal(
       canceladas,
       reagendadas,
     },
-    updated_at: new Date().toISOString(),
+    updated_at,
     cerrado: agendas.every((a) =>
       a.show !== 'pendiente' && a.cierre !== 'pendiente'
     ),
@@ -173,10 +179,13 @@ export function evaluarCumplimiento(
   };
 
   if (bet.objetivos.score_minimo !== undefined && stats.score_promedio !== undefined) {
+    const objetivo = bet.objetivos.score_minimo;
+    const real = stats.score_promedio;
     cumplimiento.score = {
-      objetivo: bet.objetivos.score_minimo,
-      real: stats.score_promedio,
-      ok: stats.score_promedio >= bet.objetivos.score_minimo,
+      objetivo,
+      real,
+      pct: objetivo === 0 ? 0 : Math.round((real / objetivo) * 1000) / 10,
+      ok: real >= objetivo,
     };
   }
 
@@ -224,18 +233,18 @@ export function detectarLogros(
   // Vuelta al ruedo: WON tras racha rota (racha era 0 antes)
   check('vuelta_ruedo', prevStreak.actual === 0 && streak.actual === 1);
 
-  // Semana perfecta: 5 días seguidos
-  check('semana_perfecta', streak.actual >= 5 && streak.actual % 5 === 0);
+  // Semana perfecta: cruzar 5 días seguidos (solo la primera vez)
+  check('semana_perfecta', streak.actual >= 5 && prevStreak.actual < 5);
 
   // Quincena: 15 días
-  check('quincena', streak.actual >= 15);
+  check('quincena', streak.actual >= 15 && prevStreak.actual < 15);
 
   // Mes completo / doble quincena: 30 días
-  check('mes_completo', streak.actual >= 30);
-  check('doble_quincena', streak.actual >= 30);
+  check('mes_completo', streak.actual >= 30 && prevStreak.actual < 30);
+  check('doble_quincena', streak.actual >= 30 && prevStreak.actual < 30);
 
-  // Récord personal
-  check('record_personal', streak.actual > prevStreak.mejor && prevStreak.mejor > 0);
+  // Récord personal: superar la mejor racha previa (incluye el primer récord)
+  check('record_personal', streak.actual > prevStreak.mejor);
 
   // Volumen 100
   check('volumen_100', (result.stats?.llamadas ?? 0) >= 100);
@@ -253,6 +262,7 @@ export function detectarLogros(
  * Formatea un número como € con 0 decimales (ej: "147 €")
  */
 export function formatEur(n: number): string {
+  if (!Number.isFinite(n)) return '— €';
   return `${Math.round(n)} €`;
 }
 

@@ -45,6 +45,8 @@ export function Modal({
 
   useEffect(() => {
     if (!open) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && !disableEscClose) onClose();
       if (e.key === 'Tab' && panelRef.current) {
@@ -64,7 +66,10 @@ export function Modal({
     };
     window.addEventListener('keydown', onKey);
     panelRef.current?.focus();
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = originalOverflow;
+    };
   }, [open, onClose, disableEscClose]);
 
   if (!open) return null;

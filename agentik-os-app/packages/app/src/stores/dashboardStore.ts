@@ -58,7 +58,7 @@ export interface GrowingDigest {
     icl: 'ok' | 'warning' | 'alert';
     ratio: 'ok' | 'warning' | 'alert';
   };
-  fipas_pendientes: Array<{ sesionId: string; area: string; objetivo: string }>;
+  fipas_pendientes: Array<{ sesionId: string; fipaIndex: number; area: string; objetivo: string }>;
   ultima_sesion?: {
     fecha: string;
     icl: number;

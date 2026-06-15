@@ -71,35 +71,10 @@ export interface ReindexResult {
 let lastRunTime = 0;
 let runTimeout: ReturnType<typeof setTimeout> | null = null;
 let activePromise: Promise<Result<ReindexResult>> | null = null;
+let pendingAfterCurrent = false;
 
-export async function reindex(): Promise<Result<ReindexResult>> {
-  // Si ya hay una indexación en curso, devolvemos su promesa
-  if (activePromise) {
-    return activePromise;
-  }
-
-  const now = Date.now();
-  const timeSinceLastRun = now - lastRunTime;
-
-  if (timeSinceLastRun < 30_000) {
-    // Si se llamó muy pronto, programamos su ejecución
-    const delay = 30_000 - timeSinceLastRun;
-    logger.info('graphify', `Reindex solicitado demasiado pronto. Debounce de ${Math.round(delay / 1000)}s`);
-
-    if (runTimeout) {
-      clearTimeout(runTimeout);
-    }
-
-    return new Promise((resolve) => {
-      runTimeout = setTimeout(async () => {
-        runTimeout = null;
-        const res = await reindex();
-        resolve(res);
-      }, delay);
-    });
-  }
-
-  lastRunTime = now;
+async function runReindex(): Promise<Result<ReindexResult>> {
+  lastRunTime = Date.now();
   activePromise = (async () => {
     const start = performance.now();
     try {
@@ -125,7 +100,42 @@ export async function reindex(): Promise<Result<ReindexResult>> {
     }
   })();
 
-  return activePromise;
+  const result = await activePromise;
+
+  // Si alguien pidio otra reindexacion mientras corria, lanzarla ahora
+  if (pendingAfterCurrent) {
+    pendingAfterCurrent = false;
+    void reindex();
+  }
+
+  return result;
+}
+
+export async function reindex(): Promise<Result<ReindexResult>> {
+  // Si ya hay una indexación en curso, marcamos que se necesita otra
+  if (activePromise) {
+    pendingAfterCurrent = true;
+    return activePromise;
+  }
+
+  const now = Date.now();
+  const timeSinceLastRun = now - lastRunTime;
+
+  if (timeSinceLastRun < 30_000) {
+    const delay = 30_000 - timeSinceLastRun;
+    logger.info('graphify', `Reindex solicitado demasiado pronto. Debounce de ${Math.round(delay / 1000)}s`);
+
+    if (runTimeout) clearTimeout(runTimeout);
+
+    return new Promise((resolve, reject) => {
+      runTimeout = setTimeout(() => {
+        runTimeout = null;
+        runReindex().then(resolve).catch(reject);
+      }, delay);
+    });
+  }
+
+  return runReindex();
 }
 
 export async function query(question: string): Promise<Result<{ answer: string }>> {

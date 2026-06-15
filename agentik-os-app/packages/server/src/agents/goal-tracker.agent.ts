@@ -47,6 +47,7 @@ export interface GoalTrackerResult {
   };
   fipas_pendientes: Array<{
     sesionId: string;
+    fipaIndex: number;
     area: string;
     objetivo: string;
   }>;
@@ -156,10 +157,13 @@ export async function runGoalTrackerAgent(
       try {
         const fb = await getFeedback(sesion.id);
         if (fb) {
-          for (const fipa of fb.fipas) {
+          for (let i = 0; i < fb.fipas.length; i++) {
+            const fipa = fb.fipas[i];
+            if (!fipa) continue;
             if (!fipa.aplicado) {
               fipas_pendientes.push({
                 sesionId: sesion.id,
+                fipaIndex: i,
                 area: fipa.area,
                 objetivo: fipa.objetivo,
               });

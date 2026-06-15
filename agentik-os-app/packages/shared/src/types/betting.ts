@@ -25,13 +25,13 @@ export interface RatiosSector {
   eur_por_cierre: number;        // default 100
 }
 
-export const RATIOS_DEFAULT: RatiosSector = {
+export const RATIOS_DEFAULT: RatiosSector = Object.freeze({
   ratio_contesta: 0.35,
   ratio_conv_agenda: 0.12,
   show_rate: 0.70,
   eur_por_show: 50,
   eur_por_cierre: 100,
-};
+});
 
 /** Reto definido antes de la sesión (sin stake, sin banca) */
 export interface DailyBet {
@@ -137,7 +137,7 @@ export interface DailyResult {
     llamadas: { objetivo: number; real: number; pct: number; ok: boolean };
     conversaciones: { objetivo: number; real: number; pct: number; ok: boolean };
     agendas: { objetivo: number; real: number; pct: number; ok: boolean };
-    score?: { objetivo: number; real: number; ok: boolean };
+    score?: { objetivo: number; real: number; pct: number; ok: boolean };
   };
   payout_potencial: PayoutPotencial | null;  // null si no hay bet
   payout_real: PayoutReal | null;            // null hasta que se cierra el ciclo
@@ -234,7 +234,7 @@ export interface BettingSettings {
   ratios: RatiosSector;
 }
 
-export const BETTING_SETTINGS_DEFAULT: BettingSettings = {
+export const BETTING_SETTINGS_DEFAULT: BettingSettings = Object.freeze({
   modo_default: 'estandar',
   modo_estricto: false,
   recordatorio_09: true,
@@ -244,11 +244,11 @@ export const BETTING_SETTINGS_DEFAULT: BettingSettings = {
   sonido: false,
   mostrar_payout_en_reto: true,
   mostrar_payout_real_calendario: true,
-  ratios: RATIOS_DEFAULT,
-};
+  ratios: { ...RATIOS_DEFAULT },
+});
 
 /** Definición de todos los logros disponibles */
-export const ACHIEVEMENTS: Achievement[] = [
+export const ACHIEVEMENTS: readonly Achievement[] = Object.freeze([
   { id: 'primera_sangre', nombre: 'Primera sangre', descripcion: 'Primer reto cumplido', emoji: '🩸', condicion: 'Primer WON' },
   { id: 'semana_perfecta', nombre: 'Semana perfecta', descripcion: '5 días seguidos cumplidos', emoji: '⚡', condicion: '5/5 WON en una semana' },
   { id: 'quincena', nombre: 'Quincena', descripcion: '15 días seguidos cumplidos', emoji: '💎', condicion: '15 días seguidos WON' },
@@ -261,12 +261,12 @@ export const ACHIEVEMENTS: Achievement[] = [
   { id: 'maraton_4h', nombre: 'Maratón', descripcion: 'Sesión de 4h+ sin parar', emoji: '🏃', condicion: 'Sesión de 4h+ continua' },
   { id: 'apuesta_5x_ganada', nombre: 'All-in winner', descripcion: 'Legacy v1.0', emoji: '🎲', condicion: 'Legacy — ya no se obtiene' },
   { id: 'doble_quincena', nombre: 'Doble quincena', descripcion: '30 días WON (alias mes_completo)', emoji: '💎💎', condicion: '30 días seguidos WON' },
-];
+]);
 
 /** Modos de apuesta con sus objetivos por defecto */
-export const MODOS_OBJETIVOS: Record<Exclude<BetMode, 'custom'>, DailyBet['objetivos']> = {
+export const MODOS_OBJETIVOS: Record<Exclude<BetMode, 'custom'>, DailyBet['objetivos']> = Object.freeze({
   conservador: { llamadas: 60, conversaciones: 15, agendas: 2 },
   estandar: { llamadas: 100, conversaciones: 25, agendas: 3 },
   push: { llamadas: 117, conversaciones: 30, agendas: 5, score_minimo: 70 },
   recuperacion: { llamadas: 80, conversaciones: 20, agendas: 2 },
-};
+});

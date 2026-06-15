@@ -5,7 +5,7 @@
 
 import type { EstadoLead } from '../types/lead.js';
 
-export const ESTADOS_LEAD: EstadoLead[] = [
+export const ESTADOS_LEAD = [
   'nuevo',
   'contactado',
   'cualificado',
@@ -16,7 +16,7 @@ export const ESTADOS_LEAD: EstadoLead[] = [
   'ganado',
   'perdido',
   'descartado',
-];
+] as const satisfies readonly EstadoLead[];
 
 /** Etiqueta humana por estado (en castellano, mostrada en UI). */
 export const ESTADO_LEAD_LABELS: Record<EstadoLead, string> = {

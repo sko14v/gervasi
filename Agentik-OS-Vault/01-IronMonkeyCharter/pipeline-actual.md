@@ -1,6 +1,6 @@
 # Pipeline Actual — Iron Monkey Charter
 
-> Generado: 2026-06-14 02:43
+> Generado: 2026-06-14 19:40
 
 ## Resumen
 
@@ -20,7 +20,7 @@
 ## Alertas (2)
 
 🔴 **[ALTA]** Carlos Ruiz (IM-2026-002)
-   → Lead caliente sin actividad hace 2 día(s) — ¡no pierdas el momentum!
+   → Lead caliente sin actividad hace 3 día(s) — ¡no pierdas el momentum!
 
 🔴 **[ALTA]** Ana Lopez (IM-2026-003)
    → Lead caliente sin actividad hace 7 día(s) — ¡no pierdas el momentum!

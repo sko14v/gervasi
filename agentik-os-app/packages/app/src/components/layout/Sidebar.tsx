@@ -35,7 +35,7 @@ export function Sidebar() {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
+    const timer = setInterval(() => setTime(new Date()), 60_000);
     return () => clearInterval(timer);
   }, []);
 
@@ -66,7 +66,7 @@ export function Sidebar() {
   ).length;
   const growingFipasPendientes = growing?.fipas_pendientes?.length || 0;
 
-  const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  const formattedTime = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
     <aside
@@ -112,21 +112,28 @@ export function Sidebar() {
 
         {/* IRON MONKEY section */}
         <div className="space-y-1">
-          <button
-            onClick={() => {
-              navigate('/iron-monkey');
-              localStorage.setItem('ultimoNegocio', 'iron-monkey');
-            }}
-            className="w-full group flex items-center justify-between px-3 py-1.5 text-caption-1 font-bold uppercase tracking-wider text-charter hover:text-charter rounded-radius-md hover:bg-tint/20 transition-all text-left"
-          >
-            <span className="flex items-center gap-2">
-              <Ship className="h-3.5 w-3.5" />
-              Iron Monkey
-            </span>
-            <div onClick={(e) => { e.stopPropagation(); toggleIm(e); }} className="p-0.5 rounded-radius-xs hover:bg-tint">
+          <div className="flex items-center justify-between rounded-radius-md hover:bg-tint/20 transition-all">
+            <button
+              onClick={() => {
+                navigate('/iron-monkey');
+                localStorage.setItem('ultimoNegocio', 'iron-monkey');
+              }}
+              className="flex-1 group flex items-center px-3 py-1.5 text-caption-1 font-bold uppercase tracking-wider text-charter hover:text-charter text-left"
+            >
+              <span className="flex items-center gap-2">
+                <Ship className="h-3.5 w-3.5" />
+                Iron Monkey
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleIm}
+              aria-label={imExpanded ? 'Colapsar Iron Monkey' : 'Expandir Iron Monkey'}
+              className="p-0.5 mr-1 rounded-radius-xs hover:bg-tint text-charter"
+            >
               {imExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-            </div>
-          </button>
+            </button>
+          </div>
 
           {imExpanded && (
             <div className="pl-3 space-y-0.5">
@@ -140,21 +147,28 @@ export function Sidebar() {
 
         {/* GROWING section */}
         <div className="space-y-1">
-          <button
-            onClick={() => {
-              navigate('/growing');
-              localStorage.setItem('ultimoNegocio', 'growing');
-            }}
-            className="w-full group flex items-center justify-between px-3 py-1.5 text-caption-1 font-bold uppercase tracking-wider text-sdr hover:text-sdr rounded-radius-md hover:bg-tint/20 transition-all text-left"
-          >
-            <span className="flex items-center gap-2">
-              <Phone className="h-3.5 w-3.5" />
-              Growing
-            </span>
-            <div onClick={(e) => { e.stopPropagation(); toggleGrowing(e); }} className="p-0.5 rounded-radius-xs hover:bg-tint">
+          <div className="flex items-center justify-between rounded-radius-md hover:bg-tint/20 transition-all">
+            <button
+              onClick={() => {
+                navigate('/growing');
+                localStorage.setItem('ultimoNegocio', 'growing');
+              }}
+              className="flex-1 group flex items-center px-3 py-1.5 text-caption-1 font-bold uppercase tracking-wider text-sdr hover:text-sdr text-left"
+            >
+              <span className="flex items-center gap-2">
+                <Phone className="h-3.5 w-3.5" />
+                Growing
+              </span>
+            </button>
+            <button
+              type="button"
+              onClick={toggleGrowing}
+              aria-label={growingExpanded ? 'Colapsar Growing' : 'Expandir Growing'}
+              className="p-0.5 mr-1 rounded-radius-xs hover:bg-tint text-sdr"
+            >
               {growingExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
-            </div>
-          </button>
+            </button>
+          </div>
 
           {growingExpanded && (
             <div className="pl-3 space-y-0.5">
@@ -220,7 +234,7 @@ export function Sidebar() {
               <span className="text-[9px] text-label-tertiary truncate">Operador Único</span>
             </div>
           </div>
-          {userMenuOpen ? <ChevronDown className="h-3.5 w-3.5 text-label-tertiary" /> : <ChevronUp className="h-3.5 w-3.5 text-label-tertiary" />}
+          {userMenuOpen ? <ChevronUp className="h-3.5 w-3.5 text-label-tertiary" /> : <ChevronDown className="h-3.5 w-3.5 text-label-tertiary" />}
         </button>
 
         {userMenuOpen && (
@@ -279,7 +293,7 @@ function SubItemLink({ to, label, badge, isAlert = false }: SubItemLinkProps) {
       {badge !== undefined && badge > 0 && (
         <span
           className={cn(
-            'flex h-4.5 min-w-[18px] items-center justify-center rounded-full px-1 text-[9px] font-bold text-white',
+            'flex h-[1.125rem] min-w-[18px] items-center justify-center rounded-full px-1 text-[9px] font-bold text-white',
             isAlert ? 'bg-danger/15 text-danger border border-danger/20' : 'bg-accent/90 text-label-inverse'
           )}
         >

@@ -3,17 +3,20 @@ import { Ship, Phone, Award, ArrowRight, CheckCircle2, Circle, Upload, BarChart3
 import { useNavigate } from 'react-router-dom';
 import { useDigest } from '@/hooks/useDigest';
 import { useSessionStore } from '@/stores/sessionStore';
+import { useBettingStore } from '@/stores/bettingStore';
 import { cn } from '@/lib/utils/cn';
 
 export default function Hoy() {
   const navigate = useNavigate();
   const { ironMonkey, growing, loading: digestLoading, error: digestError } = useDigest();
   const { sessions, fetchSessions, toggleFipa } = useSessionStore();
+  const { streak, fetchStreak } = useBettingStore();
   const [checkedFipas, setCheckedFipas] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     void fetchSessions();
-  }, [fetchSessions]);
+    void fetchStreak();
+  }, [fetchSessions, fetchStreak]);
 
   const crmAlerts = ironMonkey?.items ?? [];
   const uniqueAlerts = crmAlerts.filter((alert, index, self) =>
@@ -26,12 +29,12 @@ export default function Hoy() {
 
   const fipas = growing?.fipas_pendientes ?? [];
 
-  const handleFipaCheck = async (sesionId: string, index: number, area: string) => {
-    const key = `${sesionId}-${index}-${area}`;
+  const handleFipaCheck = async (sesionId: string, fipaIndex: number, area: string) => {
+    const key = `${sesionId}-${fipaIndex}-${area}`;
     const newChecked = !checkedFipas[key];
     setCheckedFipas((prev) => ({ ...prev, [key]: newChecked }));
     try {
-      await toggleFipa(sesionId, index, newChecked);
+      await toggleFipa(sesionId, fipaIndex, newChecked);
     } catch {
       // ignore
     }
@@ -152,13 +155,13 @@ export default function Hoy() {
               </div>
             ) : (
               <div className="space-y-2">
-                {fipas.map((f, i) => {
-                  const key = `${f.sesionId}-${i}-${f.area}`;
+                {fipas.map((f) => {
+                  const key = `${f.sesionId}-${f.fipaIndex}-${f.area}`;
                   const isChecked = !!checkedFipas[key];
                   return (
                     <div
                       key={key}
-                      onClick={() => handleFipaCheck(f.sesionId, i, f.area)}
+                      onClick={() => handleFipaCheck(f.sesionId, f.fipaIndex, f.area)}
                       className={cn(
                         'flex items-start gap-3 p-3 rounded-radius-md border cursor-pointer transition',
                         isChecked
@@ -275,8 +278,8 @@ export default function Hoy() {
             </div>
           </div>
           <div className="text-center md:text-right shrink-0">
-            <span className="text-display-lg text-label-primary">5 días</span>
-            <p className="text-caption-2 text-label-tertiary mt-0.5">mejor racha: 12 días</p>
+            <span className="text-display-lg text-label-primary">{streak?.actual ?? 0} días</span>
+            <p className="text-caption-2 text-label-tertiary mt-0.5">mejor racha: {streak?.mejor ?? 0} días</p>
           </div>
         </section>
 

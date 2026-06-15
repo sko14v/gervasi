@@ -45,21 +45,29 @@ function buildUrl(path: string, query?: ApiOptions['query']): string {
 
 export async function api<T>(path: string, options: ApiOptions = {}): Promise<T> {
   const { body, query, headers, ...rest } = options;
+  const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
   const init: RequestInit = {
     ...rest,
     headers: {
-      'Content-Type': 'application/json',
       Accept: 'application/json',
+      ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
       ...(headers ?? {}),
     },
   };
   if (body !== undefined) {
-    init.body = typeof body === 'string' ? body : JSON.stringify(body);
+    init.body = isFormData ? body : typeof body === 'string' ? body : JSON.stringify(body);
   }
 
   const res = await fetch(buildUrl(path, query), init);
   const text = await res.text();
-  const data = text ? (JSON.parse(text) as unknown) : null;
+  let data: unknown = null;
+  if (text) {
+    try {
+      data = JSON.parse(text);
+    } catch {
+      data = { error: text };
+    }
+  }
 
   if (!res.ok) {
     const errBody = (data ?? {}) as { error?: string; code?: number };

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { api } from '@/lib/api/client';
-import { Award, ChevronLeft, Calendar, Loader2, BarChart3, TrendingUp, CheckCircle2 } from 'lucide-react';
+import { Award, ChevronLeft, Loader2, BarChart3, TrendingUp, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface WeeklyData {
@@ -17,34 +17,17 @@ export default function WeeklyPage() {
   const navigate = useNavigate();
   const [data, setData] = useState<WeeklyData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchWeeklyReview() {
       try {
-        const res = await api<any>('/agents/goal-tracker', {
+        const res = await api<WeeklyData>('/digest/growing', {
           query: { tipo: 'weekly_review' },
         });
         setData(res);
       } catch (err) {
-        console.error('Error fetching weekly review', err);
-        // Fallback mock
-        setData({
-          llamadas_total: 382,
-          citas_total: 14,
-          ratio_citas: 0.036,
-          icl_promedio: 78.4,
-          sesiones_count: 5,
-          wins: [
-            'Excelente persistencia al manejar objeción de falta de presupuesto.',
-            'Cierre de llamada directo proponiendo dos alternativas horarias.',
-            'Talk-to-listen ratio promedio por debajo del 58% en general.'
-          ],
-          improvements: [
-            'Agilizar el filtro del gatekeeper para no perder tiempo de talk ratio.',
-            'Mejorar la transición de la propuesta de valor inicial.',
-            'Recordar preguntar presupuesto explícito en llamadas de calificación.'
-          ]
-        });
+        setError(err instanceof Error ? err.message : 'Error al cargar la weekly review');
       } finally {
         setLoading(false);
       }
@@ -81,6 +64,11 @@ export default function WeeklyPage() {
           <div className="flex flex-col items-center justify-center py-20 text-label-tertiary text-caption-1">
             <Loader2 className="h-6 w-6 animate-spin text-emerald-400 mb-2" />
             <span>Generando revisión semanal...</span>
+          </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-20 text-danger text-caption-1 gap-2">
+            <AlertCircle className="h-6 w-6" />
+            <span>{error}</span>
           </div>
         ) : data ? (
           <div className="space-y-6">

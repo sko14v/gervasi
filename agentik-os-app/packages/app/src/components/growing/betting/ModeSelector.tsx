@@ -39,14 +39,14 @@ const MODOS: Array<{ id: BetMode; label: string; emoji: string; desc: string; co
     label: 'Recuperación',
     emoji: '🔄',
     desc: '80 / 20 / 2',
-    color: 'border-amber-500/40 bg-amber-500/8 text-amber-300 hover:border-amber-400',
+    color: 'border-amber-500/40 bg-amber-500/[0.08] text-amber-300 hover:border-amber-400',
   },
   {
     id: 'custom',
     label: 'Custom',
     emoji: '✏️',
     desc: 'Personalizado',
-    color: 'border-violet-500/40 bg-violet-500/8 text-violet-300 hover:border-violet-400',
+    color: 'border-violet-500/40 bg-violet-500/[0.08] text-violet-300 hover:border-violet-400',
   },
 ];
 

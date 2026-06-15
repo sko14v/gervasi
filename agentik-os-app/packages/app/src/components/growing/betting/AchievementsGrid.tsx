@@ -8,7 +8,7 @@ import type { Achievement } from '@/types';
 import { cn } from '@/lib/utils/cn';
 
 interface Props {
-  achievements: Achievement[];
+  achievements: readonly Achievement[];
   unlocked: Array<{ id: string; fecha: string; bet_id: string }>;
 }
 

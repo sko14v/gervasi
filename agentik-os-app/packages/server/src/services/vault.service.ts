@@ -20,6 +20,25 @@ import { ESTADOS_LEAD, type Lead, type EstadoLead, type Sesion, type Llamada, ty
 import { VAULT_PATHS } from '../config/paths.js';
 import { logger } from '../utils/logger.js';
 
+/* ---------- Simple in-memory file lock ---------- */
+const fileLocks = new Map<string, Promise<unknown>>();
+
+async function withLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const previous = fileLocks.get(key);
+  const current = (async () => {
+    if (previous) await previous.catch(() => {});
+    return fn();
+  })();
+  fileLocks.set(key, current);
+  try {
+    return await current;
+  } finally {
+    if (fileLocks.get(key) === current) {
+      fileLocks.delete(key);
+    }
+  }
+}
+
 async function ensureDir(dir: string): Promise<void> {
   await fs.mkdir(dir, { recursive: true });
 }
@@ -103,7 +122,7 @@ function parseLlamadasFromBody(content: string): Llamada[] {
 }
 
 function parseEstado(raw: unknown): EstadoLead {
-  if (typeof raw === 'string' && (ESTADOS_LEAD as string[]).includes(raw)) {
+  if (typeof raw === 'string' && [...ESTADOS_LEAD].includes(raw as EstadoLead)) {
     return raw as EstadoLead;
   }
   return 'nuevo';
@@ -346,37 +365,39 @@ export interface LogEntry {
  * El archivo se crea con cabecera si no existe.
  */
 export async function appendToLog(entry: LogEntry): Promise<string> {
-  const d = entry.ts ?? new Date();
-  const pad = (n: number) => String(n).padStart(2, '0');
-  const tsStr =
-    `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
-    `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
+  return withLock(VAULT_PATHS.logFile, async () => {
+    const d = entry.ts ?? new Date();
+    const pad = (n: number) => String(n).padStart(2, '0');
+    const tsStr =
+      `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ` +
+      `${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 
-  await ensureDir(VAULT_PATHS.logs);
-  const line = `[${tsStr}] [${entry.agente}] [${entry.accion}] ${entry.detalle}\n`;
+    await ensureDir(VAULT_PATHS.logs);
+    const line = `[${tsStr}] [${entry.agente}] [${entry.accion}] ${entry.detalle}\n`;
 
-  let needsHeader = false;
-  try {
-    const stat = await fs.stat(VAULT_PATHS.logFile);
-    needsHeader = stat.size === 0;
-  } catch {
-    needsHeader = true;
-  }
+    let needsHeader = false;
+    try {
+      const stat = await fs.stat(VAULT_PATHS.logFile);
+      needsHeader = stat.size === 0;
+    } catch {
+      needsHeader = true;
+    }
 
-  if (needsHeader) {
-    const header = [
-      '# Log de acciones — Agentik O.S.\n',
-      '\n',
-      '> Historial cronológico de acciones ejecutadas por los agentes y la app.\n',
-      '> Formato: [YYYY-MM-DD HH:MM:SS] [agente] [acción] [detalle]\n',
-      '\n',
-    ].join('');
-    await fs.writeFile(VAULT_PATHS.logFile, header + line, 'utf8');
-  } else {
-    await fs.appendFile(VAULT_PATHS.logFile, line, 'utf8');
-  }
+    if (needsHeader) {
+      const header = [
+        '# Log de acciones — Agentik O.S.\n',
+        '\n',
+        '> Historial cronológico de acciones ejecutadas por los agentes y la app.\n',
+        '> Formato: [YYYY-MM-DD HH:MM:SS] [agente] [acción] [detalle]\n',
+        '\n',
+      ].join('');
+      await fs.writeFile(VAULT_PATHS.logFile, header + line, 'utf8');
+    } else {
+      await fs.appendFile(VAULT_PATHS.logFile, line, 'utf8');
+    }
 
-  return VAULT_PATHS.logFile;
+    return VAULT_PATHS.logFile;
+  });
 }
 
 /** Útil para health check y para evitar errores en arranque. */
@@ -590,37 +611,39 @@ export async function patchFipaAplicado(
   const feedbackDir = path.join(VAULT_PATHS.growing, 'feedback');
   const fullPath = path.join(feedbackDir, `${safe}.md`);
 
-  if (!(await fileExists(fullPath))) {
-    return { path: fullPath, feedback: null };
-  }
+  return withLock(fullPath, async () => {
+    if (!(await fileExists(fullPath))) {
+      return { path: fullPath, feedback: null };
+    }
 
-  const raw = await fs.readFile(fullPath, 'utf8');
-  const parsed = matter(raw);
-  const fm = parsed.data as Record<string, unknown>;
+    const raw = await fs.readFile(fullPath, 'utf8');
+    const parsed = matter(raw);
+    const fm = parsed.data as Record<string, unknown>;
 
-  const fipas = Array.isArray(fm.fipas) ? (fm.fipas as FeedbackSesion['fipas']) : [];
-  if (index < 0 || index >= fipas.length) {
-    throw new Error(`fipa index fuera de rango: ${index} (hay ${fipas.length} fipas)`);
-  }
-  fipas[index] = { ...fipas[index]!, aplicado };
-  fm.fipas = fipas;
+    const fipas = Array.isArray(fm.fipas) ? (fm.fipas as FeedbackSesion['fipas']) : [];
+    if (index < 0 || index >= fipas.length) {
+      throw new Error(`fipa index fuera de rango: ${index} (hay ${fipas.length} fipas)`);
+    }
+    fipas[index] = { ...fipas[index]!, aplicado };
+    fm.fipas = fipas;
 
-  const file = matter.stringify(parsed.content, fm);
-  await fs.writeFile(fullPath, file, 'utf8');
+    const file = matter.stringify(parsed.content, fm);
+    await fs.writeFile(fullPath, file, 'utf8');
 
-  return {
-    path: fullPath,
-    feedback: {
-      sesion_id: (fm.sesion_id as string) ?? safe,
-      fecha: (fm.fecha as string) ?? '',
-      score_global: typeof fm.score_global === 'number' ? fm.score_global : 0,
-      grado: (fm.grado as FeedbackSesion['grado']) ?? 'F',
-      score_anterior: typeof fm.score_anterior === 'number' ? fm.score_anterior : undefined,
-      wins: Array.isArray(fm.wins) ? (fm.wins as string[]) : [],
-      improvements: Array.isArray(fm.improvements) ? (fm.improvements as string[]) : [],
-      fipas,
-      tendencia_5: Array.isArray(fm.tendencia_5) ? (fm.tendencia_5 as number[]) : [],
-      recomendacion: (fm.recomendacion as string) ?? '',
-    },
-  };
+    return {
+      path: fullPath,
+      feedback: {
+        sesion_id: (fm.sesion_id as string) ?? safe,
+        fecha: (fm.fecha as string) ?? '',
+        score_global: typeof fm.score_global === 'number' ? fm.score_global : 0,
+        grado: (fm.grado as FeedbackSesion['grado']) ?? 'F',
+        score_anterior: typeof fm.score_anterior === 'number' ? fm.score_anterior : undefined,
+        wins: Array.isArray(fm.wins) ? (fm.wins as string[]) : [],
+        improvements: Array.isArray(fm.improvements) ? (fm.improvements as string[]) : [],
+        fipas,
+        tendencia_5: Array.isArray(fm.tendencia_5) ? (fm.tendencia_5 as number[]) : [],
+        recomendacion: (fm.recomendacion as string) ?? '',
+      },
+    };
+  });
 }

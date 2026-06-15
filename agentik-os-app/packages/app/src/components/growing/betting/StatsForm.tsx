@@ -253,7 +253,7 @@ export function StatsForm({ bet, onClose, onSuccess }: Props) {
             id="btn-guardar-dia"
             onClick={() => void handleSubmit()}
             disabled={submitting}
-            className="flex-2 flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 px-4 text-sm font-bold text-white transition shadow-lg shadow-emerald-500/20 disabled:opacity-50"
+            className="flex-[2] flex-1 rounded-xl bg-emerald-600 hover:bg-emerald-500 py-2.5 px-4 text-sm font-bold text-white transition shadow-lg shadow-emerald-500/20 disabled:opacity-50"
           >
             {submitting ? (
               <span className="flex items-center justify-center gap-2">

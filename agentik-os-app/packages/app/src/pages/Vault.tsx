@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Brain, Search, Folder, File, FileText, ChevronRight, Download, Loader2, Sparkles, X, ChevronDown } from 'lucide-react';
 import { api } from '@/lib/api/client';
 import { cn } from '@/lib/utils/cn';
@@ -13,6 +13,7 @@ interface VaultFile {
 export default function Vault() {
   const [files, setFiles] = useState<VaultFile[]>([]);
   const [loadingFiles, setLoadingFiles] = useState(true);
+  const [filesError, setFilesError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFile, setSelectedFile] = useState<VaultFile | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
@@ -30,7 +31,7 @@ export default function Vault() {
         const res = await api<{ ok: boolean; files: VaultFile[] }>('/vault/files');
         setFiles(res.files);
       } catch (err) {
-        console.error('Error fetching vault files', err);
+        setFilesError(err instanceof Error ? err.message : 'Error al cargar el vault');
       } finally {
         setLoadingFiles(false);
       }
@@ -125,6 +126,10 @@ export default function Vault() {
             <div className="flex items-center justify-center py-10 text-label-tertiary text-caption-1">
               <Loader2 className="h-4 w-4 animate-spin mr-2" />
               <span>Cargando estructura...</span>
+            </div>
+          ) : filesError ? (
+            <div className="p-3 m-2 rounded-radius-md border border-danger/20 bg-danger/5 text-caption-1 text-danger">
+              {filesError}
             </div>
           ) : Object.keys(filteredGrouped).length === 0 ? (
             <div className="text-center py-10 text-label-tertiary text-caption-1">
@@ -298,74 +303,73 @@ export default function Vault() {
 
 /* ---------- Custom Markdown Renderer ---------- */
 function SimpleMarkdown({ content }: { content: string }) {
-  const cleanContent = content.replace(/^---[\s\S]*?---\n*/, '');
-  const lines = cleanContent.split('\n');
-  let inCode = false;
-  let codeLines: string[] = [];
+  const nodes = useMemo(() => {
+    const cleanContent = content.replace(/^---[\s\S]*?---\n*/, '');
+    const lines = cleanContent.split('\n');
+    const result: React.ReactNode[] = [];
+    let codeLines: string[] = [];
+    let inCode = false;
+
+    lines.forEach((line, idx) => {
+      if (line.trim().startsWith('```')) {
+        if (inCode) {
+          inCode = false;
+          const code = codeLines.join('\n');
+          codeLines = [];
+          result.push(
+            <pre key={idx} className="p-4 rounded-radius-md bg-tint/50 border border-separator font-mono text-caption-1 overflow-x-auto text-accent">
+              <code>{code}</code>
+            </pre>
+          );
+        } else {
+          inCode = true;
+        }
+        return;
+      }
+      if (inCode) {
+        codeLines.push(line);
+        return;
+      }
+
+      if (line.startsWith('# ')) {
+        result.push(<h1 key={idx} className="text-title-1 text-label-primary border-b border-separator pb-2 mt-6">{line.slice(2)}</h1>);
+      } else if (line.startsWith('## ')) {
+        result.push(<h2 key={idx} className="text-title-2 text-label-primary mt-5 border-b border-separator pb-1">{line.slice(3)}</h2>);
+      } else if (line.startsWith('### ')) {
+        result.push(<h3 key={idx} className="text-title-3 text-label-primary mt-4">{line.slice(4)}</h3>);
+      } else if (line.startsWith('> ')) {
+        result.push(
+          <blockquote key={idx} className="border-l-4 border-accent/30 pl-4 py-1.5 italic text-label-secondary bg-tint/5 rounded-r-md">
+            {line.slice(2)}
+          </blockquote>
+        );
+      } else if (line.startsWith('|')) {
+        if (line.includes('---')) return;
+        const cols = line.split('|').map(c => c.trim()).filter(Boolean);
+        result.push(
+          <div key={idx} className="flex gap-4 border-b border-separator py-2 text-caption-1 font-mono text-label-tertiary">
+            {cols.map((c, i) => <span key={i} className="flex-1 truncate">{c}</span>)}
+          </div>
+        );
+      } else if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+        result.push(
+          <li key={idx} className="ml-4 list-disc text-label-primary pl-1">
+            {formatInline(line.trim().slice(2))}
+          </li>
+        );
+      } else if (!line.trim()) {
+        result.push(<div key={idx} className="h-2" />);
+      } else {
+        result.push(<p key={idx} className="text-label-secondary">{formatInline(line)}</p>);
+      }
+    });
+
+    return result;
+  }, [content]);
 
   return (
     <div className="space-y-4 text-label-secondary text-callout leading-relaxed max-w-none">
-      {lines.map((line, idx) => {
-        if (line.trim().startsWith('```')) {
-          if (inCode) {
-            inCode = false;
-            const code = codeLines.join('\n');
-            codeLines = [];
-            return (
-              <pre key={idx} className="p-4 rounded-radius-md bg-tint/50 border border-separator font-mono text-caption-1 overflow-x-auto text-accent">
-                <code>{code}</code>
-              </pre>
-            );
-          } else {
-            inCode = true;
-            return null;
-          }
-        }
-        if (inCode) {
-          codeLines.push(line);
-          return null;
-        }
-
-        if (line.startsWith('# ')) {
-          return <h1 key={idx} className="text-title-1 text-label-primary border-b border-separator pb-2 mt-6">{line.slice(2)}</h1>;
-        }
-        if (line.startsWith('## ')) {
-          return <h2 key={idx} className="text-title-2 text-label-primary mt-5 border-b border-separator pb-1">{line.slice(3)}</h2>;
-        }
-        if (line.startsWith('### ')) {
-          return <h3 key={idx} className="text-title-3 text-label-primary mt-4">{line.slice(4)}</h3>;
-        }
-
-        if (line.startsWith('> ')) {
-          return (
-            <blockquote key={idx} className="border-l-4 border-accent/30 pl-4 py-1.5 italic text-label-secondary bg-tint/5 rounded-r-md">
-              {line.slice(2)}
-            </blockquote>
-          );
-        }
-
-        if (line.startsWith('|')) {
-          if (line.includes('---')) return null;
-          const cols = line.split('|').map(c => c.trim()).filter(Boolean);
-          return (
-            <div key={idx} className="flex gap-4 border-b border-separator py-2 text-caption-1 font-mono text-label-tertiary">
-              {cols.map((c, i) => <span key={i} className="flex-1 truncate">{c}</span>)}
-            </div>
-          );
-        }
-
-        if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
-          return (
-            <li key={idx} className="ml-4 list-disc text-label-primary pl-1">
-              {formatInline(line.trim().slice(2))}
-            </li>
-          );
-        }
-
-        if (!line.trim()) return <div key={idx} className="h-2" />;
-
-        return <p key={idx} className="text-label-secondary">{formatInline(line)}</p>;
-      })}
+      {nodes}
     </div>
   );
 }

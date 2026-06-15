@@ -16,12 +16,19 @@ import { logger } from './logger.js';
 const activeProcesses = new Set<ChildProcess>();
 
 function register(child: ChildProcess, file: string): void {
+  if (child.exitCode !== null || child.signalCode !== null) {
+    return;
+  }
   activeProcesses.add(child);
   child.on('exit', () => activeProcesses.delete(child));
   child.on('error', (err) => {
     logger.warn('process-manager', `${file} error: ${err.message}`);
     activeProcesses.delete(child);
   });
+  // Si ya termino entre la creacion y el registro, limpiar
+  if (child.exitCode !== null || child.signalCode !== null) {
+    activeProcesses.delete(child);
+  }
 }
 
 export function execFile(

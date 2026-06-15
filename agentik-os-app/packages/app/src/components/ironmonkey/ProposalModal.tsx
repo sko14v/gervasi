@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { FileText, X, AlertCircle, Loader2, Sparkles, Download, ExternalLink } from 'lucide-react';
 import { Modal } from '@/components/ui/Modal';
 import type { Lead } from '@/types';
-import { api, ApiError } from '@/lib/api/client';
+import { api } from '@/lib/api/client';
 import { cn } from '@/lib/utils/cn';
 
 interface ProposalModalProps {
@@ -53,6 +53,7 @@ export function ProposalModal({ open, onClose, lead, score }: ProposalModalProps
   const handleClose = () => {
     setProposal(null);
     setError(null);
+    setGenerating(false);
     onClose();
   };
 

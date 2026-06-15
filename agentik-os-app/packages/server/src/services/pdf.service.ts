@@ -44,10 +44,8 @@ let _browser: Browser | null = null;
 let _launchingPromise: Promise<Browser> | null = null;
 
 async function getBrowser(): Promise<Browser> {
+  if (_browser?.isConnected()) return _browser;
   if (_browser) {
-    if (_browser.isConnected()) {
-      return _browser;
-    }
     try {
       await _browser.close();
     } catch {
@@ -56,18 +54,17 @@ async function getBrowser(): Promise<Browser> {
     _browser = null;
   }
 
-  if (_launchingPromise) {
-    return _launchingPromise;
-  }
+  if (_launchingPromise) return _launchingPromise;
 
-  _launchingPromise = chromium.launch({ headless: true }).then((b) => {
-    _browser = b;
-    _launchingPromise = null;
-    return b;
-  }).catch((err) => {
-    _launchingPromise = null;
-    throw err;
-  });
+  _launchingPromise = (async () => {
+    try {
+      const b = await chromium.launch({ headless: true });
+      _browser = b;
+      return b;
+    } finally {
+      _launchingPromise = null;
+    }
+  })();
 
   return _launchingPromise;
 }

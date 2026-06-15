@@ -37,8 +37,6 @@ async function fileExists(p: string): Promise<boolean> {
   }
 }
 
-const validEstados = ESTADOS_LEAD;
-
 const createLeadSchema = z.object({
   nombre: z.string().min(2).max(120),
   telefono: z.string().max(40).optional().default(''),
@@ -57,14 +55,14 @@ const createLeadSchema = z.object({
 });
 
 const updateLeadSchema = createLeadSchema.partial().extend({
-  estado: z.enum(ESTADOS_LEAD as [string, ...string[]]).optional(),
+  estado: z.enum([...ESTADOS_LEAD] as [EstadoLead, ...EstadoLead[]]).optional(),
 });
 
 leadsRouter.get('/', async (c) => {
   const estado = c.req.query('estado') as EstadoLead | undefined;
   const origen = c.req.query('origen');
 
-  if (estado && !(validEstados as string[]).includes(estado)) {
+  if (estado && ![...ESTADOS_LEAD].includes(estado)) {
     return c.json({ error: `estado inválido: ${estado}`, code: 400 }, 400);
   }
 

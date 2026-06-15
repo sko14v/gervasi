@@ -1,4 +1,6 @@
-import { rateLimiter } from '../middleware/rate-limiter.js';/**
+import { rateLimiter } from '../middleware/rate-limiter.js';
+
+/**
  * Rutas de los agentes.
  *
  *   POST /agents/icp              body: { leadId, nota, sensacion? }
@@ -35,9 +37,10 @@ import { z } from 'zod';
 import { runIcpAgent, type IcpInput } from '../agents/icp.agent.js';
 import { runCrmManagerAgent, type CrmManagerInput } from '../agents/crm-manager.agent.js';
 import { runProposalAgent } from '../agents/proposal.agent.js';
-import { runCallAnalyzerAgent, type CallAnalyzerInput } from '../agents/call-analyzer.agent.js';
+import { runCallAnalyzerAgent, type CallAnalyzerInput, type CallAnalyzerResult } from '../agents/call-analyzer.agent.js';
 import { runFeedbackCoachAgent } from '../agents/feedback-coach.agent.js';
 import { runGoalTrackerAgent } from '../agents/goal-tracker.agent.js';
+import type { AgentResult } from '../agents/base-agent.js';
 import { promises as fs } from 'node:fs';
 import nodePath from 'node:path';
 import { VAULT_PATHS, assertPathInside } from '../config/paths.js';
@@ -257,7 +260,7 @@ agentsRouter.post('/proposal', async (c) => {
 agentsRouter.post('/call-analyzer', rateLimiter(), async (c) => {
   const formData = await c.req.formData();
   const rawFiles = formData.getAll('audio');
-  const audioFiles: any[] = [];
+  const audioFiles: File[] = [];
   let totalBytes = 0;
   const MAX_TOTAL_BYTES = 500 * 1024 * 1024; // 500MB
   const MAX_CHUNKS = 20;
@@ -358,7 +361,7 @@ agentsRouter.post('/call-analyzer', rateLimiter(), async (c) => {
     onProgress: (msg: string) => logger.info('call-analyzer', msg),
   };
 
-  let result;
+  let result: AgentResult<CallAnalyzerResult> | undefined;
   try {
     result = await runCallAnalyzerAgent(input);
   } catch (err) {
